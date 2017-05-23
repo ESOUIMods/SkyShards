@@ -58,6 +58,7 @@ local achievementIDs = {
 	[1320] = true, --Wrothgar Skyshard Hunter
 	[1347] = true, --Hew's Bane Skyshard Hunter
 	[1342] = true, --Gold Coast Skyshard Hunter
+	[1843] = true, --Morrowind Skyshard Hunter
 }
 
 local skyshardsData = {}
@@ -1286,6 +1287,54 @@ skyshardsData["darkbrotherhood"] = {
    },
    ["garlasagea_base"] = {
       { 0.7741, 0.6648, 1342, 6, 2 },
+   },
+}
+
+skyshardsData["vvardenfell"] = {
+	-- Morrowind Chapter
+   ["vvardenfell_base"] = {          -- vvardenfell
+      { 0.7606, 0.6870, 1843, 1 },
+      { 0.8190, 0.4051, 1843, 2 },
+      { 0.6524, 0.5556, 1843, 3 },
+      { 0.7792, 0.3662, 1843, 4 },
+      { 0.7690, 0.8349, 1843, 5 },
+      { 0.4065, 0.8254, 1843, 6 },
+      { 0.4929, 0.7086, 1843, 7 },
+      { 0.2539, 0.6366, 1843, 8 },
+      { 0.4234, 0.2559, 1843, 9 },
+      { 0.1608, 0.2976, 1843, 10 },
+      { 0.6730, 0.6592, 1843, 11, 3 },	-- Nchuleftingth Public Dungeon
+      { 0.5192, 0.2571, 1843, 12, 3 },	-- Forgotten Wastes Public Dungeon
+      { 0.2452, 0.4990, 1843, 13, 2 },	-- Khartag Point Delve
+      { 0.2324, 0.2715, 1843, 14, 2 },	-- Ashalmawia Delve
+      { 0.3585, 0.7516, 1843, 15, 2 },	-- Zainsipilu Delve
+      { 0.7981, 0.6899, 1843, 16, 2 },	-- Matus-Akin Egg Mine Delve
+      { 0.6720, 0.4201, 1843, 17, 2 },	-- Pulk Delve
+      { 0.6119, 0.3294, 1843, 18, 2 }   -- Nchuleft Depths Delve
+   },
+   ["nchuleftingth5_base"] = {  		    -- Nchuleftingth Lavaworks
+      { 0.3077, 0.5958, 1843, 11, 3 },
+   },
+   ["cavernsofkogoruhnfw03_base"] = {		-- Caverns of Kogoruhn
+      { 0.4020, 0.4423, 1843, 12, 3 },
+   },
+   ["khartagpoint_base"] = {
+      { 0.6078, 0.4617, 1843, 13, 2 },
+   },
+   ["ashalmawia02_base"] = {
+      { 0.3366, 0.9284, 1843, 14, 2 },
+   },
+   ["zainsipilu_base"] = {
+      { 0.7766, 0.2541, 1843, 15, 2 },
+   },
+   ["matusakin_base"] = {
+      { 0.5307, 0.7325, 1843, 16, 2 },
+   },
+   ["pulklower_base"] = {
+      { 0.4776, 0.3677, 1843, 17, 2 },
+   },
+   ["nchuleftdepths_base"] = {
+      { 0.6067, 0.5809, 1843, 18, 2 },
    },
 }
 

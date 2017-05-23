@@ -20,7 +20,7 @@ Under the following terms:
     No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
 
-Please read full licence at : 
+Please read full licence at :
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ]]
 
@@ -29,7 +29,7 @@ local LAM = LibStub("LibAddonMenu-2.0")
 local LMP = LibStub("LibMapPins-1.0")
 
 --Local constants -------------------------------------------------------------
-local ADDON_VERSION = "5"
+local ADDON_VERSION = "6"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -197,9 +197,9 @@ local function SetMainworldTint(pin)
 			return MAINWORLD_SKYS
 		end
 	end
-	
+
 	return ZO_SELECTED_TEXT
-	
+
 end
 
 -- Slash commands -------------------------------------------------------------
@@ -215,7 +215,7 @@ local function ShowMyPosition()
 	local locY = ("%05.02f"):format(zo_round(y*10000)/100)
 
 	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubzone(true)))
-	
+
 end
 SLASH_COMMANDS["/mypos"] = ShowMyPosition
 SLASH_COMMANDS["/myloc"] = ShowMyPosition
@@ -231,13 +231,13 @@ end
 
 -- Settings menu --------------------------------------------------------------
 local function CreateSettingsMenu()
-	
+
 	local skillPanelChoices = {
 		[1] = GetString(SKYS_SKILLS_OPTION1),
 		[2] = GetString(SKYS_SKILLS_OPTION2),
 		[3] = GetString(SKYS_SKILLS_OPTION3),
 	}
-	
+
 	local pinTexturesList = {
 		[1] = "Default icons (Garkin)",
 		[2] = "Alternative icons (Garkin)",
@@ -245,7 +245,7 @@ local function CreateSettingsMenu()
 		[4] = "Glowing icons (Rushmik)",
 		[5] = "Realistic icons (Heidra)",
 	}
-	
+
 	local panelData = {
 		type = "panel",
 		name = GetString(SKYS_TITLE),
@@ -424,19 +424,19 @@ local function GetNumSkySkyShards()
 
 	collectedSkyShards = 0
 	totalSkyShards = 0
-	
+
 	local ids = SkyShards_GetAchievementIDs()
 	for achievementId in pairs(ids) do
-	
+
 		local numCriteria = GetAchievementNumCriteria(achievementId)
 		if numCriteria then
-			for n=1, numCriteria do 
+			for n=1, numCriteria do
 				local _, completed, required = GetAchievementCriterion(achievementId, n)
 				collectedSkyShards = collectedSkyShards + completed
 				totalSkyShards = totalSkyShards + required
 			end
 		end
-		
+
 	end
 
 end
@@ -460,12 +460,12 @@ local function AlterSkyShardsIndicator()
 			return true
 		end
 	end
-	
+
 	local function PreHookRefreshPointsDisplay(self)
-	
+
 		local availablePoints = GetAvailableSkillPoints()
 		self.headerData.data1Text = availablePoints
-		
+
 		if savedVariables.skillPanelDisplay == 1 then
 			local skyShards = GetNumSkyShards()
 			self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards, NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
@@ -481,16 +481,16 @@ local function AlterSkyShardsIndicator()
 				self.headerData.data2Text = collectedSkyShards
 			end
 		end
-		
+
 		ZO_GamepadGenericHeader_RefreshData(self.header, self.headerData)
 		return true
-		
+
 	end
-	
+
 	GetNumSkySkyShards()
 	ZO_PreHook(SKILLS_WINDOW, "UpdateSkyShards", PreHookUpdateSkyShards)
 	ZO_PreHook(GAMEPAD_SKILLS, "RefreshPointsDisplay", PreHookRefreshPointsDisplay)
-	
+
 end
 
 -- Event handlers -------------------------------------------------------------
@@ -511,9 +511,9 @@ local function OnLoad(_, name)
 		EVENT_MANAGER:UnregisterForEvent("SkyShards", EVENT_ADD_ON_LOADED)
 
 		savedVariables = ZO_SavedVars:NewCharacterNameSettings("SkyS_SavedVariables", 4, nil, defaults)
-		
+
 		MAINWORLD_SKYS = ZO_ColorDef:New(savedVariables.mainworldSkyshards)
-		
+
 		--get pin layout from saved variables
 		local pinTextureType = savedVariables.pinTexture.type
 		local pinTextureLevel = savedVariables.pinTexture.level
@@ -573,18 +573,18 @@ local function OnLoad(_, name)
 
 		-- addon menu
 		CreateSettingsMenu()
-		
+
 		-- Set wich tooltip must be used
 		OnGamepadPreferredModeChanged()
-		
+
 		-- Change SkyShard Display on Skills window
 		AlterSkyShardsIndicator()
-		
+
 		--events
 		EVENT_MANAGER:RegisterForEvent("SkyShards",  EVENT_ACHIEVEMENT_UPDATED, OnAchievementUpdate)
 		EVENT_MANAGER:RegisterForEvent("SkyShards", EVENT_GAMEPAD_PREFERRED_MODE_CHANGED, OnGamepadPreferredModeChanged)
 	end
-	
+
 end
 
 EVENT_MANAGER:RegisterForEvent("SkyShards", EVENT_ADD_ON_LOADED, OnLoad)

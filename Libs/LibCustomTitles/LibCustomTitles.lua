@@ -1,7 +1,7 @@
 --[[
 Author: Ayantir
 Filename: LibCustomTitles.lua
-Version: 18
+Version: 19
 ]]--
 
 --[[
@@ -24,7 +24,7 @@ Under the following terms:
     No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
 
-Please read full licence at : 
+Please read full licence at :
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 ]]--
@@ -35,11 +35,11 @@ local LibCustomTitles, oldminor = LibStub:NewLibrary(LIB_NAME, VERSION)
 if not LibCustomTitles then return end
 
 function LibCustomTitles:Init()
-	
+
 	local CT_NO_TITLE = 0
 	local CT_TITLE_ACCOUNT = 1
 	local CT_TITLE_CHARACTER = 2
-	
+
 	-- Default override
 	local overriden = {
 		en = "Volunteer",
@@ -48,21 +48,21 @@ function LibCustomTitles:Init()
 	}
 
 	local customTitles = {
-	
+
 		["@Ayantir"] = { -- Dev / EU. v1
 			ov = true,
 			en = "The Enlightened",
 			fr = "Mangeuse de Gâteaux",
 			de = "Die Erleuchtete",
 		},
-		
+
 		["@Baertram"] = { -- Dev / EU. v4
 			ov = true,
 			en = "Ursa Major",
 			fr = "Ursa Major",
 			de = "Ursa Major",
 		},
-		
+
 		["@sirinsidiator"] = { -- Dev / EU. v5
 			["Illonia Ithildû"] = {
 				ov = true,
@@ -75,7 +75,7 @@ function LibCustomTitles:Init()
 			fr = "Carrément pas suspect",
 			de = "Absolut Nicht Verdächtig",
 		},
-		
+
 		["@Randactyl"] = { -- Dev / NA. v6
 			["Vedrasi Rilim"] = {
 				ov = true,
@@ -84,12 +84,12 @@ function LibCustomTitles:Init()
 			ov = true,
 			en = "No Lollygaggin'",
 		},
-		
+
 		["@Wedgez"] = { -- NA. v8
 			ov = true,
 			en = "Golden Light Master",
 		},
-		
+
 		["@Ign0tus"] = { -- NA. v8
 			["Smudgê"] = {
 				ov = true,
@@ -106,7 +106,7 @@ function LibCustomTitles:Init()
 			ov = true,
 			en = "Sweetroll Thief",
 		},
-		
+
 		["@dOpiate"] = { -- Dev / EU. v8
 			["Harmful"] = {
 				ov = {en = "Recruit", fr = "Recrue", de = "Rekrutin"},
@@ -115,19 +115,19 @@ function LibCustomTitles:Init()
 				de = "Der Metzger",
 			},
 		},
-		
+
 		["@LadyHermione"] = { -- NA v9
 			["Lady Hermione Sophia"] = {
 				ov = true,
 				en = "Know-It-All",
 			},
 		},
-		
+
 		["@Tarsalterror"] = { -- NA v9
 			ov = {en = "Enemy of Coldharbour", fr = "Ennemi de Havreglace", de = "Feind Kalthafens"},
 			en = "Fancy Man of Cornwood",
 		},
-		
+
 		["@manavortex"] = { -- EU v10 (v12 changes)
 			["Vivicah Telvanni"] = {
 				ov = {en = "Master Wizard", fr = "Maître mage", de = "Meisterin der Zauberei"},
@@ -154,7 +154,7 @@ function LibCustomTitles:Init()
 				de = "Aufseher",
 			},
 		},
-		
+
 		["@Valorin"] = { -- EU v10
 			["Valorin Telvanni"] = {
 				ov = {en = "Savior of Nirn", fr = "Sauveur de Nirn", de = "Retter Nirns"},
@@ -169,7 +169,7 @@ function LibCustomTitles:Init()
 				de = "Aufseher",
 			},
 		},
-		
+
 		["@Manorin"] = { -- EU v10 (v12 fix)
 			["Foryn Telvanni"] = {
 				ov = {en = "Pact Hero", fr = "Héros du Pacte", de = "Held des Paktes"},
@@ -184,7 +184,7 @@ function LibCustomTitles:Init()
 				de = "Erzmagister",
 			},
 		},
-		
+
 		["@Chivana"] = { -- EU v11
 			["Chivana"] = {
 				ov = true,
@@ -193,13 +193,13 @@ function LibCustomTitles:Init()
 				de = "Amazonaskönigin",
 			},
 		},
-		
+
 		["@Mythk"] = { -- NA v11
 			ov = {en = "Recruit", fr = "Recrue", de = "Rekrutin"},
 			en = "The One and Only",
 			fr = "Le Seul et l'Unique",
 		},
-		
+
 		["@susmitds"] = { -- NA. v11
 			["Shadow Kitter"] = {
 				ov = true,
@@ -234,7 +234,7 @@ function LibCustomTitles:Init()
 				en = "Existential Anomaly",
 			},
 		},
-		
+
 		["@JasminTheSecond"] = { -- EU v11
 			["Durac"] = {
 				ov = true,
@@ -243,7 +243,7 @@ function LibCustomTitles:Init()
 				de = "Der Verschollene",
 			},
 		},
-		
+
 		["@Haunted1994"] = { -- v12
 			["Jah'rakal"] = {
 				ov = {en = "Veteran", fr = "Vétéran", de = "Veteran"},
@@ -252,7 +252,7 @@ function LibCustomTitles:Init()
 				de = "Troll Warlord",
 			},
 		},
-		
+
 		["@Vortexman11"] = { -- v12
 			["Ålaunus"] = {
 				ov = true,
@@ -283,7 +283,7 @@ function LibCustomTitles:Init()
 				de = "The Elder Dragon",
 			},
 		},
-		
+
 		["@Dolgubon"] = { -- v12
 			["Relthion"] = {
 				ov = true,
@@ -292,7 +292,7 @@ function LibCustomTitles:Init()
 				de = "Undying",
 			},
 		},
-		
+
 		["@Sethize"] = { -- EU v12
 			["Nelvan Telvanni"] = {
 				ov = {en = "Master Wizard", fr = "Maître mage", de = "Meister der Zauberei"},
@@ -301,7 +301,7 @@ function LibCustomTitles:Init()
 				de = "Meister",
 			},
 		},
-		
+
 		["@ScattyThePirate"] = { -- EU v13
 			["Teldryn Dreth"] = {
 				ov = true,
@@ -340,7 +340,7 @@ function LibCustomTitles:Init()
 				--de = "Das Monster",
 			},
 		},
-		
+
 		["@ScattyTheWizard"] = { -- v13
 			["Marukh-do"] = {
 				ov = true,
@@ -405,7 +405,7 @@ function LibCustomTitles:Init()
 			fr = "Toujours bourré",
 			--de = "Die Verlassene",
 		},
-		
+
 		["@Deltia"] = { -- v13
 			ov = {en = "Tyro", fr = "Première classe", de = "Tyro"},
 			en = "The Destroyer",
@@ -434,7 +434,7 @@ function LibCustomTitles:Init()
 				--de = "Meister",
 			},
 		},
-		
+
 		["@HMS-Dragonfly"] = { -- v16
 			ov = true,
 			en = "Knight of Stendarr",
@@ -462,11 +462,30 @@ function LibCustomTitles:Init()
 				en = "Nightcaller",
 			},
 		},
-		
+
+		["@Anceane"] = { -- v19
+			ov = true,
+			en = "Dark Emerald",
+			fr = "Emeraude Sombre",
+		},
+
+		["@Potato-Salad"] = { -- v19
+			ov = true,
+			en = "Seraphim of Azura",
+			fr = "Séraphin d'Azura",
+		},
+
+		["@blakeblox"] = { -- v19
+			["fyboba"] = {
+				ov = {en = "Tyro", fr = "Première classe", de = "Tyro"},
+				en = "Golden Lady",
+			},
+		},
+
 	}
-	
+
 	local lang = GetCVar("Language.2")
-	
+
 	local function GetCustomTitleType(displayName, unitName)
 		if customTitles[displayName] then
 			if customTitles[displayName][unitName] then
@@ -476,9 +495,9 @@ function LibCustomTitles:Init()
 		end
 		return CT_NO_TITLE
 	end
-	
+
 	local function GetModifiedTitle(originalTitle, displayName, unitName, registerType)
-		
+
 		local title = originalTitle
 		if registerType == CT_TITLE_CHARACTER then
 			if customTitles[displayName][unitName].ov then
@@ -501,9 +520,9 @@ function LibCustomTitles:Init()
 				end
 			end
 		end
-		
+
 		return title
-		
+
 	end
 
 	local GetUnitTitle_original = GetUnitTitle
@@ -517,7 +536,7 @@ function LibCustomTitles:Init()
 		end
 		return unitTitleOriginal
 	end
-	
+
 	local GetTitle_original = GetTitle
 	GetTitle = function(index)
 		local titleOriginal = GetTitle_original(index)

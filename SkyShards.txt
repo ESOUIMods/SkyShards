@@ -6,9 +6,9 @@
 
 ## Title: |cEFEBBESkyShards|r
 ## Description: This addon displays skyshards on the world map.
-## Version: 5.1
+## Version: 6
 ## Author: Ayantir & Garkin
-## APIVersion: 100018
+## APIVersion: 100019
 ## SavedVariables: SkyS_SavedVariables
 ## OptionalDependsOn: LibAddonMenu-2.0 LibMapPins-1.0 CustomCompassPins
 
