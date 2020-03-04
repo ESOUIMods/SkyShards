@@ -34,7 +34,7 @@ local GPS = LibStub("LibGPS2")
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.10"
+local ADDON_VERSION = "10.11"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -122,7 +122,8 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local function GetZoneAndSubZone(alternative)
+-- eventually this will be written into LibMapPins so it can fix it for everyone
+function SkyShards_GetZoneAndSubZone(alternative)
 	if alternative then
 		return select(3,(GetMapTileTexture()):lower():gsub("ui_map_", ""):find("maps/([%w%-]+/[%w%-]+_[%w%-]+)"))
 	end
@@ -132,7 +133,7 @@ end
 
 local function CompassCallback()
 	if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
-		local zone, subzone = GetZoneAndSubZone()
+		local zone, subzone = Skyshards_GetZoneAndSubZone()
 		local skyshards = SkyShards_GetLocalData(zone, subzone)
 		if skyshards then
 			for _, pinData in ipairs(skyshards) do
@@ -230,7 +231,7 @@ local function CreatePins()
 
 	local shouldDisplay = ShouldDisplaySkyshards()
 
-	local zone, subzone = GetZoneAndSubZone()
+	local zone, subzone = SkyShards_GetZoneAndSubZone()
 	local skyshards = SkyShards_GetLocalData(zone, subzone)
 
 	if skyshards ~= nil then
@@ -314,7 +315,7 @@ local function ShowMyPosition()
 	local locX = ("%05.02f"):format(zo_round(x*10000)/100)
 	local locY = ("%05.02f"):format(zo_round(y*10000)/100)
 
-	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>)", GetMapName(), locX, locY, GetZoneAndSubZone(true)))
+	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>)", GetMapName(), locX, locY, SkyShards_GetZoneAndSubZone(true)))
 
 end
 SLASH_COMMANDS["/mypos"] = ShowMyPosition
