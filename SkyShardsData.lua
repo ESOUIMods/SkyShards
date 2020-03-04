@@ -26,42 +26,43 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 --achievementIDs for skyshards:
 local skyshardsAchievementIDs = {
-	[993] = true, -- Soul Shriven in Coldharbor / Used for SkyShard correct count
-	[556] = true, -- Alik'r Desert Skyshards
-	[695] = true, -- Auridon Skyshards
-	[405] = true, -- Bal Foyen Skyshards
-	[557] = true, -- Bangkorai Skyshards
-	[408] = true, -- Betnikh Skyshards
-	[398] = true, -- Bleakrock Skyshards
-	[686] = true, -- Coldharbour Skyshards
-	[727] = true, -- Lower Craglorn Skyshards
-	[912] = true, -- Upper Craglorn Skyshards
-	[694] = true, -- Cyrodiil Aldmeri Skyshards
-	[693] = true, -- Cyrodiil Daggerfall Skyshards
-	[692] = true, -- Cyrodiil Ebonheart Skyshards
-	[547] = true, -- Deshaan Skyshards
-	[688] = true, -- Eastmarch Skyshards
-	[409] = true, -- Glenumbra Skyshards
-	[682] = true, -- Grahtwood Skyshards
-	[683] = true, -- Greenshade Skyshards
-	[431] = true, -- Khenarthi's Roost Skyshards
-	[684] = true, -- Malabal Tor Skyshards
-	[748] = true, -- Mountain Skyshard
-	[685] = true, -- Reaper's March Skyshards
-	[554] = true, -- Rivenspire Skyshards
-	[687] = true, -- Shadowfen Skyshards
-	[397] = true, -- Stonefalls Skyshards
-	[515] = true, -- Stormhaven Skyshards
-	[407] = true, -- Stros M'Kai Skyshards
-	[689] = true, -- The Rift Skyshards
-	[1160] = true, --Imperial City Skyshards
-	[1320] = true, --Wrothgar Skyshard Hunter
-	[1347] = true, --Hew's Bane Skyshard Hunter
-	[1342] = true, --Gold Coast Skyshard Hunter
-	[1843] = true, --Morrowind Skyshard Hunter
-	[1844] = true, --Clockwork City Skyshard Hunter
-	[1845] = true, --Summerset Skyshard Hunter
-	[2291] = true, --Murkmire Skyshard Hunter
+	[556] = true,	-- Alik'r Desert Skyshards
+	[695] = true,	-- Auridon Skyshards
+	[405] = true,	-- Bal Foyen Skyshards
+	[557] = true,	-- Bangkorai Skyshards
+	[408] = true,	-- Betnikh Skyshards
+	[398] = true,	-- Bleakrock Skyshards
+	[686] = true,	-- Coldharbour Skyshards
+	[727] = true,	-- Lower Craglorn Skyshards
+	[912] = true,	-- Upper Craglorn Skyshards
+	[694] = true,	-- Cyrodiil Aldmeri Skyshards
+	[693] = true,	-- Cyrodiil Daggerfall Skyshards
+	[692] = true,	-- Cyrodiil Ebonheart Skyshards
+	[547] = true,	-- Deshaan Skyshards
+	[688] = true,	-- Eastmarch Skyshards
+	[409] = true,	-- Glenumbra Skyshards
+	[682] = true,	-- Grahtwood Skyshards
+	[683] = true,	-- Greenshade Skyshards
+	[431] = true,	-- Khenarthi's Roost Skyshards
+	[684] = true,	-- Malabal Tor Skyshards
+	[748] = true,	-- Mountain Skyshard
+	[685] = true,	-- Reaper's March Skyshards
+	[554] = true,	-- Rivenspire Skyshards
+	[687] = true,	-- Shadowfen Skyshards
+	[993] = true,	-- Soul Shriven in Coldharbor / Used for SkyShard correct count
+	[397] = true,	-- Stonefalls Skyshards
+	[515] = true,	-- Stormhaven Skyshards
+	[407] = true,	-- Stros M'Kai Skyshards
+	[689] = true,	-- The Rift Skyshards
+	[1160] = true,	-- Imperial City Skyshards
+	[1320] = true,	-- Wrothgar Skyshard Hunter
+	[1347] = true,	-- Hew's Bane Skyshard Hunter
+	[1342] = true,	-- Gold Coast Skyshard Hunter
+	[1843] = true,	-- Morrowind Skyshard Hunter
+	[1844] = true,	-- Clockwork City Skyshard Hunter
+	[1845] = true,	-- Summerset Skyshard Hunter
+	[2291] = true,	-- Murkmire Skyshard Hunter
+	[2461] = true,	-- Elsweyr Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -1560,6 +1561,65 @@ skyshardsData["murkmire"] = {
 		{ 0.6542, 0.5523, 2291, 6, 2 },
 	},
 }
+
+
+skyshardsData["elsweyr"] = {
+	 --- Elsweyr
+	["elsweyr_base"] = {					-- Elsweyr overland
+		{ 0.4426, 0.1700, 2461, 1 },
+		{ 0.3504, 0.3548, 2461, 2 },
+		{ 0.6615, 0.4713, 2461, 3 },
+		{ 0.7325, 0.2588, 2461, 4 },
+		{ 0.3911, 0.5201, 2461, 5, 1 },		-- The Stitches
+		{ 0.2348, 0.7203, 2461, 6 },
+		{ 0.3868, 0.6891, 2461, 7 },
+		{ 0.5366, 0.5911, 2461, 8 },
+		{ 0.2929, 0.6057, 2461, 9 },
+		{ 0.5643, 0.3621, 2461, 10, },
+		{ 0.4800, 0.4876, 2461, 11, 3 },	-- Orcrest
+		{ 0.7043, 0.3815, 2461, 12, 3 },	-- Rimmen Necropolis
+		{ 0.3968, 0.4311, 2461, 13, 2 },	-- Desert Wind Caverns
+		{ 0.2664, 0.4252, 2461, 14, 2 },	-- Predator Mesa
+		{ 0.4048, 0.2249, 2461, 15, 2 },	-- Abode of Ignominy
+		{ 0.1526, 0.6090, 2461, 16, 2 },	-- Darkpool Mine
+		{ 0.6270, 0.5862, 2461, 17, 2 },	-- The Tangle
+		{ 0.6153, 0.2346, 2461, 18, 2 },	-- Tomb of the Serpents
+	},
+	["rimmen_base"] = {
+		{ 0.0475, 0.2967, 2461, 4, 1 },		-- On the very edge so maybe not needed?
+	},
+	["stitches_base"] = {
+		{ 0.6179, 0.4916, 2461, 5, 1 },
+	},
+	["orcrest_base"] = {
+		{ 0.3092, 0.6927, 2461, 11, 3 },	-- not actually there but is the nearest entrance into the sewer below
+	},
+	["orcrestsewer_base"] = {
+		{ 0.5784, 0.5863, 2461, 11, 3 },
+	},
+	["rimmennecropolis_base"] = {
+		{ 0.8151, 0.4527, 2461, 12, 3 },
+	},
+	["desertwind_base"] = {
+		{ 0.3785, 0.8465, 2461, 13, 2 },
+	},
+	["predatorrise_base"] = {
+		{ 0.6310, 0.2734, 2461, 14, 2 },
+	},
+	["abodeofignominy_base"] = {
+		{ 0.7508, 0.7881, 2461, 15, 2 },
+	},
+	["thescab_base"] = {
+		{ 0.5616, 0.4959, 2461, 16, 2 },
+	},
+	["thetangle_base"] = {
+		{ 0.1023, 0.6137, 2461, 17, 2 },
+	},
+	["tombofserpents_base"] = {
+		{ 0.1207, 0.3599, 2461, 18, 2 },
+	},
+}
+
 
 function SkyShards_GetAchievementIDs()
 	return skyshardsAchievementIDs

@@ -28,13 +28,18 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ]]
 
 --Libraries--------------------------------------------------------------------
-local LAM = LibStub("LibAddonMenu-2.0")
-local LMP = LibStub("LibMapPins-1.0")
-local GPS = LibStub("LibGPS2")
+local LAM = LibAddonMenu2
+if LAM == nil and LibStub then LAM = LibStub("LibAddonMenu-2.0") end
+local LMP = LibMapPins
+if LMP == nil and LibStub then LMP = LibStub("LibMapPins-1.0") end
+local GPS = LibGPS2
+if GPS == nil and LibStub then GPS = LibStub("LibGPS2") end
+
+if LAM == nil or LMP == nil or GPS == nil then return end
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.12"
+local ADDON_VERSION = "10.13"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"

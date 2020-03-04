@@ -6,33 +6,14 @@
 
 ## Title: |cEFEBBESkyShards|r
 ## Description: This addon displays skyshards on the world map, compass band, and inside delves/dungeons.
-## Version: 10.12
+## Version: 10.13
 ## Author: AssemblerManiac
 ; previous authors Ayantir & Garkin
-## APIVersion: 100026 100027
+## APIVersion: 100027 100028
 ## SavedVariables: SkyS_SavedVariables
-## OptionalDependsOn: LibStub LibMapPing LibGPS LibMapPins-1.0 CustomCompassPins LibAddonMenu-2.0
+## DependsOn: LibStub CustomCompassPins LibAddonMenu-2.0 LibMapPing LibGPS LibMapPins-1.0
+## FastAPI: 100027
 
-Libs/LibStub/LibStub.lua
-libs/LibMapPing/LibMapPing.lua
-libs/LibGPS/LibGPS.lua
-Libs/LibMapPins-1.0/LibMapPins-1.0.lua
-Libs/CustomCompassPins/CustomCompassPins.lua
-Libs/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
-Libs/LibAddonMenu-2.0/controls/panel.lua
-Libs/LibAddonMenu-2.0/controls/submenu.lua
-Libs/LibAddonMenu-2.0/controls/button.lua
-Libs/LibAddonMenu-2.0/controls/checkbox.lua
-Libs/LibAddonMenu-2.0/controls/colorpicker.lua
-Libs/LibAddonMenu-2.0/controls/custom.lua
-Libs/LibAddonMenu-2.0/controls/description.lua
-Libs/LibAddonMenu-2.0/controls/divider.lua
-Libs/LibAddonMenu-2.0/controls/dropdown.lua
-Libs/LibAddonMenu-2.0/controls/editbox.lua
-Libs/LibAddonMenu-2.0/controls/header.lua
-Libs/LibAddonMenu-2.0/controls/iconpicker.lua
-Libs/LibAddonMenu-2.0/controls/slider.lua
-Libs/LibAddonMenu-2.0/controls/texture.lua
 Libs/LibAnnyoingUpdateNotificationInGame/LibAnnyoingUpdateNotificationInGame.lua
 Libs/LibCustomTitles/LibCustomTitles.lua
 
