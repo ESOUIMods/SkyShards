@@ -1445,6 +1445,8 @@ skyshardsData["vvardenfell"] = {
 
 -- alias for shard 17
 skyshardsData["vvardenfell"]["pulkupper_base"]=skyshardsData["vvardenfell"]["pulklower_base"];
+-- alias for shard 14
+skyshardsData["vvardenfell"]["ashalmawia03_base"]=skyshardsData["vvardenfell"]["ashalmawia02_base"];
 
 
 skyshardsData["clockwork"] = {
@@ -1474,6 +1476,9 @@ skyshardsData["clockwork"] = {
 		{ 0.8365, 0.5701, 1844, 6, 3 },
 	},
 }
+-- alias for shard 5
+skyshardsData["clockwork"]["hallsofregulation_2"] = skyshardsData["clockwork"]["hallsofregulation_base"];
+
 
 skyshardsData["summerset"] = {
 	 --- Summerset
