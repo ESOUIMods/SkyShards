@@ -39,7 +39,7 @@ if LAM == nil or LMP == nil or GPS == nil then return end
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.13"
+local ADDON_VERSION = "10.14"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -551,7 +551,7 @@ local function CreateSettingsMenu()
 	LAM:RegisterOptionControls(ADDON_NAME, optionsTable)
 end
 
-local function GetNumSkySkyShards()
+local function GetNumFoundSkyShards()
 
 	collectedSkyShards = 0
 	totalSkyShards = 0
@@ -575,6 +575,7 @@ end
 local function AlterSkyShardsIndicator()
 
 	local function PreHookRefreshSkillPointInfo(self)				-- keyboard function
+		GetNumFoundSkyShards()
     	local availablePoints = SKILL_POINT_ALLOCATION_MANAGER:GetAvailableSkillPoints()
     	self.availablePointsLabel:SetText(zo_strformat(SI_SKILLS_POINTS_TO_SPEND, availablePoints))
 
@@ -596,6 +597,7 @@ local function AlterSkyShardsIndicator()
 	end
 
 	local function PreHookRefreshPointsDisplay(self)		-- gamepad function
+		GetNumFoundSkyShards()
 		local availablePoints = GetAvailableSkillPoints()
 		self.headerData.data1Text = availablePoints
 
@@ -620,7 +622,7 @@ local function AlterSkyShardsIndicator()
 
 	end
 
-	GetNumSkySkyShards()
+	GetNumFoundSkyShards()
 	ZO_PreHook(SKILLS_WINDOW, "RefreshSkillPointInfo", PreHookRefreshSkillPointInfo)
 	ZO_PreHook(GAMEPAD_SKILLS, "RefreshPointsDisplay", PreHookRefreshPointsDisplay)
 
@@ -634,7 +636,7 @@ local function OnAchievementUpdate(_, achievementId)
 		LMP:RefreshPins(PINS_UNKNOWN)
 		LMP:RefreshPins(PINS_COLLECTED)
 		COMPASS_PINS:RefreshPins(PINS_COMPASS)
-		GetNumSkySkyShards()
+--		GetNumFoundSkyShards()
 	end
 end
 
