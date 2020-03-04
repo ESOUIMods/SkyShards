@@ -1,23 +1,26 @@
 --[[
 -------------------------------------------------------------------------------
--- SkyShards, by Ayantir
+-- SkyShards
+-- Current maintainer: AssemblerManiac
+-- Previous maintainer: Ayantir
+-- originally by Garkin
 -------------------------------------------------------------------------------
 This software is under : CreativeCommons CC BY-NC-SA 4.0
 Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 
 You are free to:
 
-    Share — copy and redistribute the material in any medium or format
-    Adapt — remix, transform, and build upon the material
+    Share - copy and redistribute the material in any medium or format
+    Adapt - remix, transform, and build upon the material
     The licensor cannot revoke these freedoms as long as you follow the license terms.
 
 
 Under the following terms:
 
-    Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-    NonCommercial — You may not use the material for commercial purposes.
-    ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
-    No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+    Attribution - You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+    NonCommercial - You may not use the material for commercial purposes.
+    ShareAlike - If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+    No additional restrictions - You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
 
 Please read full licence at :
@@ -27,9 +30,11 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 --Libraries--------------------------------------------------------------------
 local LAM = LibStub("LibAddonMenu-2.0")
 local LMP = LibStub("LibMapPins-1.0")
+local GPS = LibStub("LibGPS2")
 
 --Local constants -------------------------------------------------------------
-local ADDON_VERSION = "6"
+local ADDON_NAME = "SkyShards"
+local ADDON_VERSION = "10.10"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -39,7 +44,7 @@ local INFORMATION_TOOLTIP
 --Local variables -------------------------------------------------------------
 local updatePins = {}
 local updating = false
-local savedVariables
+local db
 local defaults = {			-- default settings for saved variables
 	compassMaxDistance = 0.05,
 	skillPanelDisplay = 2,
@@ -54,6 +59,7 @@ local defaults = {			-- default settings for saved variables
 		[PINS_COLLECTED] = false,
 	},
 	mainworldSkyshards = ZO_SELECTED_TEXT:ToHex(),
+	immersiveMode = 1,
 }
 
 -- Local functions ------------------------------------------------------------
@@ -116,9 +122,17 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
+local function GetZoneAndSubZone(alternative)
+	if alternative then
+		return select(3,(GetMapTileTexture()):lower():gsub("ui_map_", ""):find("maps/([%w%-]+/[%w%-]+_[%w%-]+)"))
+	end
+
+	return select(3,(GetMapTileTexture()):lower():gsub("ui_map_", ""):find("maps/([%w%-]+)/([%w%-]+_[%w%-]+)"))
+end
+
 local function CompassCallback()
-	if GetMapType() <= MAPTYPE_ZONE and savedVariables.filters[PINS_COMPASS] then
-		local zone, subzone = LMP:GetZoneAndSubzone()
+	if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
+		local zone, subzone = GetZoneAndSubZone()
 		local skyshards = SkyShards_GetLocalData(zone, subzone)
 		if skyshards then
 			for _, pinData in ipairs(skyshards) do
@@ -131,8 +145,92 @@ local function CompassCallback()
 	end
 end
 
+local function ShouldDisplaySkyshards()
+
+	if db.immersiveMode == 1 then
+		return true
+	end
+
+	local mapIndex = GetCurrentMapIndex()
+
+	if not mapIndex and IsInImperialCity() then mapIndex = GetImperialCityMapIndex() end
+
+	if not mapIndex then
+		local measurements = GPS:GetCurrentMapMeasurements()
+		if measurements then
+			mapIndex = measurements.mapIndex	-- Sigh
+		end
+	end
+
+	if mapIndex then
+		if db.immersiveMode == 2 then -- MainQuest
+
+			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
+			if type(conditionData) == "table" then
+				for conditionIndex, achievementIndex in ipairs(conditionData) do
+					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
+					if not completed then
+						return false
+					end
+				end
+				return true
+			else
+				local _, _ , _, _, completed = GetAchievementInfo(conditionData)
+				return completed
+			end
+
+		elseif db.immersiveMode == 3 then -- Wayshrines
+
+			if mapIndex ~= 14 then -- It is impossible to unlock all Wayshrines in Cyrodiil
+				local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
+				return conditionData
+			end
+
+		elseif db.immersiveMode == 4 then -- Exploration
+
+			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
+			if type(conditionData) == "table" then
+				for conditionIndex, achievementIndex in ipairs(conditionData) do
+					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
+					if not completed then
+						return false
+					end
+				end
+				return true
+			else
+				local _, _ , _, _, completed = GetAchievementInfo(conditionData)
+				return completed
+			end
+
+		elseif db.immersiveMode == 5 then -- Zone Quests
+
+			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
+			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
+			if type(conditionData) == "table" then
+				for conditionIndex, achievementIndex in ipairs(conditionData) do
+					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
+					if not completed then
+						return false
+					end
+				end
+				return true
+			else
+				local _, _ , _, _, completed = GetAchievementInfo(conditionData)
+				return completed
+			end
+
+		end
+	end
+
+	return true
+
+end
+
 local function CreatePins()
-	local zone, subzone = LMP:GetZoneAndSubzone()
+
+	local shouldDisplay = ShouldDisplaySkyshards()
+
+	local zone, subzone = GetZoneAndSubZone()
 	local skyshards = SkyShards_GetLocalData(zone, subzone)
 
 	if skyshards ~= nil then
@@ -140,11 +238,11 @@ local function CreatePins()
 			local _, numCompleted = GetAchievementCriterion(pinData[3], pinData[4])
 			if numCompleted == 1 and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
 				LMP:CreatePin(PINS_COLLECTED, pinData, pinData[1], pinData[2])
-			elseif numCompleted == 0 then
+			elseif shouldDisplay and numCompleted == 0 then
 				if updatePins[PINS_UNKNOWN] and LMP:IsEnabled(PINS_UNKNOWN) then
 					LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[1], pinData[2])
 				end
-				if updatePins[PINS_COMPASS] and savedVariables.filters[PINS_COMPASS] then
+				if updatePins[PINS_COMPASS] and db.filters[PINS_COMPASS] then
 					COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[1], pinData[2])
 				end
 			end
@@ -152,7 +250,9 @@ local function CreatePins()
 	end
 
 	updatePins = {}
+
 	updating = false
+
 end
 
 local function QueueCreatePins(pinType)
@@ -187,7 +287,7 @@ local function MapCallback_collected()
 end
 
 local function CompassCallback()
-	if not savedVariables.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
+	if not db.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
 	QueueCreatePins(PINS_COMPASS)
 end
 
@@ -214,7 +314,7 @@ local function ShowMyPosition()
 	local locX = ("%05.02f"):format(zo_round(x*10000)/100)
 	local locY = ("%05.02f"):format(zo_round(y*10000)/100)
 
-	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubzone(true)))
+	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>)", GetMapName(), locX, locY, GetZoneAndSubZone(true)))
 
 end
 SLASH_COMMANDS["/mypos"] = ShowMyPosition
@@ -238,6 +338,14 @@ local function CreateSettingsMenu()
 		[3] = GetString(SKYS_SKILLS_OPTION3),
 	}
 
+	local immersiveChoices = {
+		[1] = GetString(SKYS_IMMERSIVE_CHOICE1),
+		[2] = GetString(SKYS_IMMERSIVE_CHOICE2),
+		[3] = GetString(SKYS_IMMERSIVE_CHOICE3),
+		[4] = GetString(SKYS_IMMERSIVE_CHOICE4),
+		[5] = GetString(SKYS_IMMERSIVE_CHOICE5),
+	}
+
 	local pinTexturesList = {
 		[1] = "Default icons (Garkin)",
 		[2] = "Alternative icons (Garkin)",
@@ -257,19 +365,19 @@ local function CreateSettingsMenu()
 		registerForDefaults = true,
 		website = ADDON_WEBSITE,
 	}
-	LAM:RegisterAddonPanel("SkyShards", panelData)
+	LAM:RegisterAddonPanel(ADDON_NAME, panelData)
 
 	local CreateIcons, unknownIcon, collectedIcon
 	CreateIcons = function(panel)
 		if panel == SkyShards then
 			unknownIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[1], CT_TEXTURE)
 			unknownIcon:SetAnchor(RIGHT, panel.controlsToRefresh[1].combobox, LEFT, -10, 0)
-			unknownIcon:SetTexture(pinTextures.unknown[savedVariables.pinTexture.type])
-			unknownIcon:SetDimensions(savedVariables.pinTexture.size, savedVariables.pinTexture.size)
+			unknownIcon:SetTexture(pinTextures.unknown[db.pinTexture.type])
+			unknownIcon:SetDimensions(db.pinTexture.size, db.pinTexture.size)
 			collectedIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[1], CT_TEXTURE)
 			collectedIcon:SetAnchor(RIGHT, unknownIcon, LEFT, -5, 0)
-			collectedIcon:SetTexture(pinTextures.collected[savedVariables.pinTexture.type])
-			collectedIcon:SetDimensions(savedVariables.pinTexture.size, savedVariables.pinTexture.size)
+			collectedIcon:SetTexture(pinTextures.collected[db.pinTexture.type])
+			collectedIcon:SetDimensions(db.pinTexture.size, db.pinTexture.size)
 			CALLBACK_MANAGER:UnregisterCallback("LAM-PanelControlsCreated", CreateIcons)
 		end
 	end
@@ -281,11 +389,11 @@ local function CreateSettingsMenu()
 			name = GetString(SKYS_PIN_TEXTURE),
 			tooltip = GetString(SKYS_PIN_TEXTURE_DESC),
 			choices = pinTexturesList,
-			getFunc = function() return pinTexturesList[savedVariables.pinTexture.type] end,
+			getFunc = function() return pinTexturesList[db.pinTexture.type] end,
 			setFunc = function(selected)
 					for index, name in ipairs(pinTexturesList) do
 						if name == selected then
-							savedVariables.pinTexture.type = index
+							db.pinTexture.type = index
 							LMP:SetLayoutKey(PINS_UNKNOWN, "texture", pinTextures.unknown[index])
 							LMP:SetLayoutKey(PINS_COLLECTED, "texture", pinTextures.collected[index])
 							unknownIcon:SetTexture(pinTextures.unknown[index])
@@ -298,7 +406,7 @@ local function CreateSettingsMenu()
 						end
 					end
 				end,
-			disabled = function() return not (savedVariables.filters[PINS_UNKNOWN] or savedVariables.filters[PINS_COLLECTED]) end,
+			disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
 			default = pinTexturesList[defaults.pinTexture.type],
 		},
 		{
@@ -307,9 +415,9 @@ local function CreateSettingsMenu()
 			tooltip = GetString(SKYS_PIN_SIZE_DESC),
 			min = 20,
 			max = 70,
-			getFunc = function() return savedVariables.pinTexture.size end,
+			getFunc = function() return db.pinTexture.size end,
 			setFunc = function(size)
-					savedVariables.pinTexture.size = size
+					db.pinTexture.size = size
 					unknownIcon:SetDimensions(size, size)
 					collectedIcon:SetDimensions(size, size)
 					LMP:SetLayoutKey(PINS_UNKNOWN, "size", size)
@@ -317,7 +425,7 @@ local function CreateSettingsMenu()
 					LMP:RefreshPins(PINS_UNKNOWN)
 					LMP:RefreshPins(PINS_COLLECTED)
 				end,
-			disabled = function() return not (savedVariables.filters[PINS_UNKNOWN] or savedVariables.filters[PINS_COLLECTED]) end,
+			disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
 			default = defaults.pinTexture.size
 		},
 		{
@@ -327,24 +435,24 @@ local function CreateSettingsMenu()
 			min = 10,
 			max = 200,
 			step = 5,
-			getFunc = function() return savedVariables.pinTexture.level end,
+			getFunc = function() return db.pinTexture.level end,
 			setFunc = function(level)
-					savedVariables.pinTexture.level = level
+					db.pinTexture.level = level
 					LMP:SetLayoutKey(PINS_UNKNOWN, "level", level)
 					LMP:SetLayoutKey(PINS_COLLECTED, "level", level)
 					LMP:RefreshPins(PINS_UNKNOWN)
 					LMP:RefreshPins(PINS_COLLECTED)
 				end,
-			disabled = function() return not (savedVariables.filters[PINS_UNKNOWN] or savedVariables.filters[PINS_COLLECTED]) end,
+			disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
 			default = defaults.pinTexture.level,
 		},
 		{
 			type = "checkbox",
 			name = GetString(SKYS_UNKNOWN),
 			tooltip = GetString(SKYS_UNKNOWN_DESC),
-			getFunc = function() return savedVariables.filters[PINS_UNKNOWN] end,
+			getFunc = function() return db.filters[PINS_UNKNOWN] end,
 			setFunc = function(state)
-					savedVariables.filters[PINS_UNKNOWN] = state
+					db.filters[PINS_UNKNOWN] = state
 					LMP:SetEnabled(PINS_UNKNOWN, state)
 				end,
 			default = defaults.filters[PINS_UNKNOWN],
@@ -353,9 +461,9 @@ local function CreateSettingsMenu()
 			type = "checkbox",
 			name = GetString(SKYS_COLLECTED),
 			tooltip = GetString(SKYS_COLLECTED_DESC),
-			getFunc = function() return savedVariables.filters[PINS_COLLECTED] end,
+			getFunc = function() return db.filters[PINS_COLLECTED] end,
 			setFunc = function(state)
-					savedVariables.filters[PINS_COLLECTED] = state
+					db.filters[PINS_COLLECTED] = state
 					LMP:SetEnabled(PINS_COLLECTED, state)
 				end,
 			default = defaults.filters[PINS_COLLECTED]
@@ -364,9 +472,9 @@ local function CreateSettingsMenu()
 			type = "checkbox",
 			name = GetString(SKYS_COMPASS_UNKNOWN),
 			tooltip = GetString(SKYS_COMPASS_UNKNOWN_DESC),
-			getFunc = function() return savedVariables.filters[PINS_COMPASS] end,
+			getFunc = function() return db.filters[PINS_COMPASS] end,
 			setFunc = function(state)
-					savedVariables.filters[PINS_COMPASS] = state
+					db.filters[PINS_COMPASS] = state
 					COMPASS_PINS:RefreshPins(PINS_COMPASS)
 				end,
 			default = defaults.filters[PINS_COMPASS],
@@ -377,14 +485,14 @@ local function CreateSettingsMenu()
 			tooltip = GetString(SKYS_COMPASS_DIST_DESC),
 			min = 1,
 			max = 100,
-			getFunc = function() return savedVariables.compassMaxDistance * 1000 end,
+			getFunc = function() return db.compassMaxDistance * 1000 end,
 			setFunc = function(maxDistance)
-					savedVariables.compassMaxDistance = maxDistance / 1000
+					db.compassMaxDistance = maxDistance / 1000
 					COMPASS_PINS.pinLayouts[PINS_COMPASS].maxDistance = maxDistance / 1000
 					COMPASS_PINS:RefreshPins(PINS_COMPASS)
 				end,
 			width = "full",
-			disabled = function() return not savedVariables.filters[PINS_COMPASS] end,
+			disabled = function() return not db.filters[PINS_COMPASS] end,
 			default = defaults.compassMaxDistance * 1000,
 		},
 		{
@@ -394,7 +502,7 @@ local function CreateSettingsMenu()
 			getFunc = function() return MAINWORLD_SKYS:UnpackRGBA() end,
 			setFunc = function(...)
 				MAINWORLD_SKYS:SetRGBA(...)
-				savedVariables.mainworldSkyshards = MAINWORLD_SKYS:ToHex()
+				db.mainworldSkyshards = MAINWORLD_SKYS:ToHex()
 				LMP:RefreshPins()
 				COMPASS_PINS:RefreshPins(PINS_COMPASS)
 			end,
@@ -405,19 +513,36 @@ local function CreateSettingsMenu()
 			name = GetString(SKYS_SKILLS),
 			tooltip = GetString(SKYS_SKILLS_DESC),
 			choices = skillPanelChoices,
-			getFunc = function() return skillPanelChoices[savedVariables.skillPanelDisplay] end,
+			getFunc = function() return skillPanelChoices[db.skillPanelDisplay] end,
 			setFunc = function(selected)
 					for index, name in ipairs(skillPanelChoices) do
 						if name == selected then
-							savedVariables.skillPanelDisplay = index
+							db.skillPanelDisplay = index
+							SKILLS_WINDOW:RefreshSkillPointInfo()
 							break
 						end
 					end
 				end,
 			default = skillPanelChoices[defaults.skillPanelDisplay],
 		},
+		{
+			type = "dropdown",
+			name = GetString(SKYS_IMMERSIVE),
+			tooltip = GetString(SKYS_IMMERSIVE_DESC),
+			choices = immersiveChoices,
+			getFunc = function() return immersiveChoices[db.immersiveMode] end,
+			setFunc = function(selected)
+					for index, name in ipairs(immersiveChoices) do
+						if name == selected then
+							db.immersiveMode = index
+							break
+						end
+					end
+				end,
+			default = immersiveChoices[defaults.immersiveMode],
+		},
 	}
-	LAM:RegisterOptionControls("SkyShards", optionsTable)
+	LAM:RegisterOptionControls(ADDON_NAME, optionsTable)
 end
 
 local function GetNumSkySkyShards()
@@ -443,13 +568,16 @@ end
 
 local function AlterSkyShardsIndicator()
 
-	local function PreHookUpdateSkyShards(self)
-		if savedVariables.skillPanelDisplay > 1 then
+	local function PreHookRefreshSkillPointInfo(self)				-- keyboard function
+    	local availablePoints = SKILL_POINT_ALLOCATION_MANAGER:GetAvailableSkillPoints()
+    	self.availablePointsLabel:SetText(zo_strformat(SI_SKILLS_POINTS_TO_SPEND, availablePoints))
+
+		if db.skillPanelDisplay > 1 then
 			if collectedSkyShards < totalSkyShards then
-				if savedVariables.skillPanelDisplay == 2 then
+				if db.skillPanelDisplay == 2 then
 					local newFormat = string.gsub(GetString(SI_SKILLS_SKY_SHARDS_COLLECTED), "\/3", "\/" .. totalSkyShards)
 					self.skyShardsLabel:SetText(zo_strformat(newFormat, collectedSkyShards))
-				elseif savedVariables.skillPanelDisplay == 3 then
+				elseif db.skillPanelDisplay == 3 then
 					local newFormat = string.gsub(GetString(SI_SKILLS_SKY_SHARDS_COLLECTED), "\/3", "\/" .. totalSkyShards .. " (" .. GetNumSkyShards() .. "/3)")
 					self.skyShardsLabel:SetText(zo_strformat(newFormat, collectedSkyShards))
 				end
@@ -461,19 +589,18 @@ local function AlterSkyShardsIndicator()
 		end
 	end
 
-	local function PreHookRefreshPointsDisplay(self)
-
+	local function PreHookRefreshPointsDisplay(self)		-- gamepad function
 		local availablePoints = GetAvailableSkillPoints()
 		self.headerData.data1Text = availablePoints
 
-		if savedVariables.skillPanelDisplay == 1 then
+		if db.skillPanelDisplay == 1 then
 			local skyShards = GetNumSkyShards()
 			self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards, NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
-		elseif savedVariables.skillPanelDisplay > 1 then
+		elseif db.skillPanelDisplay > 1 then
 			if collectedSkyShards < totalSkyShards then
-				if savedVariables.skillPanelDisplay == 2 then
+				if db.skillPanelDisplay == 2 then
 					self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards, totalSkyShards)
-				elseif savedVariables.skillPanelDisplay == 3 then
+				elseif db.skillPanelDisplay == 3 then
 					local skyShards = GetNumSkyShards()
 					self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards, totalSkyShards) .. " (" .. zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards, NUM_PARTIAL_SKILL_POINTS_FOR_FULL) .. ")"
 				end
@@ -488,13 +615,13 @@ local function AlterSkyShardsIndicator()
 	end
 
 	GetNumSkySkyShards()
-	ZO_PreHook(SKILLS_WINDOW, "UpdateSkyShards", PreHookUpdateSkyShards)
+	ZO_PreHook(SKILLS_WINDOW, "RefreshSkillPointInfo", PreHookRefreshSkillPointInfo)
 	ZO_PreHook(GAMEPAD_SKILLS, "RefreshPointsDisplay", PreHookRefreshPointsDisplay)
 
 end
 
 -- Event handlers -------------------------------------------------------------
-local function OnAchievementUpdate(eventCode, achievementId)
+local function OnAchievementUpdate(_, achievementId)
 	local ids = SkyShards_GetAchievementIDs()
 
 	if ids[achievementId] then
@@ -505,20 +632,41 @@ local function OnAchievementUpdate(eventCode, achievementId)
 	end
 end
 
+local function OnAchievementAwarded(_, _, _, achievementId)
+	OnAchievementUpdate(_, achievementId)
+end
+
+local function NamesToIDSavedVars()
+
+	if not db.namesToIDSavedVars then
+
+		local displayName = GetDisplayName()
+		local name = GetUnitName("player")
+
+		if SkyS_SavedVariables.Default[displayName][name] then
+			db = SkyS_SavedVariables.Default[displayName][name]
+			db.namesToIDSavedVars = true -- should not be necessary because data don't exist anymore in SkyS_SavedVariables.Default[displayName][name]
+		end
+
+	end
+
+end
+
 local function OnLoad(_, name)
 
 	if name == "SkyShards" then
-		EVENT_MANAGER:UnregisterForEvent("SkyShards", EVENT_ADD_ON_LOADED)
+		EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
 
-		savedVariables = ZO_SavedVars:NewCharacterNameSettings("SkyS_SavedVariables", 4, nil, defaults)
+		db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)
+		NamesToIDSavedVars()
 
-		MAINWORLD_SKYS = ZO_ColorDef:New(savedVariables.mainworldSkyshards)
+		MAINWORLD_SKYS = ZO_ColorDef:New(db.mainworldSkyshards)
 
 		--get pin layout from saved variables
-		local pinTextureType = savedVariables.pinTexture.type
-		local pinTextureLevel = savedVariables.pinTexture.level
-		local pinTextureSize = savedVariables.pinTexture.size
-		local compassMaxDistance = savedVariables.compassMaxDistance
+		local pinTextureType = db.pinTexture.type
+		local pinTextureLevel = db.pinTexture.level
+		local pinTextureSize = db.pinTexture.size
+		local compassMaxDistance = db.compassMaxDistance
 
 		local pinLayout_unknown = { level = pinTextureLevel, texture = pinTextures.unknown[pinTextureType], size = pinTextureSize, tint = SetMainworldTint }
 		local pinLayout_collected = { level = pinTextureLevel, texture = pinTextures.collected[pinTextureType], size = pinTextureSize, tint = SetMainworldTint }
@@ -552,8 +700,8 @@ local function OnLoad(_, name)
 		LMP:AddPinType(PINS_COLLECTED, MapCallback_collected, nil, pinLayout_collected, pinTooltipCreator)
 
 		--add filter check boxex
-		LMP:AddPinFilter(PINS_UNKNOWN, GetString(SKYS_FILTER_UNKNOWN), nil, savedVariables.filters)
-		LMP:AddPinFilter(PINS_COLLECTED, GetString(SKYS_FILTER_COLLECTED), nil, savedVariables.filters)
+		LMP:AddPinFilter(PINS_UNKNOWN, GetString(SKYS_FILTER_UNKNOWN), nil, db.filters)
+		LMP:AddPinFilter(PINS_COLLECTED, GetString(SKYS_FILTER_COLLECTED), nil, db.filters)
 
 		--add handler for the left click
 		local clickHandler = {
@@ -581,10 +729,11 @@ local function OnLoad(_, name)
 		AlterSkyShardsIndicator()
 
 		--events
-		EVENT_MANAGER:RegisterForEvent("SkyShards",  EVENT_ACHIEVEMENT_UPDATED, OnAchievementUpdate)
-		EVENT_MANAGER:RegisterForEvent("SkyShards", EVENT_GAMEPAD_PREFERRED_MODE_CHANGED, OnGamepadPreferredModeChanged)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_UPDATED, OnAchievementUpdate)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_AWARDED, OnAchievementAwarded)
+		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GAMEPAD_PREFERRED_MODE_CHANGED, OnGamepadPreferredModeChanged)
 	end
 
 end
 
-EVENT_MANAGER:RegisterForEvent("SkyShards", EVENT_ADD_ON_LOADED, OnLoad)
+EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED, OnLoad)

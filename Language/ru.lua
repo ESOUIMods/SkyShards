@@ -35,7 +35,7 @@ SafeAddString(SKYS_SKILLS_OPTION3			, "Продвинутый", 1)
 SafeAddString(SKYS_SKILLS_OPTION2			, "Детальный", 1)
 
 --filters
-SafeAddString(SKYS_UNKNOWN,               "Показывать не собранные Небесные Осколки", 1)
+SafeAddString(SKYS_UNKNOWN,               "Показывать несобранные Небесные Осколки", 1)
 SafeAddString(SKYS_UNKNOWN_DESC,          "Показать/скрыть иконки несобранных Небесных Осколков на карте.", 1)
 SafeAddString(SKYS_COLLECTED,             "Показывать собранные Небесные Осколки", 1)
 SafeAddString(SKYS_COLLECTED_DESC,        "Показать/скрыть иконки уже собранных Небесных Осколков на карте.", 1)

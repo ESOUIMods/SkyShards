@@ -1,7 +1,7 @@
 --[[
 Author: Ayantir
 Filename: LibAnnyoingUpdateNotificationInGame.lua
-Version: 3
+Version: 5
 ]]--
 
 --[[
@@ -24,18 +24,18 @@ Under the following terms:
     No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
 
-Please read full licence at :
+Please read full licence at : 
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 ]]--
 
 local libLoaded
-local LIB_NAME, VERSION = "Launig", 3
+local LIB_NAME, VERSION = "Launig", 5
 local Launig, oldminor = LibStub:NewLibrary(LIB_NAME, VERSION)
 if not Launig then return end
 
-local GRACE_PERIOD = 86400 * 7
-local REPEAT_EVERY = 86400 * 20
+local GRACE_PERIOD = 86400 * 15
+local REPEAT_EVERY = 86400 * 40
 
 local UPDATE_WEBSITE = "http://www.esoui.com"
 
@@ -81,22 +81,22 @@ local function GetLangStrings(language)
 end
 
 local function GetDLCTextures()
-
+	
 	local picts = {}
 	for dlcIndex = 1 , GetTotalCollectiblesByCategoryType(COLLECTIBLE_CATEGORY_TYPE_DLC) do
-		local collectibleId = GetCollectibleIdFromType(COLLECTIBLE_CATEGORY_TYPE_DLC, dlcIndex)
+		local collectibleId = GetCollectibleIdFromType(COLLECTIBLE_CATEGORY_TYPE_DLC, dlcIndex) 
 		local pict = GetCollectibleGamepadBackgroundImage(collectibleId)
 		table.insert(picts, pict)
 	end
-
+	
 	for chapterIndex = 1 , GetTotalCollectiblesByCategoryType(COLLECTIBLE_CATEGORY_TYPE_CHAPTER) do
-		local collectibleId = GetCollectibleIdFromType(COLLECTIBLE_CATEGORY_TYPE_CHAPTER, chapterIndex)
+		local collectibleId = GetCollectibleIdFromType(COLLECTIBLE_CATEGORY_TYPE_CHAPTER, chapterIndex) 
 		local pict = GetCollectibleGamepadBackgroundImage(collectibleId)
 		table.insert(picts, pict)
 	end
-
+	
 	return picts
-
+    
 end
 
 local function PushDialog()
@@ -126,38 +126,38 @@ local function DrawKeyboardUI(tlw)
 	local container = wm:CreateControl("$(parent)Container", tlw, CT_CONTROL)
 	container:SetAnchor(RIGHT, nil, RIGHT, -80, 0)
 	container:SetDimensions(600, 725)
-
+	
 		local background = CreateControlFromVirtual("$(parent)BG", container, "ZO_DefaultBackdrop")
-
+		
 		local title = wm:CreateControl("$(parent)Title", container, CT_LABEL)
 		title:SetAnchor(TOP, nil, TOP, 0, 15)
 		title:SetFont("ZoFontWinH1")
 		title:SetModifyTextType(MODIFY_TEXT_TYPE_UPPERCASE)
 		title:SetText(lang.TITLE)
-
+		
 		local divider = CreateControlFromVirtual("$(parent)Divider", container, "ZO_Options_Divider")
 		divider:SetAnchor(TOP, nil, TOP, 0, 50)
-
+		
 		local pict = wm:CreateControl("$(parent)Pict", container, CT_TEXTURE)
 		pict:SetAnchor(TOP, nil, TOP, 0, 65)
 		pict:SetDimensions(575, 550)
 		pict:SetTexture(textures[zo_random(1, #textures)])
 		pict:SetTextureCoords(0, 407 / 512, 0, 1)
-
+		
 		local description = wm:CreateControl("$(parent)Description", container, CT_LABEL)
 		description:SetAnchor(BOTTOMLEFT, nil, BOTTOMLEFT, 20, -55)
 		description:SetFont("ZoFontGameLargeBold")
 		description:SetColor(ZO_NORMAL_TEXT:UnpackRGBA())
 		description:SetText(lang.DESC[platform])
-
+		
 		local keybinds = wm:CreateControl("$(parent)Keybinds", container, CT_CONTROL)
 		keybinds:SetAnchor(BOTTOMRIGHT, nil, BOTTOMRIGHT, -10, -10)
-
+		
 			local updatenow = CreateControlFromVirtual("$(parent)UpdateNow", keybinds, "ZO_KeybindButton")
 			updatenow:SetAnchor(BOTTOMRIGHT, nil, BOTTOMRIGHT, 0, 0)
 			updatenow:SetKeybind("DIALOG_PRIMARY")
 			updatenow:SetCallback(GoOnUpdateWebsite)
-
+			
 				local updatenowlbl = GetControl(updatenow, "NameLabel")
 				updatenowlbl:SetText(lang.NOW)
 
@@ -165,10 +165,10 @@ local function DrawKeyboardUI(tlw)
 			updatelater:SetAnchor(RIGHT, updatenow, LEFT, -10, 0)
 			updatelater:SetKeybind("DIALOG_NEGATIVE")
 			updatelater:SetCallback(CloseAnnouncement)
-
+		
 				local updatelaterlbl = GetControl(updatelater, "NameLabel")
 				updatelaterlbl:SetText(lang.LATER)
-
+			
 end
 
 local function InitializeAnnouncement()
@@ -178,10 +178,10 @@ local function InitializeAnnouncement()
 	tlw:SetDrawTier(DT_HIGH)
 	tlw:SetAnchorFill()
 	tlw:SetHidden(true)
-
+	
 	tlw:SetHandler("OnEffectivelyShown", PushDialog)
 	tlw:SetHandler("OnEffectivelyHidden", ReleaseDialog)
-
+	
 	if IsInGamepadPreferredMode() then
 		platform = 1
 		lang = GetLangStrings(GetCVar("Language.2"))
@@ -190,7 +190,7 @@ local function InitializeAnnouncement()
 		lang = GetLangStrings(GetCVar("Language.2"))
 		DrawKeyboardUI(tlw)
 	end
-
+	
 	ZO_Dialogs_RegisterCustomDialog("LAUNIG",
 	{
 		gamepadInfo = {
@@ -213,7 +213,7 @@ local function InitializeAnnouncement()
 				text = lang.NOW,
 				keybind = "DIALOG_PRIMARY",
 				callback = GoOnUpdateWebsite,
-			},
+			},  
 			{
 				control = GetControl(tlw, "ContainerKeybindsUpdateLater"),
 				text = lang.LATER,
@@ -222,7 +222,7 @@ local function InitializeAnnouncement()
 			},
 		}
 	})
-
+	
 end
 
 local function ShowAnnouncement()
@@ -230,10 +230,10 @@ local function ShowAnnouncement()
 end
 
 local function HaveOutdatedAddons()
-
+	
 	local AddOnManager = GetAddOnManager()
 	local haveOutdatedAddons
-
+	
 	for addonIndex = 1, AddOnManager:GetNumAddOns() do
 		local _, _, _, _, enabled, state, isOutOfDate = AddOnManager:GetAddOnInfo(addonIndex)
 		haveOutdatedAddons = enabled and isOutOfDate and state == ADDON_STATE_ENABLED or false -- addons can be enabled and state ~= ADDON_STATE_ENABLED
@@ -241,9 +241,9 @@ local function HaveOutdatedAddons()
 			return haveOutdatedAddons
 		end
 	end
-
+	
 	return true
-
+	
 end
 
 local function OnPlayerActivated()
@@ -254,26 +254,28 @@ local function OnPlayerActivated()
 end
 
 function Launig:Init()
-
+	
 	local apiVersion = GetAPIVersion()
 	local now = GetTimeStamp()
 	if GetWorldName() ~= "PTS" then
-		if not SV_HOST.Launig or apiVersion > SV_HOST.Launig.a then
-			SV_HOST.Launig = { t = now, a = apiVersion, d = false } -- time, api, displayed
-		elseif HaveOutdatedAddons() then
-			local remindPeriod = GRACE_PERIOD
-			if SV_HOST.Launig.d then
-				remindPeriod = REPEAT_EVERY
-			end
-			if now > SV_HOST.Launig.t + remindPeriod then
-				SV_HOST.Launig.t = now
-				SV_HOST.Launig.d = true
-				InitializeAnnouncement()
-				EVENT_MANAGER:RegisterForEvent(LIB_NAME, EVENT_PLAYER_ACTIVATED, OnPlayerActivated)
+		if SV_HOST then
+			if not SV_HOST.Launig or apiVersion > SV_HOST.Launig.a then
+				SV_HOST.Launig = { t = now, a = apiVersion, d = false } -- time, api, displayed
+			elseif HaveOutdatedAddons() then
+				local remindPeriod = GRACE_PERIOD
+				if SV_HOST.Launig.d then
+					remindPeriod = REPEAT_EVERY
+				end
+				if now > SV_HOST.Launig.t + remindPeriod then
+					SV_HOST.Launig.t = now
+					SV_HOST.Launig.d = true
+					InitializeAnnouncement()
+					EVENT_MANAGER:RegisterForEvent(LIB_NAME, EVENT_PLAYER_ACTIVATED, OnPlayerActivated)
+				end
 			end
 		end
 	end
-
+	
 end
 
 local function OnAddonLoaded()

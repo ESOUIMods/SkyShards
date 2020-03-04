@@ -51,3 +51,11 @@ SafeAddString(SKYS_COLLECTED_DESC,        "Zeige/Verberge bereits eingesammelte 
 --worldmap filters
 SafeAddString(SKYS_FILTER_UNKNOWN,        "Unbekannte Himmelsscherben", 1)
 SafeAddString(SKYS_FILTER_COLLECTED,      "Eingesammelte Himmelsscherben", 1)
+
+-- Immersive Mode
+SafeAddString(SKYS_IMMERSIVE,					"Aktiviere Immersiv Modus (abhängig von)", 1)
+SafeAddString(SKYS_IMMERSIVE_DESC,			"Unbekannte Himmelsscherben werden nicht angezeigt, wenn die folgende Einstellung nicht für die aktuell betrachtete Zone erfüllt wurde", 1)
+
+SafeAddString(SKYS_IMMERSIVE_CHOICE1,		"Deaktiviert", 1)
+SafeAddString(SKYS_IMMERSIVE_CHOICE2,		"Zonen Haupt Quest", 1)
+SafeAddString(SKYS_IMMERSIVE_CHOICE5,		"Zonen Quests", 1)
