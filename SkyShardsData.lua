@@ -62,7 +62,8 @@ local skyshardsAchievementIDs = {
 	[1844] = true,	-- Clockwork City Skyshard Hunter
 	[1845] = true,	-- Summerset Skyshard Hunter
 	[2291] = true,	-- Murkmire Skyshard Hunter
-	[2461] = true,	-- Elsweyr Skyshard Hunter
+	[2461] = true,	-- Northern Elsweyr Skyshard Hunter
+	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -1645,6 +1646,11 @@ skyshardsData["southernelsweyr"]["moonlitcove02_base"]=skyshardsData["southernel
 skyshardsData["southernelsweyr"]["moonlitcove03_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
 skyshardsData["southernelsweyr"]["moonlitcove04_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
 skyshardsData["southernelsweyr"]["moonlitcove05_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
+
+-- **************
+-- when adding new zone data
+-- Add achieve ID to var skyshardsAchievementIDs at top of this file too
+-- **************
 
 function SkyShards_GetAchievementIDs()
 	return skyshardsAchievementIDs
