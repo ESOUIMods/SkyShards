@@ -13,9 +13,6 @@
 ## SavedVariables: SkyS_SavedVariables
 ## DependsOn: CustomCompassPins LibAddonMenu-2.0 LibMapPing LibGPS LibMapPins-1.0
 
-Libs/LibStub/LibStub.lua
-Libs/LibCustomTitles/LibCustomTitles.lua
-
 Language/strings.lua
 Language/$(language).lua
 SkyShardsData.lua

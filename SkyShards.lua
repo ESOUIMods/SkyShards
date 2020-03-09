@@ -292,7 +292,7 @@ local function MapCallback_collected()
 	QueueCreatePins(PINS_COLLECTED)
 end
 
-local function CompassCallback()
+local function CompassCallback_knownpins()
 	if not db.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
 	QueueCreatePins(PINS_COMPASS)
 end
@@ -724,7 +724,7 @@ local function OnLoad(_, name)
 		LMP:SetClickHandlers(PINS_COLLECTED, clickHandler)
 
 		--initialize compass pins
-		COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback, pinLayout_compassunknown)
+		COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback_knownpins, pinLayout_compassunknown)
 		COMPASS_PINS:RefreshPins(PINS_COMPASS)
 
 		-- addon menu
