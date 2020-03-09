@@ -1620,6 +1620,31 @@ skyshardsData["elsweyr"] = {
 	},
 }
 
+skyshardsData["southernelsweyr"] = {
+	-- Southern Elsweyr
+	["southernelsweyr_base"] = {			-- Elsweyr overland
+		{ 0.5883, 0.2437, 2562, 1 },
+		{ 0.4481, 0.5515, 2562, 2, 1 },		-- Senchal
+		{ 0.3450, 0.5671, 2562, 3 },
+		{ 0.2575, 0.3207, 2562, 4 },
+		{ 0.1545, 0.5990, 2562, 5, 2 },		-- Moonlit Cove
+		{ 0.5066, 0.2937, 2562, 6, 2 },		-- Forsaken Citadel
+	},
+	["senchal_base"] = {
+		{ 0.2467, 0.6866, 2562, 2, 1 },		-- Senchal
+	},
+	["moonlitcove01_base"] = {
+		{ 0.7608, 0.2282, 2562, 5, 2 },
+	},
+	["houseofembersinside_base"] = {
+		{ 0.4010, 0.3841, 2562, 6, 2 },
+	},
+}
+-- alias for Southern Elsweyr shard 5
+skyshardsData["southernelsweyr"]["moonlitcove02_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
+skyshardsData["southernelsweyr"]["moonlitcove03_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
+skyshardsData["southernelsweyr"]["moonlitcove04_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
+skyshardsData["southernelsweyr"]["moonlitcove05_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
 
 function SkyShards_GetAchievementIDs()
 	return skyshardsAchievementIDs
