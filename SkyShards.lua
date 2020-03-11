@@ -29,13 +29,8 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 --Libraries--------------------------------------------------------------------
 local LAM = LibAddonMenu2
-if LAM == nil and LibStub then LAM = LibStub("LibAddonMenu-2.0") end
 local LMP = LibMapPins
-if LMP == nil and LibStub then LMP = LibStub("LibMapPins-1.0") end
 local GPS = LibGPS2
-if GPS == nil and LibStub then GPS = LibStub("LibGPS2") end
-
-if LAM == nil or LMP == nil or GPS == nil then return end
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
