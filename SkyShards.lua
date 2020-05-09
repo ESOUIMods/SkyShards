@@ -124,7 +124,7 @@ end
 
 local function CompassCallback()
 	if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
-		local zone, subzone = LMP:GetZoneAndSubZone(false, true)
+		local zone, subzone = LMP:GetZoneAndSubzone(false, true)
 		local skyshards = SkyShards_GetLocalData(zone, subzone)
 		if skyshards then
 			for _, pinData in ipairs(skyshards) do
@@ -222,7 +222,7 @@ local function CreatePins()
 
 	local shouldDisplay = ShouldDisplaySkyshards()
 
-	local zone, subzone = LMP:GetZoneAndSubZone(false, true)
+	local zone, subzone = LMP:GetZoneAndSubzone(false, true)
 	local skyshards = SkyShards_GetLocalData(zone, subzone)
 
 	if skyshards ~= nil then
@@ -306,7 +306,7 @@ local function ShowMyPosition()
 	local locX = ("%05.02f"):format(zo_round(x*10000)/100)
 	local locY = ("%05.02f"):format(zo_round(y*10000)/100)
 
-	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>/<<5>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubZone(false, true)))
+	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>/<<5>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubzone(false, true)))
 
 end
 SLASH_COMMANDS["/skypos"] = ShowMyPosition
