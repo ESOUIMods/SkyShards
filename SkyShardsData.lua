@@ -64,6 +64,7 @@ local skyshardsAchievementIDs = {
 	[2291] = true,	-- Murkmire Skyshard Hunter
 	[2461] = true,	-- Northern Elsweyr Skyshard Hunter
 	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
+	[2687] = true,  -- Western Skyrim Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -1646,6 +1647,58 @@ skyshardsData["southernelsweyr"]["moonlitcove02_base"]=skyshardsData["southernel
 skyshardsData["southernelsweyr"]["moonlitcove03_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
 skyshardsData["southernelsweyr"]["moonlitcove04_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
 skyshardsData["southernelsweyr"]["moonlitcove05_base"]=skyshardsData["southernelsweyr"]["moonlitcove01_base"]
+
+
+skyshardsData["skyrim"] = {
+    -- Western Skyrim
+    ["westernskryim_base"] = {
+        { 0.2695, 0.5570, 2687, 5 },
+        { 0.6197, 0.4321, 2687, 6 },
+        { 0.3164, 0.7052, 2687, 7 },
+        { 0.6698, 0.6519, 2687, 8 },
+        { 0.2435, 0.4416, 2687, 9 },
+        { 0.5059, 0.5786, 2687, 10 },
+        { 0.7505, 0.6806, 2687, 11, 3 },
+        { 0.3657, 0.6128, 2687, 13, 2 },
+        { 0.1156, 0.4351, 2687, 14, 2 },
+        { 0.8232, 0.2823, 2687, 15, 2 },
+        { 0.4854, 0.3021, 2687, 17, 2 },
+    },
+    ["blackreach_base"] = {
+        { 0.9126, 0.4652, 2687, 1 },
+        { 0.1658, 0.7171, 2687, 2 },
+        { 0.6715, 0.2118, 2687, 3 },
+        { 0.5352, 0.7520, 2687, 4 },
+        { 0.5867, 0.5876, 2687, 12, 3 },
+        { 0.7669, 0.3685, 2687, 16, 2 },
+        { 0.0835, 0.3666, 2687, 18, 2 },
+    },
+    ["labyrinthian_base"] = {
+        { 0.5657, 0.4789, 2687, 11 },
+    },
+    ["nchuthnkarst_base"] = {
+        { 0.6816, 0.6035, 2687, 12 },
+    },
+    ["chillwinddepths_base"] = {
+        { 0.8658, 0.5503, 2687, 13 },
+    },
+    ["dragonhome_base"] = {
+        { 0.5861, 0.6119, 2687, 14 },
+    },
+    ["frozencoast_base"] = {
+        { 0.3566, 0.5842, 2687, 15 },
+    },
+    ["midnightbarrow_base"] = {
+        { 0.7051, 0.4036, 2687, 16 },
+    },
+    ["shadowgreen_upper_base"] = {
+        { 0.452, 0.616, 2687, 17 },
+    },
+    ["thescraps_base"] = {
+        { 0.7254, 0.5049, 2687, 18 },
+    },
+}
+skyshardsData["skyrim"]["shadowgreen_lower_base"]=skyshardsData["skyrim"]["shadowgreen_upper_base"]
 
 -- **************
 -- when adding new zone data

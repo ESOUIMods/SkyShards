@@ -278,7 +278,7 @@ local function MapCallback_collected()
 	QueueCreatePins(PINS_COLLECTED)
 end
 
-local function CompassCallback_knownpins()
+local function CompassCallback()
 	if not db.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
 	QueueCreatePins(PINS_COMPASS)
 end
@@ -303,8 +303,8 @@ local function ShowMyPosition()
 
 	local x, y = GetMapPlayerPosition("player")
 
-	local locX = ("%05.02f"):format(zo_round(x*10000)/100)
-	local locY = ("%05.02f"):format(zo_round(y*10000)/100)
+	local locX = ("%02.04f"):format(zo_round(x*10000)/10000)
+	local locY = ("%02.04f"):format(zo_round(y*10000)/10000)
 
 	MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>/<<5>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubzone(false, true)))
 
@@ -709,7 +709,7 @@ local function OnLoad(_, name)
 		LMP:SetClickHandlers(PINS_COLLECTED, clickHandler)
 
 		--initialize compass pins
-		COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback_knownpins, pinLayout_compassunknown)
+		COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback, pinLayout_compassunknown)
 		COMPASS_PINS:RefreshPins(PINS_COMPASS)
 
 		-- addon menu
