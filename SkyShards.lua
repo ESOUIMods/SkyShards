@@ -253,11 +253,7 @@ local function QueueCreatePins(pinType)
 	if not updating then
 		updating = true
 		if IsPlayerActivated() then
-			if LMP.AUI.IsMinimapEnabled() then -- "Cleaner code" is in Destinations addon, but even if adding all checks this addon does the result is same. Duplicates are created with AUI
-				zo_callLater(CreatePins, 150) -- Didn't find anything proper than this. If other MiniMap addons are loaded, It will fail and create duplicates
-			else
-				CreatePins() -- Normal way. AUI will fire its refresh after this code has run so it will create duplicates if left "as is".
-			end
+            CreatePins()
 		else
 			EVENT_MANAGER:RegisterForEvent("SkyShards_PinUpdate", EVENT_PLAYER_ACTIVATED,
 				function(event)
