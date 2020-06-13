@@ -12,7 +12,7 @@
 ; previous authors Ayantir & Garkin
 ## APIVersion: 100031 100032
 ## SavedVariables: SkyS_SavedVariables
-## DependsOn: CustomCompassPins LibAddonMenu-2.0 LibMapPing LibGPS LibMapPins-1.0
+## DependsOn: CustomCompassPins LibAddonMenu-2.0 LibMapPing LibGPS LibMapPins-1.0>=10022
 
 Language/strings.lua
 Language/$(language).lua
