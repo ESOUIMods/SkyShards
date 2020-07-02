@@ -583,7 +583,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.1589, 0.5419, 1160, 5 },
 		{ 0.4670, 0.6719, 1160, 6 },
 		},
-	["imperialsewers_ebon1"] = {
+	["imperialsewers_ebon1_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -592,7 +592,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewers_ebon2"] = {
+	["imperialsewers_ebon2_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -601,7 +601,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewers_aldmeri1"] = {
+	["imperialsewers_aldmeri1_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -610,7 +610,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewers_aldmeri2"] = {
+	["imperialsewers_aldmeri2_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -619,7 +619,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewer_daggerfall1"] = {
+	["imperialsewer_daggerfall1_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -628,7 +628,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewer_daggerfall2"] = {
+	["imperialsewer_daggerfall2_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -646,7 +646,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewer_ebonheart3"] = {
+	["imperialsewer_ebonheart3_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -655,7 +655,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewers_aldmeri3"] = {
+	["imperialsewers_aldmeri3_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -664,7 +664,7 @@ skyshardsData["cyrodiil"] = {
 		{ 0.3200, 0.5578, 1160, 12 },
 		{ 0.5252, 0.5487, 1160, 13 },
 		},
-	["imperialsewer_daggerfall3"] = {
+	["imperialsewer_daggerfall3_base"] = {
 		{ 0.4477, 0.3309, 1160, 7 },
 		{ 0.4142, 0.4021, 1160, 8 },
 		{ 0.9000, 0.6213, 1160, 9 },
@@ -1363,13 +1363,13 @@ skyshardsData["thievesguild"] = {
 	["bahrahasgloom_base"] = {
 		{ 0.2563, 0.5249, 1347, 5, 2 },
 		},
-	["bahrahasgloom_secret1"] = {
+	["bahrahasgloom_secret1_base"] = {
 		{ 0.2563, 0.5249, 1347, 5, 2 },
 		},
-	["bahrahasgloom_secret2"] = {
+	["bahrahasgloom_secret2_base"] = {
 		{ 0.2563, 0.5249, 1347, 5, 2 },
 		},
-	["bahrahasgloom_secret3"] = {
+	["bahrahasgloom_secret3_base"] = {
 		{ 0.2563, 0.5249, 1347, 5, 2 },
 		},
 	["sharktoothgrotto1_base"] = {
@@ -1505,7 +1505,7 @@ skyshardsData["summerset"] = {
 		{ 0.4963, 0.5445, 1845, 16, 2, 4 },	-- Tor-Hame-Khard
 		{ 0.2669, 0.5216, 1845, 17, 2 },	-- Wasten Coraldale
 	},
-	["sum_karnwasten"] = {
+	["sum_karnwasten_base"] = {
 		{ 0.5995, 0.5956, 1845, 11, 3 },
 	},
 	["sunhold_base"] = {
