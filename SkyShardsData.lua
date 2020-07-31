@@ -1514,14 +1514,14 @@ skyshardsData["summerset"] = {
 	["kingshavenint1_base"] = {
 		{ 0.1975, 0.3843, 1845, 13, 2 },
 	},
-	["etonnir_base"] = {
+	["etonnir_01_base"] = {
 		{ 0.1481, 0.5968, 1845, 14, 2, 4 },
 	},
 	["archonsgrove_base"] = {
 		{ 0.5428, 0.7050, 1845, 15, 2 },
 	},
-	["torhamekhard_base"] = {
-		{ 0.4689, 0.7125, 1845, 16, 2, 4 },
+	["torhamekhard_02_base"] = {
+		{ 0.4683, 0.7120, 1845, 16, 2, 4 },
 	},
 	["wastencoraldale_base"] = {
 		{ 0.3842, 0.4512, 1845, 17, 2 },
@@ -1538,9 +1538,8 @@ skyshardsData["summerset"] = {
 }
 
 -- alias for Summerset shard 16
-skyshardsData["summerset"]["torhamekhard_01"]=skyshardsData["summerset"]["torhamekhard_base"];
-skyshardsData["summerset"]["torhamekhard_02"]=skyshardsData["summerset"]["torhamekhard_base"];
-skyshardsData["summerset"]["etonnir_01"]=skyshardsData["summerset"]["etonnir_base"];
+skyshardsData["summerset"]["torhamekhard_01_base"]=skyshardsData["summerset"]["torhamekhard_02_base"];
+-- alias for Summerset shard 18
 skyshardsData["summerset"]["traitorsvault02_base"]=skyshardsData["summerset"]["traitorsvault01_base"];
 skyshardsData["summerset"]["traitorsvault03_base"]=skyshardsData["summerset"]["traitorsvault01_base"];
 skyshardsData["summerset"]["traitorsvault04_base"]=skyshardsData["summerset"]["traitorsvault01_base"];
@@ -1556,7 +1555,7 @@ skyshardsData["murkmire"] = {
 		{ 0.2030, 0.5157, 2291, 5, 2 },
 		{ 0.4653, 0.3691, 2291, 6, 2 },
 	},
-	["tsofeercavern01_0"] = {				-- this name is a divergence from the typical map name format, but it works
+	["tsofeercavern01"] = {				-- this name is a divergence from the typical map name format, but it works
 		{ 0.2663, 0.8301, 2291, 5, 2 },
 	},
 	["teethofsithis01_base"] = {
