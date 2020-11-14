@@ -65,6 +65,7 @@ local skyshardsAchievementIDs = {
 	[2461] = true,	-- Northern Elsweyr Skyshard Hunter
 	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
 	[2687] = true,  -- Western Skyrim Skyshard Hunter
+	[2857] = true,  -- The Reach Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -412,7 +413,7 @@ skyshardsData["craglorn"] = {
 	["kardala_base"] = {
 		{ 0.612, 0.455, 727, 3 },
 		},
-	["rkhardahrk_0"] = {
+	["rkhardahrk"] = {
 		{ 0.463, 0.381, 727, 4 },
 		},
 	["haddock_base"] = {
@@ -1698,6 +1699,27 @@ skyshardsData["skyrim"] = {
     },
 }
 skyshardsData["skyrim"]["shadowgreen_lower_base"]=skyshardsData["skyrim"]["shadowgreen_upper_base"]
+
+skyshardsData["reach"] = {
+    ["reach_base"] = {
+        { 0.469306826591, 0.262717017804, 2857, 1 },
+        { 0.821157634258, 0.717262506484, 2857, 2 },
+        { 0.336136519908, 0.664194226264, 2857, 5, 2 },
+        { 0.730453908443, 0.699964821338, 2857, 6, 2 },
+    },
+    ["u28_blackreach_base"] = {
+        { 0.405695199966, 0.371521294116, 2857, 3 },
+        { 0.914884865283, 0.732063591480, 2857, 4 },
+        { 0.738115906715, 0.330711334943, 2857, 6, 2 },
+    },
+    ["gloomreach3_base"] = {
+        { 0.646440267562, 0.407346159219, 2857, 6 },
+    },
+    ["briarrockruins_ext_base"] = {
+        { 0.341515928506, 0.621803820133, 2857, 5 },
+    },
+}
+skyshardsData["reach"]["gloomreach2_base"]=skyshardsData["reach"]["gloomreach3_base"]
 
 -- **************
 -- when adding new zone data
