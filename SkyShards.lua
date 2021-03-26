@@ -64,7 +64,7 @@ local defaults = {			-- default settings for saved variables
 
 -- Local functions ------------------------------------------------------------
 local function MyPrint(...)
-	CHAT_SYSTEM:AddMessage(...)
+	CHAT_ROUTER:AddSystemMessage(...)
 end
 
 -- Pins -----------------------------------------------------------------------
