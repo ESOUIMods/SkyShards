@@ -30,7 +30,7 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 --Libraries--------------------------------------------------------------------
 local LAM = LibAddonMenu2
 local LMP = LibMapPins
-local GPS = LibGPS2
+local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
