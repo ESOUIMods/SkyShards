@@ -1,5 +1,5 @@
 ----------------------------------------
--- English localization for SkyShards --
+-- Polish localization for SkyShards --
 ----------------------------------------
 
 --Code below is commented out, because english strings was added in strings.lua.
