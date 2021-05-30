@@ -34,12 +34,11 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.26"
+local ADDON_VERSION = "10.27"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
 local PINS_COMPASS = "SkySCompassPin_unknown"
-local INFORMATION_TOOLTIP
 
 --Local variables -------------------------------------------------------------
 local updatePins = {}
@@ -105,20 +104,23 @@ pinTooltipCreator.creator = function(pin)
 		table.insert(info, "[" .. GetString(SKYS_KNOWN) .. "]")
 	end
 
-	if IsInGamepadPreferredMode() then
-		INFORMATION_TOOLTIP:LayoutIconStringLine(INFORMATION_TOOLTIP.tooltip, nil, zo_strformat("<<1>>", name), INFORMATION_TOOLTIP.tooltip:GetStyle("mapTitle"))
-		INFORMATION_TOOLTIP:LayoutIconStringLine(INFORMATION_TOOLTIP.tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[4], description), {fontSize = 27, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_3})
-		if info[1] then
-			INFORMATION_TOOLTIP:LayoutIconStringLine(INFORMATION_TOOLTIP.tooltip, nil, table.concat(info, " / "), INFORMATION_TOOLTIP.tooltip:GetStyle("worldMapTooltip"))
-		end
-	else
-		INFORMATION_TOOLTIP:AddLine(zo_strformat("<<1>>", name), "ZoFontGameOutline", ZO_SELECTED_TEXT:UnpackRGB())
-		ZO_Tooltip_AddDivider(INFORMATION_TOOLTIP)
-		INFORMATION_TOOLTIP:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[4], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
-		if info[1] then
-			INFORMATION_TOOLTIP:AddLine(table.concat(info, " / "), "", ZO_TOOLTIP_DEFAULT_COLOR:UnpackRGB())
-		end
-	end
+  local informationTooltip = IsInGamepadPreferredMode() and ZO_MapLocationTooltip_Gamepad or InformationTooltip
+    if IsInGamepadPreferredMode() then
+        local tooltip = informationTooltip.tooltip
+        local mapTitleStyle = tooltip:GetStyle("mapTitle")
+        informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("<<1>>", name), mapTitleStyle)
+        informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[4], description), {fontSize = 27, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_3})
+        if info[1] then 
+            informationTooltip:LayoutIconStringLine(tooltip, nil, table.concat(info, " / "), tooltip:GetStyle("worldMapTooltip"))
+        end
+    else
+        informationTooltip:AddLine(zo_strformat("<<1>>", name), "ZoFontGameOutline", ZO_SELECTED_TEXT:UnpackRGB())
+        ZO_Tooltip_AddDivider(informationTooltip)
+        informationTooltip:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[4], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
+        if info[1] then
+            informationTooltip:AddLine(table.concat(info, " / "), "", ZO_TOOLTIP_DEFAULT_COLOR:UnpackRGB())
+        end
+    end
 
 end
 
@@ -155,9 +157,9 @@ local function ShouldDisplaySkyshards()
 	end
 
 	if mapIndex then
+	  local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
 		if db.immersiveMode == 2 then -- MainQuest
 
-			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
 			if type(conditionData) == "table" then
 				for conditionIndex, achievementIndex in ipairs(conditionData) do
 					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
@@ -174,13 +176,11 @@ local function ShouldDisplaySkyshards()
 		elseif db.immersiveMode == 3 then -- Wayshrines
 
 			if mapIndex ~= 14 then -- It is impossible to unlock all Wayshrines in Cyrodiil
-				local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
 				return conditionData
 			end
 
 		elseif db.immersiveMode == 4 then -- Exploration
 
-			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
 			if type(conditionData) == "table" then
 				for conditionIndex, achievementIndex in ipairs(conditionData) do
 					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
@@ -196,8 +196,6 @@ local function ShouldDisplaySkyshards()
 
 		elseif db.immersiveMode == 5 then -- Zone Quests
 
-			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
-			local conditionData = SkyShards_GetImmersiveModeCondition(db.immersiveMode, mapIndex)
 			if type(conditionData) == "table" then
 				for conditionIndex, achievementIndex in ipairs(conditionData) do
 					local _, _ , _, _, completed = GetAchievementInfo(achievementIndex)
@@ -306,15 +304,6 @@ local function ShowMyPosition()
 
 end
 SLASH_COMMANDS["/skypos"] = ShowMyPosition
-
--- Gamepad Switch -------------------------------------------------------------
-local function OnGamepadPreferredModeChanged()
-	if IsInGamepadPreferredMode() then
-		INFORMATION_TOOLTIP = ZO_MapLocationTooltip_Gamepad
-	else
-		INFORMATION_TOOLTIP = InformationTooltip
-	end
-end
 
 -- Settings menu --------------------------------------------------------------
 local function CreateSettingsMenu()
@@ -696,6 +685,7 @@ local function OnLoad(_, name)
 		local clickHandler = {
 			[1] = {
 				name = GetString(SKYS_SET_WAYPOINT),
+				gamepadName = GetString(SKYS_SET_WAYPOINT),
 				show = function(pin) return true end,
 				duplicates = function(pin1, pin2) return (pin1.m_PinTag[3] == pin2.m_PinTag[3] and pin1.m_PinTag[4] == pin2.m_PinTag[4]) end,
 				callback = function(pin) PingMap(MAP_PIN_TYPE_PLAYER_WAYPOINT, MAP_TYPE_LOCATION_CENTERED, pin.normalizedX, pin.normalizedY) end,
@@ -711,16 +701,12 @@ local function OnLoad(_, name)
 		-- addon menu
 		CreateSettingsMenu()
 
-		-- Set wich tooltip must be used
-		OnGamepadPreferredModeChanged()
-
 		-- Change SkyShard Display on Skills window
 		AlterSkyShardsIndicator()
 
 		--events
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_UPDATED, OnAchievementUpdate)
 		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_AWARDED, OnAchievementAwarded)
-		EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_GAMEPAD_PREFERRED_MODE_CHANGED, OnGamepadPreferredModeChanged)
 	end
 
 end
