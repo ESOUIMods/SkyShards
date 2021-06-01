@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.27"
+local ADDON_VERSION = "10.28"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -110,7 +110,7 @@ pinTooltipCreator.creator = function(pin)
         local mapTitleStyle = tooltip:GetStyle("mapTitle")
         informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("<<1>>", name), mapTitleStyle)
         informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[4], description), {fontSize = 27, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_3})
-        if info[1] then 
+        if info[1] then
             informationTooltip:LayoutIconStringLine(tooltip, nil, table.concat(info, " / "), tooltip:GetStyle("worldMapTooltip"))
         end
     else
@@ -150,7 +150,7 @@ local function ShouldDisplaySkyshards()
 	if not mapIndex and IsInImperialCity() then mapIndex = GetImperialCityMapIndex() end
 
 	if not mapIndex then
-		local measurements = GPS:GetCurrentMapMeasurements()
+		local measurements = GPS:GetCurrentMapMeasurement()
 		if measurements then
 			mapIndex = measurements.mapIndex	-- Sigh
 		end
