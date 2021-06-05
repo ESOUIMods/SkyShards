@@ -1,9 +1,9 @@
 --[[
 -------------------------------------------------------------------------------
 -- SkyShards
--- Current maintainer: AssemblerManiac
--- Previous maintainer: Ayantir
--- originally by Garkin
+-- Current maintainer: Sharlikran
+-- Previous maintainer: AssemblerManiac
+-- originally by Garkin, Ayantir
 -------------------------------------------------------------------------------
 This software is under : CreativeCommons CC BY-NC-SA 4.0
 Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.28"
+local ADDON_VERSION = "10.29"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"

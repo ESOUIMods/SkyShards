@@ -6,11 +6,11 @@
 
 ## Title: |cEFEBBESkyShards|r
 ## Description: This addon displays skyshards on the world map, compass band, and inside delves/dungeons.
-## Version: 10.28
-## AddOnVersion: 100028
+## Version: 10.29
+## AddOnVersion: 100029
 ## Author: Sharlikran
 ; previous authors Ayantir, Garkin, AssemblerManiac
-## APIVersion: 100034 100035
+## APIVersion: 100035 100036
 ## SavedVariables: SkyS_SavedVariables
 ## DependsOn: CustomCompassPins>=31 LibAddonMenu-2.0>=32 LibMapPing>=1200 LibGPS>=65 LibMapPins-1.0>=10031
 

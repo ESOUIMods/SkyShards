@@ -66,6 +66,7 @@ local skyshardsAchievementIDs = {
 	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
 	[2687] = true,  -- Western Skyrim Skyshard Hunter
 	[2857] = true,  -- The Reach Skyshard Hunter
+	[2982] = true,  -- Blackwood Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -1720,6 +1721,61 @@ skyshardsData["reach"] = {
     },
 }
 skyshardsData["reach"]["gloomreach2_base"]=skyshardsData["reach"]["gloomreach3_base"]
+
+skyshardsData["blackwood"] = {
+	--Blackwood
+	["blackwood_base"] = {                   --Blackwood
+		{ 0.2936, 0.6413, 2982, 1 },
+		{ 0.7032, 0.9111, 2982, 2 },
+		{ 0.1641, 0.4476, 2982, 3 },
+		{ 0.3023, 0.2263, 2982, 4 },
+		{ 0.7533, 0.3630, 2982, 5 },
+		{ 0.5809, 0.1822, 2982, 6 },
+		{ 0.5370, 0.4571, 2982, 7 },
+		{ 0.8137, 0.7067, 2982, 8 },
+		{ 0.5887, 0.7653, 2982, 9 },
+		{ 0.4674, 0.5632, 2982, 10 },
+		{ 0.5772, 0.6437, 2982, 11, 3 }, -- The Silent Halls
+		{ 0.4584, 0.3125, 2982, 12, 3 }, -- Zenithar's Abbey
+		{ 0.5481, 0.7722, 2982, 13, 2 }, -- Xi-Tsei
+		{ 0.2071, 0.5011, 2982, 14, 2 }, -- Undertow Cavern
+		{ 0.7404, 0.5157, 2982, 15, 2 }, -- Doomvault Porcixid
+		{ 0.3696, 0.2596, 2982, 16, 2 }, -- Arpenia
+		{ 0.6411, 0.1772, 2982, 17, 2 }, -- Bloodrun Cave
+		{ 0.8397, 0.6944, 2982, 18, 2 }, -- Vunalk
+        },
+	["u30_silenthalls_ext01_base"] = {
+		{ 0.3100, 0.3500, 2982, 11, 3 },
+		},
+	["u30_silenthalls_ext02_base"] = {
+		{ 0.4527, 0.7332, 2982, 11, 3 },
+		},
+	["zhmain_base"] = {
+		{ 0.7774, 0.6222, 2982, 12, 3 },
+		},
+	["u30_xanmeeroverlook_ext_base"] = {
+		{ 0.6829, 0.5145, 2982, 13, 2 },
+		},
+	["u30_undertowcavern_base"] = {
+		{ 0.5237, 0.4037, 2982, 14, 2 },
+		},
+	["vaultdelve_ext02_base"] = {
+		{ 0.8785, 0.3493, 2982, 15, 2 },
+		},
+	["arpenial_base"] = {
+		{ 0.8572, 0.4465, 2982, 16, 2 },
+		},
+	["u30_bloodruncave_base"] = {
+		{ 0.5370, 0.2982, 2982, 17, 2 },
+		},
+	["vunalk1_base"] = {
+		{ 0.8567, 0.2124, 2982, 18, 2 },
+		},
+}
+skyshardsData["blackwood"]["arpeniah_base"]=skyshardsData["blackwood"]["arpenial_base"]
+skyshardsData["blackwood"]["arpeniah2_base"]=skyshardsData["blackwood"]["arpenial_base"]
+skyshardsData["blackwood"]["vunalk2_base"]=skyshardsData["blackwood"]["vunalk1_base"]
+
 
 -- **************
 -- when adding new zone data
