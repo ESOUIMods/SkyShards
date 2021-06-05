@@ -15,51 +15,51 @@ SafeAddString(SKYS_MOREINFO3,             "Publiczny loch", 1)
 SafeAddString(SKYS_MOREINFO4,             "Podziemia", 1)
 SafeAddString(SKYS_MOREINFO5,             "Grupowa grota", 1)
 
-SafeAddString(SKYS_SET_WAYPOINT, "Ustaw Niebiañski Od³amek jako cel podró¿y", 1)
+SafeAddString(SKYS_SET_WAYPOINT, "Ustaw NiebiaÃ±ski OdÂ³amek jako cel podrÃ³Â¿y", 1)
 
 --settings menu header
 SafeAddString(SKYS_TITLE,                 "SkyShards", 1)
 
 --appearance
-SafeAddString(SKYS_PIN_TEXTURE,           "Wybierz ikonê punktów na mapie", 1)
-SafeAddString(SKYS_PIN_TEXTURE_DESC,      "Wybiera ikonê punktów na mapie.", 1)
-SafeAddString(SKYS_PIN_SIZE,              "Wielkoœæ punktów", 1)
-SafeAddString(SKYS_PIN_SIZE_DESC,         "Ustawia wielkoœæ punktu na mapie.", 1)
+SafeAddString(SKYS_PIN_TEXTURE,           "Wybierz ikonÃª punktÃ³w na mapie", 1)
+SafeAddString(SKYS_PIN_TEXTURE_DESC,      "Wybiera ikonÃª punktÃ³w na mapie.", 1)
+SafeAddString(SKYS_PIN_SIZE,              "WielkoÅ“Ã¦ punktÃ³w", 1)
+SafeAddString(SKYS_PIN_SIZE_DESC,         "Ustawia wielkoÅ“Ã¦ punktu na mapie.", 1)
 SafeAddString(SKYS_PIN_LAYER,             "Warstwa punktu", 1)
-SafeAddString(SKYS_PIN_LAYER_DESC,        "Ustawia kolejnoœæ warstw punktów mapy, gdy kilka punktów ma te same wspó³rzêdne", 1)
+SafeAddString(SKYS_PIN_LAYER_DESC,        "Ustawia kolejnoÅ“Ã¦ warstw punktÃ³w mapy, gdy kilka punktÃ³w ma te same wspÃ³Â³rzÃªdne", 1)
 
 --compass
-SafeAddString(SKYS_COMPASS_UNKNOWN,       "Poka¿ Niebiañskie Od³amki na kompasie.", 1)
-SafeAddString(SKYS_COMPASS_UNKNOWN_DESC,  "Pokazuje/ukrywa na kompasie ikony dla niezebranych Niebiañskich Od³amków.", 1)
-SafeAddString(SKYS_COMPASS_DIST,          "Maksymalna odleg³oœæ punktów", 1)
-SafeAddString(SKYS_COMPASS_DIST_DESC,     "Maksymalna odleg³oœæ, w jakiej punkty pojawiaj¹ siê na kompasie.", 1)
+SafeAddString(SKYS_COMPASS_UNKNOWN,       "PokaÂ¿ NiebiaÃ±skie OdÂ³amki na kompasie.", 1)
+SafeAddString(SKYS_COMPASS_UNKNOWN_DESC,  "Pokazuje/ukrywa na kompasie ikony dla niezebranych NiebiaÃ±skich OdÂ³amkÃ³w.", 1)
+SafeAddString(SKYS_COMPASS_DIST,          "Maksymalna odlegÂ³oÅ“Ã¦ punktÃ³w", 1)
+SafeAddString(SKYS_COMPASS_DIST_DESC,     "Maksymalna odlegÂ³oÅ“Ã¦, w jakiej punkty pojawiajÂ¹ siÃª na kompasie.", 1)
 
-SafeAddString(SKYS_MAINWORLD, 			  "Kolor punktów Niebiañskich Od³amków na g³ównej mapie œwiata", 1)
-SafeAddString(SKYS_MAINWORLD_DESC, 		  "Kolor punktów Niebiañskich Od³amków dostêpnych bezpoœrednio na g³ównej mapie œwiata", 1)
+SafeAddString(SKYS_MAINWORLD, 			  "Kolor punktÃ³w NiebiaÃ±skich OdÂ³amkÃ³w na gÂ³Ã³wnej mapie Å“wiata", 1)
+SafeAddString(SKYS_MAINWORLD_DESC, 		  "Kolor punktÃ³w NiebiaÃ±skich OdÂ³amkÃ³w dostÃªpnych bezpoÅ“rednio na gÂ³Ã³wnej mapie Å“wiata", 1)
 
 --skill panel
-SafeAddString(SKYS_SKILLS, 				  "Podsumuj w panelu umiejêtnoœci", 1)
-SafeAddString(SKYS_SKILLS_DESC, 		  "Wybierz format wyœwietlania liczby Niebiañskich Od³amków w panelu umiejêtnoœci.", 1)
+SafeAddString(SKYS_SKILLS, 				  "Podsumuj w panelu umiejÃªtnoÅ“ci", 1)
+SafeAddString(SKYS_SKILLS_DESC, 		  "Wybierz format wyÅ“wietlania liczby NiebiaÃ±skich OdÂ³amkÃ³w w panelu umiejÃªtnoÅ“ci.", 1)
 SafeAddString(SKYS_SKILLS_OPTION1, 		  "Podstawowy", 1)
 SafeAddString(SKYS_SKILLS_OPTION3, 		  "Zaawansowany", 1)
-SafeAddString(SKYS_SKILLS_OPTION2, 		  "Szczegó³owy", 1)
+SafeAddString(SKYS_SKILLS_OPTION2, 		  "SzczegÃ³Â³owy", 1)
 
 --filters
-SafeAddString(SKYS_UNKNOWN,               "Poka¿ niezebrane Niebiañskie Od³amki", 1)
-SafeAddString(SKYS_UNKNOWN_DESC,          "Pokazuje/ukrywa ikony na mapie dla niezebranych Niebiañskich Od³amków.", 1)
-SafeAddString(SKYS_COLLECTED,             "Poka¿ zebrane Niebiañskie Od³amki", 1)
-SafeAddString(SKYS_COLLECTED_DESC,        "Pokazuje/ukrywa ikony na mapie dla zebranych Niebiañskich Od³amków.", 1)
+SafeAddString(SKYS_UNKNOWN,               "PokaÂ¿ niezebrane NiebiaÃ±skie OdÂ³amki", 1)
+SafeAddString(SKYS_UNKNOWN_DESC,          "Pokazuje/ukrywa ikony na mapie dla niezebranych NiebiaÃ±skich OdÂ³amkÃ³w.", 1)
+SafeAddString(SKYS_COLLECTED,             "PokaÂ¿ zebrane NiebiaÃ±skie OdÂ³amki", 1)
+SafeAddString(SKYS_COLLECTED_DESC,        "Pokazuje/ukrywa ikony na mapie dla zebranych NiebiaÃ±skich OdÂ³amkÃ³w.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "Niezebrane Niebiañskie Od³amki", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "Zebrane Niebiañskie Od³amki", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "Niezebrane NiebiaÃ±skie OdÂ³amki", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "Zebrane NiebiaÃ±skie OdÂ³amki", 1)
 
 -- Immersive Mode
-SafeAddString(SKYS_IMMERSIVE,				"W³¹cz tryb immersyjny jako podstawowy", 1)
-SafeAddString(SKYS_IMMERSIVE_DESC,			"Niezebrane Niebiañskie Od³amki nie bêd¹ wyœwietlane, ta opcja bazuje na stopniu ukoñczenia osi¹gniêcia w danej strefie", 1)
+SafeAddString(SKYS_IMMERSIVE,				"WÂ³Â¹cz tryb immersyjny jako podstawowy", 1)
+SafeAddString(SKYS_IMMERSIVE_DESC,			"Niezebrane NiebiaÃ±skie OdÂ³amki nie bÃªdÂ¹ wyÅ“wietlane, ta opcja bazuje na stopniu ukoÃ±czenia osiÂ¹gniÃªcia w danej strefie", 1)
 	
-SafeAddString(SKYS_IMMERSIVE_CHOICE1,		"Wy³¹cz", 1)
-SafeAddString(SKYS_IMMERSIVE_CHOICE2,		"Strefa g³ównego zadania", 1)
+SafeAddString(SKYS_IMMERSIVE_CHOICE1,		"WyÂ³Â¹cz", 1)
+SafeAddString(SKYS_IMMERSIVE_CHOICE2,		"Strefa gÂ³Ã³wnego zadania", 1)
 SafeAddString(SKYS_IMMERSIVE_CHOICE3,		GetString(SI_MAPFILTER8), 1)
 SafeAddString(SKYS_IMMERSIVE_CHOICE4,		GetAchievementCategoryInfo(6), 1)
-SafeAddString(SKYS_IMMERSIVE_CHOICE5,		"Strefa zadañ", 1)
+SafeAddString(SKYS_IMMERSIVE_CHOICE5,		"Strefa zadaÃ±", 1)
