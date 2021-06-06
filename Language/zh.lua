@@ -10,7 +10,7 @@ SafeAddString(SKYS_MOREINFO5, "组队洞穴", 1)
 SafeAddString(SKYS_SET_WAYPOINT, "设置天空碎片路径点", 1)
 
 --settings menu header
-SafeAddString(SKYS_TITLE, "天空碎片", 1)
+SafeAddString(SKYS_TITLE, "SkyShards 天空碎片", 1)
 
 --appearance
 SafeAddString(SKYS_PIN_TEXTURE, "选择地图标记图标", 1)
