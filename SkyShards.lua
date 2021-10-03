@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.32"
+local ADDON_VERSION = "10.33"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -556,19 +556,12 @@ local function AlterSkyShardsIndicator()
   local function PreHookRefreshSkillPointInfo(self)
     -- keyboard function
     GetNumFoundSkyShards()
-    local totalSkillPoints = nil
-    local outputText = ""
     local availablePoints = SKILL_POINT_ALLOCATION_MANAGER:GetAvailableSkillPoints()
+    local pointsLabel = zo_strformat(SI_SKILLS_POINTS_TO_SPEND, availablePoints)
     if SSP then
-      totalSkillPoints = SSP.GetTotalSpentPoints() + availablePoints
+      pointsLabel = string.format("%s|cffffff/%d|r", pointsLabel, SSP.GetTotalSpentPoints() + availablePoints)
     end
-
-    if totalSkillPoints then
-      outputText = zo_strformat(SI_SKILL_POINT_TOTALS, availablePoints, totalSkillPoints)
-    else
-      outputText = zo_strformat(SI_SKILLS_POINTS_TO_SPEND, availablePoints)
-    end
-    self.availablePointsLabel:SetText(outputText)
+    self.availablePointsLabel:SetText(pointsLabel)
 
     if db.skillPanelDisplay > 1 then
       if collectedSkyShards < totalSkyShards then
