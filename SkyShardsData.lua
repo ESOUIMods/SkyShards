@@ -1775,6 +1775,32 @@ skyshardsData["blackwood"]["arpenial3_base"]=skyshardsData["blackwood"]["arpenia
 
 skyshardsData["blackwood"]["vunalk2_base"]=skyshardsData["blackwood"]["vunalk1_base"]
 
+-- pesakm
+skyshardsData["deadlands"] = {
+	--Deadlands
+	["u32deadlandszone_base"] = {
+		{ 0.4641, 0.6774, 3140, 1 },
+		{ 0.7115, 0.3896, 3140, 2 },
+		{ 0.6565, 0.3027, 3140, 3 },
+		{ 0.1455, 0.5360, 3140, 5, 2 }, -- Brandfire Reformatory
+		{ 0.8935, 0.2685, 3140, 6, 2 }, -- False Martyrs' Folly
+        },
+	["u32_dreaded_refuge_ext_base"] = {
+		{ 0.2632, 0.2483, 3140, 5, 2 },
+		},
+	["u32_folly_delve_base"] = {
+		{ 0.7549, 0.5525, 3140, 6, 2 },
+		},
+  --The Shambles
+	["u32_theshambles_base"] = {
+		{ 0.4894, 0.5019, 3140, 4 },
+	},
+  --The Shambles - Location map
+	["u32_fargravezone_base"] = {
+		{ 0.6020, 0.3470, 3140, 4 },
+	},
+}
+
 -- **************
 -- when adding new zone data
 -- Add achieve ID to var skyshardsAchievementIDs at top of this file too

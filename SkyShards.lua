@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.31"
+local ADDON_VERSION = "10.32"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -559,8 +559,8 @@ local function AlterSkyShardsIndicator()
     local totalSkillPoints = nil
     local outputText = ""
     local availablePoints = SKILL_POINT_ALLOCATION_MANAGER:GetAvailableSkillPoints()
-    if SSP and SSP.cache then
-      totalSkillPoints = SSP.cache.total
+    if SSP then
+      totalSkillPoints = SSP.GetTotalSpentPoints() + availablePoints
     end
 
     if totalSkillPoints then
