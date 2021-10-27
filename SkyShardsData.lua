@@ -67,6 +67,7 @@ local skyshardsAchievementIDs = {
 	[2687] = true,  -- Western Skyrim Skyshard Hunter
 	[2857] = true,  -- The Reach Skyshard Hunter
 	[2982] = true,  -- Blackwood Skyshard Hunter
+  [3140] = true,  -- Deadlands Skyshard Hunter
 }
 
 local skyshardsExplorationIDs = {
@@ -1197,10 +1198,7 @@ skyshardsData["stonefalls"] = {
 	["bleakrock_base"] = {  --Bleakrock Isle
 		{ 0.7744, 0.4388, 398, 1 },
 		{ 0.4985, 0.2252, 398, 2 },
-		{ 0.2547, 0.3964, 398, 3, 4 }, --Hozzin's Folly entrance
-		},
-	["hozzinsfolley_base"] = {
-		{ 0.3296, 0.8098, 398, 3 },
+		{ 0.2780946493, 0.4022813737, 398, 3 }, --Hozzin's Folly entrance
 		},
 }
 
