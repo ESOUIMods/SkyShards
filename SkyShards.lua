@@ -34,12 +34,11 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.35"
+local ADDON_VERSION = "10.36"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
 local PINS_COMPASS = "SkySCompassPin_unknown"
-local SI_SKILL_POINT_TOTALS = "Points to spend: |cffffff<<1>>/<<2>>|r"
 
 --Local variables -------------------------------------------------------------
 local updatePins = {}

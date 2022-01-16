@@ -1712,13 +1712,17 @@ skyshardsData["reach"] = {
         { 0.738115906715, 0.330711334943, 2857, 6, 2 },
     },
     ["gloomreach3_base"] = {
-        { 0.646440267562, 0.407346159219, 2857, 6 },
+        { 0.6464774012, 0.4073275923, 2857, 6 },
     },
     ["briarrockruins_ext_base"] = {
         { 0.341515928506, 0.621803820133, 2857, 5 },
     },
 }
+skyshardsData["reach"]["gloomreach_base"]=skyshardsData["reach"]["gloomreach3_base"]
 skyshardsData["reach"]["gloomreach2_base"]=skyshardsData["reach"]["gloomreach3_base"]
+skyshardsData["reach"]["gloomreach2b_base"]=skyshardsData["reach"]["gloomreach3_base"]
+skyshardsData["reach"]["gloomreach2c_base"]=skyshardsData["reach"]["gloomreach3_base"]
+skyshardsData["reach"]["gloomreach5_base"]=skyshardsData["reach"]["gloomreach3_base"]
 
 skyshardsData["blackwood"] = {
 	--Blackwood
