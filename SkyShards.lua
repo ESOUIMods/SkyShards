@@ -34,11 +34,16 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.36"
+local ADDON_VERSION = "10.37"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
 local PINS_COMPASS = "SkySCompassPin_unknown"
+local SKYSHARDS_PINDATA_LOCX = 1
+local SKYSHARDS_PINDATA_LOCY = 2
+local SKYSHARDS_PINDATA_ACHIEVEMENTID = 3
+local SKYSHARDS_PINDATA_CRITERIAINDEX = 4
+local SKYSHARDS_PINDATA_MOREINFO = 5
 
 --Local variables -------------------------------------------------------------
 local updatePins = {}
@@ -93,14 +98,17 @@ pinTooltipCreator.tooltip = 1 --TOOLTIP_MODE.INFORMATION
 pinTooltipCreator.creator = function(pin)
 
   local _, pinTag = pin:GetPinTypeAndTag()
-  local name = GetAchievementInfo(pinTag[3])
-  local description, numCompleted = GetAchievementCriterion(pinTag[3], pinTag[4])
+  local name = GetAchievementInfo(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+  local description = GetAchievementCriterion(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID], pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX])
+  local zoneId = GetSkyshardAchievementZoneId(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+  local shardId = GetZoneSkyshardId(zoneId, pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX])
+  local shardStatus = GetSkyshardDiscoveryStatus(shardId)
   local info = {}
 
-  if pinTag[5] ~= nil then
-    table.insert(info, "[" .. GetString("SKYS_MOREINFO", pinTag[5]) .. "]")
+  if pinTag[SKYSHARDS_PINDATA_MOREINFO] ~= nil then
+    table.insert(info, "[" .. GetString("SKYS_MOREINFO", pinTag[SKYSHARDS_PINDATA_MOREINFO]) .. "]")
   end
-  if numCompleted == 1 then
+  if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED then
     table.insert(info, "[" .. GetString(SKYS_KNOWN) .. "]")
   end
 
@@ -109,7 +117,7 @@ pinTooltipCreator.creator = function(pin)
     local tooltip = informationTooltip.tooltip
     local mapTitleStyle = tooltip:GetStyle("mapTitle")
     informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("<<1>>", name), mapTitleStyle)
-    informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[4], description),
+    informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX], description),
       { fontSize = 27, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_3 })
     if info[1] then
       informationTooltip:LayoutIconStringLine(tooltip, nil, table.concat(info, " / "),
@@ -118,7 +126,7 @@ pinTooltipCreator.creator = function(pin)
   else
     informationTooltip:AddLine(zo_strformat("<<1>>", name), "ZoFontGameOutline", ZO_SELECTED_TEXT:UnpackRGB())
     ZO_Tooltip_AddDivider(informationTooltip)
-    informationTooltip:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[4], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
+    informationTooltip:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
     if info[1] then
       informationTooltip:AddLine(table.concat(info, " / "), "", ZO_TOOLTIP_DEFAULT_COLOR:UnpackRGB())
     end
@@ -130,11 +138,13 @@ local function CompassCallback()
   if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
     local zone, subzone = LMP:GetZoneAndSubzone(false, true)
     local skyshards = SkyShards_GetLocalData(zone, subzone)
-    if skyshards then
+    if skyshards ~= nil then
       for _, pinData in ipairs(skyshards) do
-        local _, numCompleted = GetAchievementCriterion(pinData[3], pinData[4])
-        if numCompleted == 0 then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[1], pinData[2])
+        local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+        local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_CRITERIAINDEX])
+        local shardStatus = GetSkyshardDiscoveryStatus(shardId)
+        if (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
+          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
         end
       end
     end
@@ -232,15 +242,17 @@ local function CreatePins()
 
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
-      local _, numCompleted = GetAchievementCriterion(pinData[3], pinData[4])
-      if numCompleted == 1 and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
-        LMP:CreatePin(PINS_COLLECTED, pinData, pinData[1], pinData[2])
-      elseif shouldDisplay and numCompleted == 0 then
+      local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+      local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_CRITERIAINDEX])
+      local shardStatus = GetSkyshardDiscoveryStatus(shardId)
+      if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
+        LMP:CreatePin(PINS_COLLECTED, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
+      elseif shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
         if updatePins[PINS_UNKNOWN] and LMP:IsEnabled(PINS_UNKNOWN) then
-          LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[1], pinData[2])
+          LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
         end
         if updatePins[PINS_COMPASS] and db.filters[PINS_COMPASS] then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[1], pinData[2])
+          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
         end
       end
     end
