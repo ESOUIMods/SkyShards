@@ -26,48 +26,56 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 --achievementIDs for skyshards:
 local skyshardsAchievementIDs = {
-	[556] = true,	-- Alik'r Desert Skyshards
 	[695] = true,	-- Auridon Skyshards
-	[405] = true,	-- Bal Foyen Skyshards
-	[557] = true,	-- Bangkorai Skyshards
-	[408] = true,	-- Betnikh Skyshards
-	[398] = true,	-- Bleakrock Skyshards
-	[686] = true,	-- Coldharbour Skyshards
-	[727] = true,	-- Lower Craglorn Skyshards
-	[912] = true,	-- Upper Craglorn Skyshards
-	[694] = true,	-- Cyrodiil Aldmeri Skyshards
-	[693] = true,	-- Cyrodiil Daggerfall Skyshards
-	[692] = true,	-- Cyrodiil Ebonheart Skyshards
-	[547] = true,	-- Deshaan Skyshards
-	[688] = true,	-- Eastmarch Skyshards
-	[409] = true,	-- Glenumbra Skyshards
 	[682] = true,	-- Grahtwood Skyshards
 	[683] = true,	-- Greenshade Skyshards
 	[431] = true,	-- Khenarthi's Roost Skyshards
 	[684] = true,	-- Malabal Tor Skyshards
-	[748] = true,	-- Mountain Skyshard
 	[685] = true,	-- Reaper's March Skyshards
-	[554] = true,	-- Rivenspire Skyshards
+	[405] = true,	-- Bal Foyen Skyshards
+	[398] = true,	-- Bleakrock Skyshards
+	[547] = true,	-- Deshaan Skyshards
+	[688] = true,	-- Eastmarch Skyshards
 	[687] = true,	-- Shadowfen Skyshards
-	[993] = true,	-- Soul Shriven in Coldharbor / Used for SkyShard correct count
 	[397] = true,	-- Stonefalls Skyshards
+	[689] = true,	-- The Rift Skyshards
+	[556] = true,	-- Alik'r Desert Skyshards
+	[557] = true,	-- Bangkorai Skyshards
+	[408] = true,	-- Betnikh Skyshards
+	[409] = true,	-- Glenumbra Skyshards
+	[554] = true,	-- Rivenspire Skyshards
 	[515] = true,	-- Stormhaven Skyshards
 	[407] = true,	-- Stros M'Kai Skyshards
-	[689] = true,	-- The Rift Skyshards
-	[1160] = true,	-- Imperial City Skyshards
-	[1320] = true,	-- Wrothgar Skyshard Hunter
-	[1347] = true,	-- Hew's Bane Skyshard Hunter
-	[1342] = true,	-- Gold Coast Skyshard Hunter
-	[1843] = true,	-- Morrowind Skyshard Hunter
-	[1844] = true,	-- Clockwork City Skyshard Hunter
+  -- Arteaum and Summerset same zoneID
 	[1845] = true,	-- Summerset Skyshard Hunter
+  -- The Reach and Arkthzand Cavern same zoneID
+	[2857] = true,  -- The Reach Skyshard Hunter
+  -- Westers Skyrim and Greymoor Cavern same zoneID
+	[2687] = true,  -- Western Skyrim Skyshard Hunter
+	[2982] = true,  -- Blackwood Skyshard Hunter
+	[1844] = true,	-- Clockwork City Skyshard Hunter
+  -- Only one Coldharbour needed to get the 16 total skyshards
+	[686] = true,	-- Coldharbour Skyshards
+	--[993] = true,	-- Soul Shriven in Coldharbor / Used for SkyShard correct count
+	[727] = true,	-- Lower Craglorn Skyshards
+  -- Only one Craglorn needed to get the 18 total skyshards
+	--[912] = true,	-- Upper Craglorn Skyshards
+  -- Fargrave and Deadlands same zoneID
+  [3140] = true,  -- Deadlands Skyshard Hunter
+	[1342] = true,	-- Gold Coast Skyshard Hunter
+	[1347] = true,	-- Hew's Bane Skyshard Hunter
 	[2291] = true,	-- Murkmire Skyshard Hunter
 	[2461] = true,	-- Northern Elsweyr Skyshard Hunter
 	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
-	[2687] = true,  -- Western Skyrim Skyshard Hunter
-	[2857] = true,  -- The Reach Skyshard Hunter
-	[2982] = true,  -- Blackwood Skyshard Hunter
-  [3140] = true,  -- Deadlands Skyshard Hunter
+	[1843] = true,	-- Morrowind Skyshard Hunter
+	[1320] = true,	-- Wrothgar Skyshard Hunter
+  -- Only one Cyrodiil needed to get the 46 total skyshards
+	[692] = true,	-- Cyrodiil Ebonheart Skyshards
+	--[693] = true,	-- Cyrodiil Daggerfall Skyshards
+	--[694] = true,	-- Cyrodiil Aldmeri Skyshards
+  -- Mountain Skyshard is still in Cyrodiil
+	--[748] = true,	-- Mountain Skyshard
+	[1160] = true,	-- Imperial City Skyshards
 }
 
 local skyshardsExplorationIDs = {
@@ -466,22 +474,22 @@ skyshardsData["craglorn"] = {
 skyshardsData["cyrodiil"] = {
 	--Cyrodiil
 	["ava_whole"] = {          --Cyrodiil
-		--Aldmeri
-		{ 0.574, 0.851, 694, 1 },
-		{ 0.413, 0.842, 694, 2 },
-		{ 0.311, 0.659, 694, 3 },
-		{ 0.629, 0.681, 694, 4 },
-		{ 0.482, 0.534, 694, 5 },
-		{ 0.184, 0.458, 694, 6 },
-		{ 0.259, 0.531, 694, 7 },
-		{ 0.501, 0.761, 694, 8 },
-		{ 0.330, 0.770, 694, 9 },
-		{ 0.5377, 0.8100, 694, 10, 2 }, --Bloodmayne Cave
-		{ 0.2893, 0.4848, 694, 11, 2 }, --Breakneck Cave
-		{ 0.3165, 0.5627, 694, 12, 2 }, --Haynote Cave
-		{ 0.3628, 0.6982, 694, 13, 2 }, --Nisin Cave
-		{ 0.4548, 0.7252, 694, 14, 2 }, --Pothole Caverns
-		{ 0.2056, 0.5074, 694, 15, 2 }, --Serpent Hollow Cave
+		--Ebonheart
+		{ 0.8105, 0.1672, 692, 1 },
+		{ 0.8874, 0.3297, 692, 2 },
+		{ 0.7023, 0.6259, 692, 3 },
+		{ 0.7793, 0.3877, 692, 4 },
+		{ 0.7238, 0.5086, 692, 5 },
+		{ 0.6542, 0.3785, 692, 6 },
+		{ 0.8068, 0.3047, 692, 7 },
+		{ 0.7796, 0.2086, 692, 8, 4 },
+		{ 0.6789, 0.1857, 692, 9 },
+		{ 0.6726, 0.5961, 692, 10, 2 }, --Cracked Wood Cave
+		{ 0.8074, 0.2506, 692, 11, 2 }, --Kingscrest Cavern
+		{ 0.7103, 0.4903, 692, 12, 2 }, --Muck Valley Cavern
+		{ 0.7211, 0.6949, 692, 13, 2 }, --Newt Cave
+		{ 0.7587, 0.3474, 692, 14, 2 }, --Quickwater Cave
+		{ 0.8067, 0.4610, 692, 15, 2 }, --Vahtacen
 		--Daggerfall
 		{ 0.105, 0.267, 693, 16 },
 		{ 0.153, 0.152, 693, 17 },
@@ -498,43 +506,43 @@ skyshardsData["cyrodiil"] = {
 		{ 0.5831, 0.1949, 693, 28, 2 }, --Red Ruby Cave
 		{ 0.5027, 0.2148, 693, 29, 2 }, --Toadstool Hollow
 		{ 0.3612, 0.2210, 693, 30, 2 }, --Underpall Cave
-		--Ebonheart
-		{ 0.8105, 0.1672, 692, 31 },
-		{ 0.8874, 0.3297, 692, 32 },
-		{ 0.7023, 0.6259, 692, 33 },
-		{ 0.7793, 0.3877, 692, 34 },
-		{ 0.7238, 0.5086, 692, 35 },
-		{ 0.6542, 0.3785, 692, 36 },
-		{ 0.8068, 0.3047, 692, 37 },
-		{ 0.7796, 0.2086, 692, 38, 4 },
-		{ 0.6789, 0.1857, 692, 39 },
-		{ 0.6726, 0.5961, 692, 40, 2 }, --Cracked Wood Cave
-		{ 0.8074, 0.2506, 692, 41, 2 }, --Kingscrest Cavern
-		{ 0.7103, 0.4903, 692, 42, 2 }, --Muck Valley Cavern
-		{ 0.7211, 0.6949, 692, 43, 2 }, --Newt Cave
-		{ 0.7587, 0.3474, 692, 44, 2 }, --Quickwater Cave
-		{ 0.8067, 0.4610, 692, 45, 2 }, --Vahtacen
+		--Aldmeri
+		{ 0.574, 0.851, 694, 31 },
+		{ 0.413, 0.842, 694, 32 },
+		{ 0.311, 0.659, 694, 33 },
+		{ 0.629, 0.681, 694, 34 },
+		{ 0.482, 0.534, 694, 35 },
+		{ 0.184, 0.458, 694, 36 },
+		{ 0.259, 0.531, 694, 37 },
+		{ 0.501, 0.761, 694, 38 },
+		{ 0.330, 0.770, 694, 39 },
+		{ 0.5377, 0.8100, 694, 40, 2 }, --Bloodmayne Cave
+		{ 0.2893, 0.4848, 694, 41, 2 }, --Breakneck Cave
+		{ 0.3165, 0.5627, 694, 42, 2 }, --Haynote Cave
+		{ 0.3628, 0.6982, 694, 43, 2 }, --Nisin Cave
+		{ 0.4548, 0.7252, 694, 44, 2 }, --Pothole Caverns
+		{ 0.2056, 0.5074, 694, 45, 2 }, --Serpent Hollow Cave
 		--Mountain
 		{ 0.7525, 0.2966, 748, 46 },
 		},
-		--Aldmeri
-	["bloodmaynecave_base"] = {
-		{ 0.153, 0.486, 694, 10 },
+		--Ebonheart
+	["crackedwoodcave_base"] = {
+		{ 0.3558, 0.3702, 692, 10 },
 		},
-	["breakneckcave_base"] = {
-		{ 0.488, 0.242, 694, 11 },
+	["kingscrest_base"] = {
+		{ 0.7250, 0.4530, 692, 11 },
 		},
-	["haynotecave_base"] = {
-		{ 0.539, 0.186, 694, 12 },
+	["muckvalleycavern_base"] = {
+		{ 0.1752, 0.6967, 692, 12 },
 		},
-	["nisincave_base"] = {
-		{ 0.194, 0.723, 694, 13 },
+	["newtcave_base"] = {
+		{ 0.380, 0.324, 692, 13 },
 		},
-	["potholecavern_base"] = {
-		{ 0.60, 0.45, 694, 14 },
+	["quickwatercave_base"] = {
+		{ 0.3965, 0.5494, 692, 14 },
 		},
-	["serpenthollowcave_base"] = {
-		{ 0.257, 0.637, 694, 15 },
+	["vahtacen_base"] = {
+		{ 0.14, 0.78, 692, 15 },
 		},
 		--Dagerrfall
 	["capstonecave_base"] = {
@@ -558,24 +566,24 @@ skyshardsData["cyrodiil"] = {
 	["underpallcave_base"] = {
 		{ 0.770, 0.441, 693, 30 },
 		},
-		--Ebonheart
-	["crackedwoodcave_base"] = {
-		{ 0.3558, 0.3702, 692, 40 },
+		--Aldmeri
+	["bloodmaynecave_base"] = {
+		{ 0.153, 0.486, 694, 40 },
 		},
-	["kingscrest_base"] = {
-		{ 0.7250, 0.4530, 692, 41 },
+	["breakneckcave_base"] = {
+		{ 0.488, 0.242, 694, 41 },
 		},
-	["muckvalleycavern_base"] = {
-		{ 0.1752, 0.6967, 692, 42 },
+	["haynotecave_base"] = {
+		{ 0.539, 0.186, 694, 42 },
 		},
-	["newtcave_base"] = {
-		{ 0.380, 0.324, 692, 43 },
+	["nisincave_base"] = {
+		{ 0.194, 0.723, 694, 43 },
 		},
-	["quickwatercave_base"] = {
-		{ 0.3965, 0.5494, 692, 44 },
+	["potholecavern_base"] = {
+		{ 0.60, 0.45, 694, 44 },
 		},
-	["vahtacen_base"] = {
-		{ 0.14, 0.78, 692, 45 },
+	["serpenthollowcave_base"] = {
+		{ 0.257, 0.637, 694, 45 },
 		},
 		--Imperial City
 	["imperialcity_base"] = {
@@ -1849,4 +1857,14 @@ function SkyShards_SetLocalData(zone, subzone, data)
 		skyshardsData[zone][subzone] = skyshardsData[zone][subzone] or {}
 		table.insert(skyshardsData[zone][subzone], data)
 	end
+end
+-- /script LibQuestHelper.dm("Debug", SkyShards_GetCyrodiilData())
+function SkyShards_GetCyrodiilData()
+  return skyshardsData["cyrodiil"]["ava_whole"]
+end
+
+function SkyShards_SetCyrodiilData(loc_x, loc_y, achievementId, index)
+  skyshardsData["cyrodiil"]["ava_whole"][index][1] = loc_x
+  skyshardsData["cyrodiil"]["ava_whole"][index][2] = loc_y
+  skyshardsData["cyrodiil"]["ava_whole"][index][3] = achievementId
 end

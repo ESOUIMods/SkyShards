@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.38"
+local ADDON_VERSION = "10.39"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -550,22 +550,30 @@ end
 local function GetNumFoundSkyShards()
 
   collectedSkyShards = 0
-  totalSkyShards = 0
+  totalSkyShards = 1
 
   local ids = SkyShards_GetAchievementIDs()
   for achievementId in pairs(ids) do
-
-    local numCriteria = GetAchievementNumCriteria(achievementId)
-    if numCriteria then
-      for n = 1, numCriteria do
-        local _, completed, required = GetAchievementCriterion(achievementId, n)
-        collectedSkyShards = collectedSkyShards + completed
-        totalSkyShards = totalSkyShards + required
+    local zoneId = GetSkyshardAchievementZoneId(achievementId)
+    local numSkyshards = GetNumSkyshardsInZone(zoneId)
+    if numSkyshards then
+      totalSkyShards = totalSkyShards + numSkyshards
+      for n = 1, numSkyshards do
+        local skyshardId = GetZoneSkyshardId(zoneId, n)
+        local completed = GetSkyshardDiscoveryStatus(skyshardId)
+        if completed == SKYSHARD_DISCOVERY_STATUS_ACQUIRED then
+          collectedSkyShards = collectedSkyShards + 1
+        end
       end
     end
-
   end
 
+    for i = 4290, 5000 do
+    -- Get next completed quest. If it was the last, break loop
+      id = GetNextCompletedQuestId(i)
+      if id == nil then break end
+      if id == 4296 then collectedSkyShards = collectedSkyShards + 1 end
+    end
 end
 
 local function AlterSkyShardsIndicator()
@@ -636,19 +644,10 @@ local function AlterSkyShardsIndicator()
 end
 
 -- Event handlers -------------------------------------------------------------
-local function OnAchievementUpdate(_, achievementId)
-  local ids = SkyShards_GetAchievementIDs()
-
-  if ids[achievementId] then
-    LMP:RefreshPins(PINS_UNKNOWN)
-    LMP:RefreshPins(PINS_COLLECTED)
-    COMPASS_PINS:RefreshPins(PINS_COMPASS)
-    --		GetNumFoundSkyShards()
-  end
-end
-
-local function OnAchievementAwarded(_, _, _, achievementId)
-  OnAchievementUpdate(_, achievementId)
+local function OnSkyshardsUpdated(eventCode)
+  LMP:RefreshPins(PINS_UNKNOWN)
+  LMP:RefreshPins(PINS_COLLECTED)
+  COMPASS_PINS:RefreshPins(PINS_COMPASS)
 end
 
 local function NamesToIDSavedVars()
@@ -667,9 +666,268 @@ local function NamesToIDSavedVars()
 
 end
 
-local function OnLoad(_, name)
+local GetSkyshardHintAchivementLookup = {
+  -- Aldmeri 694
+        ["Within sight of Mnem."] = {
+          [1] = 0.574,
+          [2] = 0.851,
+          [3] = 694,
+        },
+        ["Ascending toward prophecy and dawn."] = {
+          [1] = 0.413,
+          [2] = 0.842,
+          [3] = 694,
+        },
+        ["Helping establish a new town."] = {
+          [1] = 0.311,
+          [2] = 0.659,
+          [3] = 694,
+        },
+        ["Tooth of Jone or Jode."] = {
+          [1] = 0.629,
+          [2] = 0.681,
+          [3] = 694,
+        },
+        ["Ruined spire peering north to the Tower."] = {
+          [1] = 0.482,
+          [2] = 0.534,
+          [3] = 694,
+        },
+        ["Hears hacking to the east."] = {
+          [1] = 0.184,
+          [2] = 0.458,
+          [3] = 694,
+        },
+        ["Upon timbered fingers."] = {
+          [1] = 0.259,
+          [2] = 0.531,
+          [3] = 694,
+        },
+        ["Ruin's crown between three castles."] = {
+          [1] = 0.501,
+          [2] = 0.761,
+          [3] = 694,
+        },
+        ["Where archers of the Eight train."] = {
+          [1] = 0.330,
+          [2] = 0.770,
+          [3] = 694,
+        },
+        ["Six-legged assassins crawl the cave."] = {
+          [1] = 0.5377,
+          [2] = 0.8100,
+          [3] = 694,
+        },
+        ["The Black Dagger's prize."] = {
+          [1] = 0.2893,
+          [2] = 0.4848,
+          [3] = 694,
+        },
+        ["Singing straw's song."] = {
+          [1] = 0.3165,
+          [2] = 0.5627,
+          [3] = 694,
+        },
+        ["Walk the Shadowed Path."] = {
+          [1] = 0.3628,
+          [2] = 0.6982,
+          [3] = 694,
+        },
+        ["At the end of a bumpy road."] = {
+          [1] = 0.4548,
+          [2] = 0.7252,
+          [3] = 694,
+        },
+        ["Where bear and ogre burrow."] = {
+          [1] = 0.2056,
+          [2] = 0.5074,
+          [3] = 694,
+        },
+  -- Daggerfall 693
+        ["Approach the southern scroll."] = {
+          [1] = 0.105,
+          [2] = 0.267,
+          [3] = 693,
+        },
+        ["Overlooking Ni-Mohk's falls."] = {
+          [1] = 0.153,
+          [2] = 0.152,
+          [3] = 693,
+        },
+        ["Near liquid fire flowing."] = {
+          [1] = 0.176,
+          [2] = 0.371,
+          [3] = 693,
+        },
+        ["Decorating a Nord's manor grounds."] = {
+          [1] = 0.467,
+          [2] = 0.172,
+          [3] = 693,
+        },
+        ["Offering at the priory."] = {
+          [1] = 0.210,
+          [2] = 0.397,
+          [3] = 693,
+        },
+        ["Atop a crumbling Empire."] = {
+          [1] = 0.375,
+          [2] = 0.330,
+          [3] = 693,
+        },
+        ["Home of the goat-faced altar."] = {
+          [1] = 0.271,
+          [2] = 0.229,
+          [3] = 693,
+        },
+        ["Search near the cliffs … cliffs … cliffs …."] = {
+          [1] = 0.2945,
+          [2] = 0.1286,
+          [3] = 693,
+        },
+        ["Where a ruin-seeking Khajiit is denied."] = {
+          [1] = 0.535,
+          [2] = 0.224,
+          [3] = 693,
+        },
+        ["Bandits' crowning achievement."] = {
+          [1] = 0.4217,
+          [2] = 0.1465,
+          [3] = 693,
+        },
+        ["Amid reverberations of clattering bones."] = {
+          [1] = 0.3547,
+          [2] = 0.1348,
+          [3] = 693,
+        },
+        ["Vampires prowl where Elves once lived."] = {
+          [1] = 0.1544,
+          [2] = 0.2411,
+          [3] = 693,
+        },
+        ["In a cave of crimson treasures."] = {
+          [1] = 0.5831,
+          [2] = 0.1949,
+          [3] = 693,
+        },
+        ["Surrounded by frozen fungus."] = {
+          [1] = 0.5027,
+          [2] = 0.2148,
+          [3] = 693,
+        },
+        ["Under shroud and ground."] = {
+          [1] = 0.3612,
+          [2] = 0.2210,
+          [3] = 693,
+        },
+  -- Ebonheart 692
+        ["Near the scroll of royalty's secret syllable."] = {
+          [1] = 0.8105,
+          [2] = 0.1672,
+          [3] = 692,
+        },
+        ["Rope ladder hangs south of Ghartok."] = {
+          [1] = 0.8874,
+          [2] = 0.3297,
+          [3] = 692,
+        },
+        ["Keeping the crops alive."] = {
+          [1] = 0.7023,
+          [2] = 0.6259,
+          [3] = 692,
+        },
+        ["Cradled in a ruined temple hall."] = {
+          [1] = 0.7793,
+          [2] = 0.3877,
+          [3] = 692,
+        },
+        ["The Arvinas' pride."] = {
+          [1] = 0.7238,
+          [2] = 0.5086,
+          [3] = 692,
+        },
+        ["Blue Road's trees fall just down the hill."] = {
+          [1] = 0.6542,
+          [2] = 0.3785,
+          [3] = 692,
+        },
+        ["Where bound spirits hold vigil."] = {
+          [1] = 0.8068,
+          [2] = 0.3047,
+          [3] = 692,
+        },
+        ["Soft wings spin choral garb."] = {
+          [1] = 0.7796,
+          [2] = 0.2086,
+          [3] = 692,
+        },
+        ["Wedged well in Sedor."] = {
+          [1] = 0.6789,
+          [2] = 0.1857,
+          [3] = 692,
+        },
+        ["Fractured by the Bloody Hand."] = {
+          [1] = 0.6726,
+          [2] = 0.5961,
+          [3] = 692,
+        },
+        ["The monarch's buried secret."] = {
+          [1] = 0.8074,
+          [2] = 0.2506,
+          [3] = 692,
+        },
+        ["Enjoy a good roll in the muck."] = {
+          [1] = 0.7103,
+          [2] = 0.4903,
+          [3] = 692,
+        },
+        ["Nurtured by amphibious host."] = {
+          [1] = 0.7211,
+          [2] = 0.6949,
+          [3] = 692,
+        },
+        ["Rushing water in the depths."] = {
+          [1] = 0.7587,
+          [2] = 0.3474,
+          [3] = 692,
+        },
+        ["Facing the Faceless."] = {
+          [1] = 0.8067,
+          [2] = 0.4610,
+          [3] = 692,
+        },
+  -- Mountain 748
+        ["Where White Fall reaches for Aetherius."] = {
+          [1] = 0.7525,
+          [2] = 0.2966,
+          [3] = 748,
+        },
+}
 
-  if name == "SkyShards" then
+function SkyShards_BuildSkyShardCyrodiilData()
+  --d("BuildSkyShardCyrodiilData")
+  local zoneId = GetSkyshardAchievementZoneId(694)
+  --d(zoneId)
+  local numSkyshards = GetNumSkyshardsInZone(zoneId)
+  --d(numSkyshards)
+  for shardIndex = 1, numSkyshards do
+    local shardId = GetZoneSkyshardId(zoneId, shardIndex)
+    local loc_x, loc_y = GetNormalizedPositionForSkyshardId(shardId)
+    local description = GetSkyshardHint(shardId)
+    local dataPool = SkyShards_GetCyrodiilData()
+    for index, data in pairs(dataPool) do
+      if shardIndex == data[SKYSHARDS_PINDATA_ZONEGUIDEINDEX] then
+        --d(string.format("Altering Data: %s for shardIndex: %s",index,shardIndex))
+        local skyshardData = GetSkyshardHintAchivementLookup[description]
+        --d(skyshardData)
+        SkyShards_SetCyrodiilData(skyshardData[1], skyshardData[2], skyshardData[3], index)
+      end
+    end
+  end
+end
+
+local function OnLoad(eventCode, addOnName)
+
+  if addOnName == "SkyShards" then
     EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
 
     db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)
@@ -742,9 +1000,11 @@ local function OnLoad(_, name)
     -- Change SkyShard Display on Skills window
     AlterSkyShardsIndicator()
 
+    -- Build Cyrodiil Skyshard Data
+    SkyShards_BuildSkyShardCyrodiilData()
+
     --events
-    EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_UPDATED, OnAchievementUpdate)
-    EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ACHIEVEMENT_AWARDED, OnAchievementAwarded)
+    EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKYSHARDS_UPDATED, OnSkyshardsUpdated)
   end
 
 end
