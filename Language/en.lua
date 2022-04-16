@@ -46,7 +46,7 @@ SafeAddString(SKYS_COLLECTED,             "Show collected skyshards", 1)
 SafeAddString(SKYS_COLLECTED_DESC,        "Show/hide icons for already collected skyshards on the map.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "Unknown skyshards", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "Collected skyshards", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "(Sky) Unknown skyshards", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "(Sky) Collected skyshards", 1)
 
 --]]

@@ -41,8 +41,8 @@ SafeAddString(SKYS_COLLECTED,					"Afficher les Éclats Célestes collectés", 1
 SafeAddString(SKYS_COLLECTED_DESC,			"Afficher/masquer les icônes des Éclats Célestes déjà collectés sur la carte.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,			"Éclats Célestes inconnus", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,		"Éclats Célestes collectés", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,			"(Sky) Éclats Célestes inconnus", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,		"(Sky) Éclats Célestes collectés", 1)
 
 -- Immersive Mode
 SafeAddString(SKYS_IMMERSIVE,					"Activer le mode immersif basé sur", 1)

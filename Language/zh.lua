@@ -43,8 +43,8 @@ SafeAddString(SKYS_COLLECTED, "显示已收集天空碎片", 1)
 SafeAddString(SKYS_COLLECTED_DESC, "在地图上 显示/隐藏 已收集的天空碎片图标", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN, "未知天空碎片", 1)
-SafeAddString(SKYS_FILTER_COLLECTED, "已收集天空碎片", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN, "(Sky) 未知天空碎片", 1)
+SafeAddString(SKYS_FILTER_COLLECTED, "(Sky) 已收集天空碎片", 1)
 
 -- Immersive Mode
 SafeAddString(SKYS_IMMERSIVE, "开启沉浸模式基于", 1)

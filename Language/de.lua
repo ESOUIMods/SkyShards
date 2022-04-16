@@ -49,8 +49,8 @@ SafeAddString(SKYS_COLLECTED,             "Zeige gesammelte Himmelsscherben", 1)
 SafeAddString(SKYS_COLLECTED_DESC,        "Zeige/Verberge bereits eingesammelte Himmelsscherben.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "Unbekannte Himmelsscherben", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "Eingesammelte Himmelsscherben", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "(Sky) Unbekannte Himmelsscherben", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "(Sky) Eingesammelte Himmelsscherben", 1)
 
 -- Immersive Mode
 SafeAddString(SKYS_IMMERSIVE,					"Aktiviere Immersiv Modus (abhängig von)", 1)

@@ -45,5 +45,5 @@ SafeAddString(SKYS_COLLECTED,             "取得済みのスカイシャード�
 SafeAddString(SKYS_COLLECTED_DESC,        "取得済みのスカイシャードをマップに表示/非表示します。", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "不明なスカイシャード", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "取得済みのスカイシャード", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "(Sky) 不明なスカイシャード", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "(Sky) 取得済みのスカイシャード", 1)

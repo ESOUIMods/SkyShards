@@ -51,8 +51,8 @@ SafeAddString(SKYS_COLLECTED,             "Pokaż zebrane Niebiańskie Odłamki"
 SafeAddString(SKYS_COLLECTED_DESC,        "Pokazuje/ukrywa ikony na mapie dla zebranych Niebiańskich Odłamków.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "Niezebrane Niebiańskie Odłamki", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "Zebrane Niebiańskie Odłamki", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "(Sky) Niezebrane Niebiańskie Odłamki", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "(Sky) Zebrane Niebiańskie Odłamki", 1)
 
 -- Immersive Mode
 SafeAddString(SKYS_IMMERSIVE,				"Włącz tryb immersyjny jako podstawowy", 1)

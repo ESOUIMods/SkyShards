@@ -37,6 +37,6 @@ do
    Add("SKYS_COLLECTED_DESC",       "Muestra los iconos de los fragmentos del cielo ya coleccionados en el mapa.")
 
    --worldmap filters
-   Add("SKYS_FILTER_UNKNOWN",       "Frags. del cielo desconocidos")
-   Add("SKYS_FILTER_COLLECTED",     "Frags. del cielo coleccionados")
+   Add("SKYS_FILTER_UNKNOWN",       "(Sky) Fragmentos desconocidos")
+   Add("SKYS_FILTER_COLLECTED",     "(Sky) Fragmentos coleccionados")
 end

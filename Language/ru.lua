@@ -41,5 +41,5 @@ SafeAddString(SKYS_COLLECTED,             "Показывать собранны
 SafeAddString(SKYS_COLLECTED_DESC,        "Показать/скрыть иконки уже собранных Небесных Осколков на карте.", 1)
 
 --worldmap filters
-SafeAddString(SKYS_FILTER_UNKNOWN,        "Несобранные Небесные Осколки", 1)
-SafeAddString(SKYS_FILTER_COLLECTED,      "Собранные Небесные Осколки", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN,        "(Sky) Несобранные Небесные Осколки", 1)
+SafeAddString(SKYS_FILTER_COLLECTED,      "(Sky) Собранные Небесные Осколки", 1)

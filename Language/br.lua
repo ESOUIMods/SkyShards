@@ -43,8 +43,8 @@ SafeAddString(SKYS_COLLECTED, "Mostra Fragmentos Celestes coletados", 1)
 SafeAddString(SKYS_COLLECTED_DESC, "Mostra/oculta no mapa ícones para os Fragmentos Celestes já coletados.", 1)
 
 --filtros do mapamundi
-SafeAddString(SKYS_FILTER_UNKNOWN, "Fragmentos Celestes desconhecidos", 1)
-SafeAddString(SKYS_FILTER_COLLECTED, "Fragmentos Celestes coletados", 1)
+SafeAddString(SKYS_FILTER_UNKNOWN, "(Sky) Fragmentos desconhecidos", 1)
+SafeAddString(SKYS_FILTER_COLLECTED, "(Sky) Fragmentos coletados", 1)
 
 --Modo imersivo
 SafeAddString(SKYS_IMMERSIVE, "Habilite o modo imersivo baseado em", 1)

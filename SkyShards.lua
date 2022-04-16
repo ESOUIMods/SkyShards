@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.37"
+local ADDON_VERSION = "10.38"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -42,8 +42,14 @@ local PINS_COMPASS = "SkySCompassPin_unknown"
 local SKYSHARDS_PINDATA_LOCX = 1
 local SKYSHARDS_PINDATA_LOCY = 2
 local SKYSHARDS_PINDATA_ACHIEVEMENTID = 3
-local SKYSHARDS_PINDATA_CRITERIAINDEX = 4
+local SKYSHARDS_PINDATA_ZONEGUIDEINDEX = 4
 local SKYSHARDS_PINDATA_MOREINFO = 5
+
+local SKYSHARDS_PINDATA_ON_CITY_MAP = 1
+local SKYSHARDS_PINDATA_IN_DELVE = 2
+local SKYSHARDS_PINDATA_IN_PUBLIC_DUNGEON = 3
+local SKYSHARDS_PINDATA_UNDER_GROUND = 4
+local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
 
 --Local variables -------------------------------------------------------------
 local updatePins = {}
@@ -99,9 +105,9 @@ pinTooltipCreator.creator = function(pin)
 
   local _, pinTag = pin:GetPinTypeAndTag()
   local name = GetAchievementInfo(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-  local description = GetAchievementCriterion(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID], pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX])
   local zoneId = GetSkyshardAchievementZoneId(pinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-  local shardId = GetZoneSkyshardId(zoneId, pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX])
+  local shardId = GetZoneSkyshardId(zoneId, pinTag[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
+  local description = GetSkyshardHint(shardId)
   local shardStatus = GetSkyshardDiscoveryStatus(shardId)
   local info = {}
 
@@ -117,7 +123,7 @@ pinTooltipCreator.creator = function(pin)
     local tooltip = informationTooltip.tooltip
     local mapTitleStyle = tooltip:GetStyle("mapTitle")
     informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("<<1>>", name), mapTitleStyle)
-    informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX], description),
+    informationTooltip:LayoutIconStringLine(tooltip, nil, zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_ZONEGUIDEINDEX], description),
       { fontSize = 27, fontColorField = GAMEPAD_TOOLTIP_COLOR_GENERAL_COLOR_3 })
     if info[1] then
       informationTooltip:LayoutIconStringLine(tooltip, nil, table.concat(info, " / "),
@@ -126,7 +132,7 @@ pinTooltipCreator.creator = function(pin)
   else
     informationTooltip:AddLine(zo_strformat("<<1>>", name), "ZoFontGameOutline", ZO_SELECTED_TEXT:UnpackRGB())
     ZO_Tooltip_AddDivider(informationTooltip)
-    informationTooltip:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_CRITERIAINDEX], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
+    informationTooltip:AddLine(zo_strformat("(<<1>>) <<2>>", pinTag[SKYSHARDS_PINDATA_ZONEGUIDEINDEX], description), "", ZO_HIGHLIGHT_TEXT:UnpackRGB())
     if info[1] then
       informationTooltip:AddLine(table.concat(info, " / "), "", ZO_TOOLTIP_DEFAULT_COLOR:UnpackRGB())
     end
@@ -141,7 +147,7 @@ local function CompassCallback()
     if skyshards ~= nil then
       for _, pinData in ipairs(skyshards) do
         local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-        local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_CRITERIAINDEX])
+        local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
         local shardStatus = GetSkyshardDiscoveryStatus(shardId)
         if (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
           COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
@@ -243,7 +249,7 @@ local function CreatePins()
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
       local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-      local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_CRITERIAINDEX])
+      local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
       local shardStatus = GetSkyshardDiscoveryStatus(shardId)
       if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
         LMP:CreatePin(PINS_COLLECTED, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
@@ -298,7 +304,7 @@ end
 
 local function SetMainworldTint(pin)
   if pin.m_PinTag then
-    if not pin.m_PinTag[5] or pin.m_PinTag[5] == 1 or pin.m_PinTag[5] == 4 then
+    if not pin.m_PinTag[SKYSHARDS_PINDATA_MOREINFO] or pin.m_PinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_ON_CITY_MAP or pin.m_PinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_UNDER_GROUND then
       return MAINWORLD_SKYS
     end
   end
@@ -692,7 +698,7 @@ local function OnLoad(_, name)
       additionalLayout = {
         function(pin)
           if pin.pinTag then
-            if not pin.pinTag[5] or pin.pinTag[5] == 1 or pin.pinTag[5] == 4 then
+            if not pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] or pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_ON_CITY_MAP or pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_UNDER_GROUND then
               local icon = pin:GetNamedChild("Background")
               icon:SetColor(MAINWORLD_SKYS:UnpackRGBA())
             end
@@ -718,7 +724,7 @@ local function OnLoad(_, name)
         name = GetString(SKYS_SET_WAYPOINT),
         gamepadName = GetString(SKYS_SET_WAYPOINT),
         show = function(pin) return true end,
-        duplicates = function(pin1, pin2) return (pin1.m_PinTag[3] == pin2.m_PinTag[3] and pin1.m_PinTag[4] == pin2.m_PinTag[4]) end,
+        duplicates = function(pin1, pin2) return (pin1.m_PinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID] == pin2.m_PinTag[SKYSHARDS_PINDATA_ACHIEVEMENTID] and pin1.m_PinTag[SKYSHARDS_PINDATA_ZONEGUIDEINDEX] == pin2.m_PinTag[SKYSHARDS_PINDATA_ZONEGUIDEINDEX]) end,
         callback = function(pin) PingMap(MAP_PIN_TYPE_PLAYER_WAYPOINT, MAP_TYPE_LOCATION_CENTERED, pin.normalizedX,
           pin.normalizedY) end,
       },
