@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.39"
+local ADDON_VERSION = "10.40"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -919,7 +919,9 @@ function SkyShards_BuildSkyShardCyrodiilData()
         --d(string.format("Altering Data: %s for shardIndex: %s",index,shardIndex))
         local skyshardData = GetSkyshardHintAchivementLookup[description]
         --d(skyshardData)
-        SkyShards_SetCyrodiilData(skyshardData[1], skyshardData[2], skyshardData[3], index)
+        if skyshardData then
+          SkyShards_SetCyrodiilData(skyshardData[1], skyshardData[2], skyshardData[3], index)
+        end
       end
     end
   end
