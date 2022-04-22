@@ -64,6 +64,7 @@ local skyshardsAchievementIDs = {
   [3140] = true,  -- Deadlands Skyshard Hunter
 	[1342] = true,	-- Gold Coast Skyshard Hunter
 	[1347] = true,	-- Hew's Bane Skyshard Hunter
+	[3270] = true,	-- High Isle Skyshard Hunter
 	[2291] = true,	-- Murkmire Skyshard Hunter
 	[2461] = true,	-- Northern Elsweyr Skyshard Hunter
 	[2562] = true,	-- Southern Elsweyr Skyshard Hunter
@@ -1809,6 +1810,53 @@ skyshardsData["deadlands"] = {
 	["u32_fargravezone_base"] = {
 		{ 0.6020, 0.3470, 3140, 4 },
 	},
+}
+
+	--High Isle
+skyshardsData["systres"] = {
+	["u34_systreszone_base"] = {
+		{ 0.2757271826, 0.7063370943, 3270, 15, 2 },
+		{ 0.3301258087, 0.9128304123, 3270, 13, 2 },
+		{ 0.2124494165, 0.4482330381, 3270, 14, 2 },
+		{ 0.4803281426, 0.4857603907, 3270, 16, 2 },
+		{ 0.5994069576, 0.3531643152, 3270, 18, 2 },
+		{ 0.8163086175, 0.2028605937, 3270, 17, 2 },
+    { 0.6196997761, 0.6886463165, 3270, 12, 3 },
+		{ 0.8649539351, 0.4046482443, 3270, 11, 3 },
+  },
+	["u34_firepotcave_base"] = {
+		{ 0.3721571266, 0.5969663929, 3270, 15, 2 },
+		},
+	["u34_breakwatercave_base"] = {
+		{ 0.3721571266, 0.5969663929, 3270, 13, 2 },
+  },
+	["u34_hauntedsepulcherext_base"] = {
+		{ 0.4835341274, 0.9269076585, 3270, 14, 2 },
+  },
+	["u34_shipwreckshoalsext_base"] = {
+		{ 0.3591299951, 0.6580677628, 3270, 16, 2 },
+  },
+	["u34_whalefall_cay_base"] = {
+		{ 0.4726826250, 0.5890116691, 3270, 18, 2 },
+  },
+	["u34_coralcliffsint_base"] = { -- main
+		{ 0.3161764740, 0.3466386497, 3270, 17, 2 },
+  },
+	["u34_coralcliffsext_base"] = { -- bc
+		{ 0.3621001839, 0.4224502146, 3270, 17, 2 },
+		{ 0.2450211197, 0.4912492334, 3270, 17, 2 },
+		{ 0.5274592638, 0.2896801531, 3270, 17, 2 },
+  },
+	["u34_crimsoncoin_ext_base"] = { -- main
+		{ 0.7741302847, 0.5128171443, 3270, 12, 3 },
+  },
+	["u34_ghosthaven_base"] = { -- main
+		{ 0.6281458735, 0.5921931266, 3270, 11, 3 },
+  },
+	["u34_ghosthavenext_base"] = { -- bc
+		{ 0.8324697613, 0.7328727841, 3270, 11, 3 },
+  },
+
 }
 
 -- **************
