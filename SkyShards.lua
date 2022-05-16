@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.42"
+local ADDON_VERSION = "10.43"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -52,8 +52,6 @@ local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
 
 --Local variables -------------------------------------------------------------
-local updatePins = {}
-local updating = false
 local db
 local defaults = {      -- default settings for saved variables
   compassMaxDistance = 0.05,
@@ -140,21 +138,11 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local function CompassCallback()
-  if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
-    local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-    local skyshards = SkyShards_GetLocalData(zone, subzone)
-    if skyshards ~= nil then
-      for _, pinData in ipairs(skyshards) do
-        local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-        local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
-        local shardStatus = GetSkyshardDiscoveryStatus(shardId)
-        if (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-        end
-      end
-    end
-  end
+local lastZone = ""
+local skyshards
+local function UpdateSkyshardsData(zone, subzone)
+  skyshards = SkyShards_GetLocalData(zone, subzone)
+  lastZone = GetMapTileTexture()
 end
 
 local function ShouldDisplaySkyshards()
@@ -239,67 +227,50 @@ local function ShouldDisplaySkyshards()
 
 end
 
-local function CreatePins()
+local function CompassCallback()
+  if GetMapType() > MAPTYPE_ZONE then return end
+
+  if not db.filters[PINS_COMPASS] then return end
 
   local shouldDisplay = ShouldDisplaySkyshards()
-
-  local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-  local skyshards = SkyShards_GetLocalData(zone, subzone)
 
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
       local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
       local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
       local shardStatus = GetSkyshardDiscoveryStatus(shardId)
-      if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
+      if shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
+        COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
+      end
+    end
+  end
+end
+
+local function MapCallbackCreatePins()
+
+  if GetMapType() > MAPTYPE_ZONE then return end
+
+  local shouldDisplay = ShouldDisplaySkyshards()
+
+  local zone, subzone = LMP:GetZoneAndSubzone(false, true)
+  if GetMapTileTexture() ~= lastZone then
+    UpdateSkyshardsData(zone, subzone)
+  end
+
+  if skyshards ~= nil then
+    for _, pinData in ipairs(skyshards) do
+      local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+      local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
+      local shardStatus = GetSkyshardDiscoveryStatus(shardId)
+      if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and LMP:IsEnabled(PINS_COLLECTED) then
         LMP:CreatePin(PINS_COLLECTED, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
       elseif shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
-        if updatePins[PINS_UNKNOWN] and LMP:IsEnabled(PINS_UNKNOWN) then
+        if LMP:IsEnabled(PINS_UNKNOWN) then
           LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-        end
-        if updatePins[PINS_COMPASS] and db.filters[PINS_COMPASS] then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
         end
       end
     end
   end
-
-  updatePins = {}
-
-  updating = false
-
-end
-
-local function QueueCreatePins(pinType)
-  updatePins[pinType] = true
-
-  if not updating then
-    updating = true
-    if IsPlayerActivated() then
-      CreatePins()
-    else
-      EVENT_MANAGER:RegisterForEvent("SkyShards_PinUpdate", EVENT_PLAYER_ACTIVATED,
-        function(event)
-          EVENT_MANAGER:UnregisterForEvent("SkyShards_PinUpdate", event)
-          CreatePins()
-        end)
-    end
-  end
-end
-
-local function MapCallback_unknown()
-  if not LMP:IsEnabled(PINS_UNKNOWN) or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_UNKNOWN)
-end
-
-local function MapCallback_collected()
-  if not LMP:IsEnabled(PINS_COLLECTED) or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_COLLECTED)
-end
-
-local function CompassCallback()
-  if not db.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_COMPASS)
 end
 
 local function SetMainworldTint(pin)
@@ -666,267 +637,6 @@ local function NamesToIDSavedVars()
 
 end
 
-local GetSkyshardHintAchivementLookup = {
-  -- Aldmeri 694
-        ["Within sight of Mnem."] = {
-          [1] = 0.574,
-          [2] = 0.851,
-          [3] = 694,
-        },
-        ["Ascending toward prophecy and dawn."] = {
-          [1] = 0.413,
-          [2] = 0.842,
-          [3] = 694,
-        },
-        ["Helping establish a new town."] = {
-          [1] = 0.311,
-          [2] = 0.659,
-          [3] = 694,
-        },
-        ["Tooth of Jone or Jode."] = {
-          [1] = 0.629,
-          [2] = 0.681,
-          [3] = 694,
-        },
-        ["Ruined spire peering north to the Tower."] = {
-          [1] = 0.482,
-          [2] = 0.534,
-          [3] = 694,
-        },
-        ["Hears hacking to the east."] = {
-          [1] = 0.184,
-          [2] = 0.458,
-          [3] = 694,
-        },
-        ["Upon timbered fingers."] = {
-          [1] = 0.259,
-          [2] = 0.531,
-          [3] = 694,
-        },
-        ["Ruin's crown between three castles."] = {
-          [1] = 0.501,
-          [2] = 0.761,
-          [3] = 694,
-        },
-        ["Where archers of the Eight train."] = {
-          [1] = 0.330,
-          [2] = 0.770,
-          [3] = 694,
-        },
-        ["Six-legged assassins crawl the cave."] = {
-          [1] = 0.5377,
-          [2] = 0.8100,
-          [3] = 694,
-        },
-        ["The Black Dagger's prize."] = {
-          [1] = 0.2893,
-          [2] = 0.4848,
-          [3] = 694,
-        },
-        ["Singing straw's song."] = {
-          [1] = 0.3165,
-          [2] = 0.5627,
-          [3] = 694,
-        },
-        ["Walk the Shadowed Path."] = {
-          [1] = 0.3628,
-          [2] = 0.6982,
-          [3] = 694,
-        },
-        ["At the end of a bumpy road."] = {
-          [1] = 0.4548,
-          [2] = 0.7252,
-          [3] = 694,
-        },
-        ["Where bear and ogre burrow."] = {
-          [1] = 0.2056,
-          [2] = 0.5074,
-          [3] = 694,
-        },
-  -- Daggerfall 693
-        ["Approach the southern scroll."] = {
-          [1] = 0.105,
-          [2] = 0.267,
-          [3] = 693,
-        },
-        ["Overlooking Ni-Mohk's falls."] = {
-          [1] = 0.153,
-          [2] = 0.152,
-          [3] = 693,
-        },
-        ["Near liquid fire flowing."] = {
-          [1] = 0.176,
-          [2] = 0.371,
-          [3] = 693,
-        },
-        ["Decorating a Nord's manor grounds."] = {
-          [1] = 0.467,
-          [2] = 0.172,
-          [3] = 693,
-        },
-        ["Offering at the priory."] = {
-          [1] = 0.210,
-          [2] = 0.397,
-          [3] = 693,
-        },
-        ["Atop a crumbling Empire."] = {
-          [1] = 0.375,
-          [2] = 0.330,
-          [3] = 693,
-        },
-        ["Home of the goat-faced altar."] = {
-          [1] = 0.271,
-          [2] = 0.229,
-          [3] = 693,
-        },
-        ["Search near the cliffs … cliffs … cliffs …."] = {
-          [1] = 0.2945,
-          [2] = 0.1286,
-          [3] = 693,
-        },
-        ["Where a ruin-seeking Khajiit is denied."] = {
-          [1] = 0.535,
-          [2] = 0.224,
-          [3] = 693,
-        },
-        ["Bandits' crowning achievement."] = {
-          [1] = 0.4217,
-          [2] = 0.1465,
-          [3] = 693,
-        },
-        ["Amid reverberations of clattering bones."] = {
-          [1] = 0.3547,
-          [2] = 0.1348,
-          [3] = 693,
-        },
-        ["Vampires prowl where Elves once lived."] = {
-          [1] = 0.1544,
-          [2] = 0.2411,
-          [3] = 693,
-        },
-        ["In a cave of crimson treasures."] = {
-          [1] = 0.5831,
-          [2] = 0.1949,
-          [3] = 693,
-        },
-        ["Surrounded by frozen fungus."] = {
-          [1] = 0.5027,
-          [2] = 0.2148,
-          [3] = 693,
-        },
-        ["Under shroud and ground."] = {
-          [1] = 0.3612,
-          [2] = 0.2210,
-          [3] = 693,
-        },
-  -- Ebonheart 692
-        ["Near the scroll of royalty's secret syllable."] = {
-          [1] = 0.8105,
-          [2] = 0.1672,
-          [3] = 692,
-        },
-        ["Rope ladder hangs south of Ghartok."] = {
-          [1] = 0.8874,
-          [2] = 0.3297,
-          [3] = 692,
-        },
-        ["Keeping the crops alive."] = {
-          [1] = 0.7023,
-          [2] = 0.6259,
-          [3] = 692,
-        },
-        ["Cradled in a ruined temple hall."] = {
-          [1] = 0.7793,
-          [2] = 0.3877,
-          [3] = 692,
-        },
-        ["The Arvinas' pride."] = {
-          [1] = 0.7238,
-          [2] = 0.5086,
-          [3] = 692,
-        },
-        ["Blue Road's trees fall just down the hill."] = {
-          [1] = 0.6542,
-          [2] = 0.3785,
-          [3] = 692,
-        },
-        ["Where bound spirits hold vigil."] = {
-          [1] = 0.8068,
-          [2] = 0.3047,
-          [3] = 692,
-        },
-        ["Soft wings spin choral garb."] = {
-          [1] = 0.7796,
-          [2] = 0.2086,
-          [3] = 692,
-        },
-        ["Wedged well in Sedor."] = {
-          [1] = 0.6789,
-          [2] = 0.1857,
-          [3] = 692,
-        },
-        ["Fractured by the Bloody Hand."] = {
-          [1] = 0.6726,
-          [2] = 0.5961,
-          [3] = 692,
-        },
-        ["The monarch's buried secret."] = {
-          [1] = 0.8074,
-          [2] = 0.2506,
-          [3] = 692,
-        },
-        ["Enjoy a good roll in the muck."] = {
-          [1] = 0.7103,
-          [2] = 0.4903,
-          [3] = 692,
-        },
-        ["Nurtured by amphibious host."] = {
-          [1] = 0.7211,
-          [2] = 0.6949,
-          [3] = 692,
-        },
-        ["Rushing water in the depths."] = {
-          [1] = 0.7587,
-          [2] = 0.3474,
-          [3] = 692,
-        },
-        ["Facing the Faceless."] = {
-          [1] = 0.8067,
-          [2] = 0.4610,
-          [3] = 692,
-        },
-  -- Mountain 748
-        ["Where White Fall reaches for Aetherius."] = {
-          [1] = 0.7525,
-          [2] = 0.2966,
-          [3] = 748,
-        },
-}
-
-function SkyShards_BuildSkyShardCyrodiilData()
-  --d("BuildSkyShardCyrodiilData")
-  local zoneId = GetSkyshardAchievementZoneId(694)
-  --d(zoneId)
-  local numSkyshards = GetNumSkyshardsInZone(zoneId)
-  --d(numSkyshards)
-  for shardIndex = 1, numSkyshards do
-    local shardId = GetZoneSkyshardId(zoneId, shardIndex)
-    local loc_x, loc_y = GetNormalizedPositionForSkyshardId(shardId)
-    local description = GetSkyshardHint(shardId)
-    local dataPool = SkyShards_GetCyrodiilData()
-    for index, data in pairs(dataPool) do
-      if shardIndex == data[SKYSHARDS_PINDATA_ZONEGUIDEINDEX] then
-        --d(string.format("Altering Data: %s for shardIndex: %s",index,shardIndex))
-        local skyshardData = GetSkyshardHintAchivementLookup[description]
-        --d(skyshardData)
-        if skyshardData then
-          SkyShards_SetCyrodiilData(skyshardData[1], skyshardData[2], skyshardData[3], index)
-        end
-      end
-    end
-  end
-end
-
 local function OnLoad(eventCode, addOnName)
 
   if addOnName == "SkyShards" then
@@ -971,8 +681,8 @@ local function OnLoad(eventCode, addOnName)
     }
 
     --initialize map pins
-    LMP:AddPinType(PINS_UNKNOWN, MapCallback_unknown, nil, pinLayout_unknown, pinTooltipCreator)
-    LMP:AddPinType(PINS_COLLECTED, MapCallback_collected, nil, pinLayout_collected, pinTooltipCreator)
+    LMP:AddPinType(PINS_UNKNOWN, function() MapCallbackCreatePins() end, nil, pinLayout_unknown, pinTooltipCreator)
+    LMP:AddPinType(PINS_COLLECTED, function() MapCallbackCreatePins() end, nil, pinLayout_collected, pinTooltipCreator)
 
     --add filter check boxex
     LMP:AddPinFilter(PINS_UNKNOWN, GetString(SKYS_FILTER_UNKNOWN), nil, db.filters)
@@ -993,7 +703,7 @@ local function OnLoad(eventCode, addOnName)
     LMP:SetClickHandlers(PINS_COLLECTED, clickHandler)
 
     --initialize compass pins
-    COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback, pinLayout_compassunknown)
+    COMPASS_PINS:AddCustomPin(PINS_COMPASS, function() CompassCallback() end, pinLayout_compassunknown)
     COMPASS_PINS:RefreshPins(PINS_COMPASS)
 
     -- addon menu
@@ -1001,9 +711,6 @@ local function OnLoad(eventCode, addOnName)
 
     -- Change SkyShard Display on Skills window
     AlterSkyShardsIndicator()
-
-    -- Build Cyrodiil Skyshard Data
-    --SkyShards_BuildSkyShardCyrodiilData()
 
     --events
     EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKYSHARDS_UPDATED, OnSkyshardsUpdated)

@@ -1906,13 +1906,3 @@ function SkyShards_SetLocalData(zone, subzone, data)
 		table.insert(skyshardsData[zone][subzone], data)
 	end
 end
--- /script LibQuestHelper.dm("Debug", SkyShards_GetCyrodiilData())
-function SkyShards_GetCyrodiilData()
-  return skyshardsData["cyrodiil"]["ava_whole"]
-end
-
-function SkyShards_SetCyrodiilData(loc_x, loc_y, achievementId, index)
-  skyshardsData["cyrodiil"]["ava_whole"][index][1] = loc_x
-  skyshardsData["cyrodiil"]["ava_whole"][index][2] = loc_y
-  skyshardsData["cyrodiil"]["ava_whole"][index][3] = achievementId
-end
