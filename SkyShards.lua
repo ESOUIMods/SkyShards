@@ -34,7 +34,7 @@ local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.43"
+local ADDON_VERSION = "10.44"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -52,8 +52,6 @@ local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
 
 --Local variables -------------------------------------------------------------
-local updatePins = {}
-local updating = false
 local db
 local defaults = {      -- default settings for saved variables
   compassMaxDistance = 0.05,
@@ -140,21 +138,11 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local function CompassCallback()
-  if GetMapType() <= MAPTYPE_ZONE and db.filters[PINS_COMPASS] then
-    local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-    local skyshards = SkyShards_GetLocalData(zone, subzone)
-    if skyshards ~= nil then
-      for _, pinData in ipairs(skyshards) do
-        local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
-        local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
-        local shardStatus = GetSkyshardDiscoveryStatus(shardId)
-        if (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-        end
-      end
-    end
-  end
+local lastZone = ""
+local skyshards
+local function UpdateSkyshardsData(zone, subzone)
+  skyshards = SkyShards_GetLocalData(zone, subzone)
+  lastZone = GetMapTileTexture()
 end
 
 local function ShouldDisplaySkyshards()
@@ -239,67 +227,55 @@ local function ShouldDisplaySkyshards()
 
 end
 
-local function CreatePins()
+local function CompassCallback()
+  if GetMapType() > MAPTYPE_ZONE then return end
+
+  if not db.filters[PINS_COMPASS] then return end
 
   local shouldDisplay = ShouldDisplaySkyshards()
-
-  local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-  local skyshards = SkyShards_GetLocalData(zone, subzone)
 
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
       local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
       local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
       local shardStatus = GetSkyshardDiscoveryStatus(shardId)
-      if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and updatePins[PINS_COLLECTED] and LMP:IsEnabled(PINS_COLLECTED) then
-        LMP:CreatePin(PINS_COLLECTED, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-      elseif shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
-        if updatePins[PINS_UNKNOWN] and LMP:IsEnabled(PINS_UNKNOWN) then
-          LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-        end
-        if updatePins[PINS_COMPASS] and db.filters[PINS_COMPASS] then
-          COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
-        end
+      if shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) then
+        COMPASS_PINS.pinManager:CreatePin(PINS_COMPASS, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
       end
     end
   end
-
-  updatePins = {}
-
-  updating = false
-
 end
 
-local function QueueCreatePins(pinType)
-  updatePins[pinType] = true
+local function MapCallbackCreatePins(pinType)
 
-  if not updating then
-    updating = true
-    if IsPlayerActivated() then
-      CreatePins()
-    else
-      EVENT_MANAGER:RegisterForEvent("SkyShards_PinUpdate", EVENT_PLAYER_ACTIVATED,
-        function(event)
-          EVENT_MANAGER:UnregisterForEvent("SkyShards_PinUpdate", event)
-          CreatePins()
-        end)
+  if GetMapType() > MAPTYPE_ZONE then return end
+
+  local shouldDisplay = ShouldDisplaySkyshards()
+
+  local zone, subzone = LMP:GetZoneAndSubzone(false, true)
+  if GetMapTileTexture() ~= lastZone then
+    UpdateSkyshardsData(zone, subzone)
+  end
+
+  if skyshards ~= nil then
+    for _, pinData in ipairs(skyshards) do
+      local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
+      local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
+      local shardStatus = GetSkyshardDiscoveryStatus(shardId)
+      if pinType == PINS_COLLECTED then
+        if shardStatus == SKYSHARD_DISCOVERY_STATUS_ACQUIRED and LMP:IsEnabled(PINS_COLLECTED) then
+          LMP:CreatePin(PINS_COLLECTED, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
+        end
+      end
+
+      if pinType == PINS_UNKNOWN then
+        if shouldDisplay and (shardStatus == SKYSHARD_DISCOVERY_STATUS_DISCOVERED or shardStatus == SKYSHARD_DISCOVERY_STATUS_UNDISCOVERED) and LMP:IsEnabled(PINS_UNKNOWN) then
+          LMP:CreatePin(PINS_UNKNOWN, pinData, pinData[SKYSHARDS_PINDATA_LOCX], pinData[SKYSHARDS_PINDATA_LOCY])
+        end
+      end
+
     end
   end
-end
-
-local function MapCallback_unknown()
-  if not LMP:IsEnabled(PINS_UNKNOWN) or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_UNKNOWN)
-end
-
-local function MapCallback_collected()
-  if not LMP:IsEnabled(PINS_COLLECTED) or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_COLLECTED)
-end
-
-local function CompassCallback()
-  if not db.filters[PINS_COMPASS] or (GetMapType() > MAPTYPE_ZONE) then return end
-  QueueCreatePins(PINS_COMPASS)
 end
 
 local function SetMainworldTint(pin)
@@ -568,12 +544,12 @@ local function GetNumFoundSkyShards()
     end
   end
 
-    for i = 4290, 5000 do
+  for i = 4290, 5000 do
     -- Get next completed quest. If it was the last, break loop
-      id = GetNextCompletedQuestId(i)
-      if id == nil then break end
-      if id == 4296 then collectedSkyShards = collectedSkyShards + 1 end
-    end
+    id = GetNextCompletedQuestId(i)
+    if id == nil then break end
+    if id == 4296 then collectedSkyShards = collectedSkyShards + 1 end
+  end
 end
 
 local function AlterSkyShardsIndicator()
@@ -710,8 +686,8 @@ local function OnLoad(eventCode, addOnName)
     }
 
     --initialize map pins
-    LMP:AddPinType(PINS_UNKNOWN, MapCallback_unknown, nil, pinLayout_unknown, pinTooltipCreator)
-    LMP:AddPinType(PINS_COLLECTED, MapCallback_collected, nil, pinLayout_collected, pinTooltipCreator)
+    LMP:AddPinType(PINS_UNKNOWN, function() MapCallbackCreatePins(PINS_UNKNOWN) end, nil, pinLayout_unknown, pinTooltipCreator)
+    LMP:AddPinType(PINS_COLLECTED, function() MapCallbackCreatePins(PINS_COLLECTED) end, nil, pinLayout_collected, pinTooltipCreator)
 
     --add filter check boxex
     LMP:AddPinFilter(PINS_UNKNOWN, GetString(SKYS_FILTER_UNKNOWN), nil, db.filters)
@@ -732,7 +708,7 @@ local function OnLoad(eventCode, addOnName)
     LMP:SetClickHandlers(PINS_COLLECTED, clickHandler)
 
     --initialize compass pins
-    COMPASS_PINS:AddCustomPin(PINS_COMPASS, CompassCallback, pinLayout_compassunknown)
+    COMPASS_PINS:AddCustomPin(PINS_COMPASS, function() CompassCallback() end, pinLayout_compassunknown)
     COMPASS_PINS:RefreshPins(PINS_COMPASS)
 
     -- addon menu
