@@ -62,6 +62,7 @@ local skyshardsAchievementIDs = {
   --[912] = true,	-- Upper Craglorn Skyshards
   -- Fargrave and Deadlands same zoneID
   [3140] = true, -- Deadlands Skyshard Hunter
+  [3499] = true, -- Galen Skyshard Hunter
   [1342] = true, -- Gold Coast Skyshard Hunter
   [1347] = true, -- Hew's Bane Skyshard Hunter
   [3270] = true, -- High Isle Skyshard Hunter
@@ -1806,6 +1807,7 @@ skyshardsData["deadlands"] = {
     { 0.6020, 0.3470, 3140, 4 },
   },
 }
+
 --High Isle
 skyshardsData["systres"] = {
   ["u34_systreszone_base"] = {
@@ -1859,6 +1861,29 @@ skyshardsData["systres"] = {
   },
   ["u34_whalefall_cay_base"] = {
     { 0.4726826250, 0.5890116691, 3270, 18, 2 },
+  },
+}
+
+--Galen and Y'ffelon
+skyshardsData["galen"] = {
+  ["u36_galenisland_base"] = {
+    { 0.2616, 0.2655, 3499, 1 },
+    { 0.5758, 0.3194, 3499, 2 },
+    { 0.5205, 0.5451, 3499, 3 },
+    { 0.2894, 0.5316, 3499, 4 },
+    { 0.2152689993, 0.4701301157, 3499, 5, 2 }, --Fauns' Thicket
+    { 0.5566987395, 0.4461925029, 3499, 6, 2 }, --Embervine
+  },
+  --Fauns' Thicket
+  ["u36_lkh_base"] = {
+    { 0.4575, 0.7518, 3499, 5, 2 },
+  },
+  -- Embervine
+  ["u36_embervine_base"] = {
+    { 0.3770, 0.1942, 3499, 6, 2 },
+  },
+  ["u36_embervine_int1_base"] = { -- Embervine breadcrumb
+    { 0.3909091055, 0.3860139846, 3499, 6, 2 },
   },
 }
 
