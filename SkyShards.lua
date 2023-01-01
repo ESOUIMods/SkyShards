@@ -31,6 +31,7 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 local LAM = LibAddonMenu2
 local LMP = LibMapPins
 local GPS = LibGPS3
+local LMD = LibMapData
 
 --Local constants -------------------------------------------------------------
 local ADDON_NAME = "SkyShards"
@@ -138,11 +139,16 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local lastZone = ""
+local lastMapTexture = ""
+local lastMapId = 0
 local skyshards
 local function UpdateSkyshardsData(zone, subzone)
-  skyshards = SkyShards_GetLocalData(zone, subzone)
-  lastZone = GetMapTileTexture()
+  if LMD.mapTexture ~= lastMapTexture or LMD.mapId ~= lastMapId then
+    lastMapTexture = LMD.mapTexture
+    lastMapId = LMD.mapId
+    skyshards = SkyShards_GetLocalData(zone, subzone)
+    COMPASS_PINS:RefreshPins(PINS_COMPASS)
+  end
 end
 
 local function ShouldDisplaySkyshards()
@@ -253,9 +259,7 @@ local function MapCallbackCreatePins(pinType)
   local shouldDisplay = ShouldDisplaySkyshards()
 
   local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-  if GetMapTileTexture() ~= lastZone then
-    UpdateSkyshardsData(zone, subzone)
-  end
+  UpdateSkyshardsData(zone, subzone)
 
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
@@ -544,12 +548,8 @@ local function GetNumFoundSkyShards()
     end
   end
 
-  for i = 4290, 5000 do
-    -- Get next completed quest. If it was the last, break loop
-    id = GetNextCompletedQuestId(i)
-    if id == nil then break end
-    if id == 4296 then collectedSkyShards = collectedSkyShards + 1 end
-  end
+  -- "Soul Shriven in Coldharbour", 4296
+  if HasCompletedQuest(4296) then collectedSkyShards = collectedSkyShards + 1 end
 end
 
 local function AlterSkyShardsIndicator()
