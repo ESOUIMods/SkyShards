@@ -214,7 +214,7 @@ local lastMapTexture = ""
 local lastMapId = 0
 local skyshards
 local function UpdateSkyshardsData(zone, subzone)
-  if LMD.mapTexture ~= lastZoneShalidor or LMD.mapId ~= lastMapIpShalidor then
+  if LMD.mapTexture ~= lastMapTexture or LMD.mapId ~= lastMapId then
     lastMapTexture = LMD.mapTexture
     lastMapId = LMD.mapId
     skyshards = SkyShards_GetLocalData(zone, subzone)
