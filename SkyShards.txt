@@ -14,6 +14,7 @@
 ## SavedVariables: SkyS_SavedVariables
 ## DependsOn: CustomCompassPins>=32 LibAddonMenu-2.0>=33 LibMapPing>=1236 LibGPS>=68 LibMapPins-1.0>=10038
 ## DependsOn: LibMapData>=107
+## OptionalDependsOn: LibDebugLogger DebugLogViewer
 
 Language/strings.lua
 Language/$(language).lua

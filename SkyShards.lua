@@ -56,7 +56,7 @@ local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
 -------------------------------------------------
 ----- Logger Function                       -----
 -------------------------------------------------
-SkyShards.show_log = false
+SkyShards.show_log = true
 if LibDebugLogger then
   SkyShards.logger = LibDebugLogger.Create(ADDON_NAME)
 end
@@ -717,6 +717,7 @@ local function OnLoad(eventCode, addOnName)
 
   if addOnName == "SkyShards" then
     EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
+    SkyShards:dm("Debug", "OnAddOnLoaded")
 
     db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)
     NamesToIDSavedVars()
