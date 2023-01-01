@@ -34,6 +34,7 @@ local GPS = LibGPS3
 local LMD = LibMapData
 
 --Local constants -------------------------------------------------------------
+SkyShards = {}
 local ADDON_NAME = "SkyShards"
 local ADDON_VERSION = "10.48"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
@@ -51,6 +52,76 @@ local SKYSHARDS_PINDATA_IN_DELVE = 2
 local SKYSHARDS_PINDATA_IN_PUBLIC_DUNGEON = 3
 local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
+
+-------------------------------------------------
+----- Logger Function                       -----
+-------------------------------------------------
+SkyShards.show_log = false
+if LibDebugLogger then
+  SkyShards.logger = LibDebugLogger.Create(ADDON_NAME)
+end
+local logger
+local viewer
+if DebugLogViewer then viewer = true else viewer = false end
+if LibDebugLogger then logger = true else logger = false end
+
+local function create_log(log_type, log_content)
+  if not viewer and log_type == "Info" then
+    CHAT_ROUTER:AddSystemMessage(log_content)
+    return
+  end
+  if not SkyShards.show_log then return end
+  if logger and log_type == "Debug" then
+    SkyShards.logger:Debug(log_content)
+  end
+  if logger and log_type == "Info" then
+    SkyShards.logger:Info(log_content)
+  end
+  if logger and log_type == "Verbose" then
+    SkyShards.logger:Verbose(log_content)
+  end
+  if logger and log_type == "Warn" then
+    SkyShards.logger:Warn(log_content)
+  end
+end
+
+local function emit_message(log_type, text)
+  if (text == "") then
+    text = "[Empty String]"
+  end
+  create_log(log_type, text)
+end
+
+local function emit_table(log_type, t, indent, table_history)
+  indent = indent or "."
+  table_history = table_history or {}
+
+  for k, v in pairs(t) do
+    local vType = type(v)
+
+    emit_message(log_type, indent .. "(" .. vType .. "): " .. tostring(k) .. " = " .. tostring(v))
+
+    if (vType == "table") then
+      if (table_history[v]) then
+        emit_message(log_type, indent .. "Avoiding cycle on table...")
+      else
+        table_history[v] = true
+        emit_table(log_type, v, indent .. "  ", table_history)
+      end
+    end
+  end
+end
+
+function SkyShards:dm(log_type, ...)
+  for i = 1, select("#", ...) do
+    local value = select(i, ...)
+    if (type(value) == "table") then
+      emit_table(log_type, value)
+    else
+      emit_message(log_type, tostring(value))
+    end
+  end
+end
 
 --Local variables -------------------------------------------------------------
 local db
@@ -646,6 +717,7 @@ local function OnLoad(eventCode, addOnName)
 
   if addOnName == "SkyShards" then
     EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
+    SkyShards:dm("Debug", "OnAddOnLoaded")
 
     db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)
     NamesToIDSavedVars()
