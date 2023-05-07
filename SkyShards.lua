@@ -36,7 +36,7 @@ local LMD = LibMapData
 --Local constants -------------------------------------------------------------
 SkyShards = {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.48"
+local ADDON_VERSION = "10.49"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -211,12 +211,10 @@ pinTooltipCreator.creator = function(pin)
 end
 
 local lastMapTexture = ""
-local lastMapId = 0
 local skyshards
 local function UpdateSkyshardsData(zone, subzone)
-  if LMD.mapTexture ~= lastMapTexture or LMD.mapId ~= lastMapId then
+  if LMD.mapTexture ~= lastMapTexture then
     lastMapTexture = LMD.mapTexture
-    lastMapId = LMD.mapId
     skyshards = SkyShards_GetLocalData(zone, subzone)
     COMPASS_PINS:RefreshPins(PINS_COMPASS)
   end
@@ -376,8 +374,7 @@ local function ShowMyPosition()
   local locX = ("%02.04f"):format(zo_round(x * 10000) / 10000)
   local locY = ("%02.04f"):format(zo_round(y * 10000) / 10000)
 
-  MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>/<<5>>)", GetMapName(), locX, locY,
-    LMP:GetZoneAndSubzone(false, true)))
+  MyPrint(zo_strformat("<<1>>: <<2>>\195\151<<3>> (<<4>>/<<5>>)", GetMapName(), locX, locY, LMP:GetZoneAndSubzone(false, true)))
 
 end
 SLASH_COMMANDS["/skypos"] = ShowMyPosition
