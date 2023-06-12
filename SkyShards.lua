@@ -33,9 +33,9 @@ local LMP = LibMapPins
 local GPS = LibGPS3
 
 --Local constants -------------------------------------------------------------
-SkyShards = {}
+SkyShards = SkyShards or {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.50"
+local ADDON_VERSION = "10.51"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -51,6 +51,8 @@ local SKYSHARDS_PINDATA_IN_DELVE = 2
 local SKYSHARDS_PINDATA_IN_PUBLIC_DUNGEON = 3
 local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
+
+local MAINWORLD_SKYS
 
 -------------------------------------------------
 ----- Logger Function                       -----
