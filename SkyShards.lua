@@ -35,7 +35,7 @@ local GPS = LibGPS3
 --Local constants -------------------------------------------------------------
 SkyShards = SkyShards or {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.51"
+local ADDON_VERSION = "10.52"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -51,6 +51,10 @@ local SKYSHARDS_PINDATA_IN_DELVE = 2
 local SKYSHARDS_PINDATA_IN_PUBLIC_DUNGEON = 3
 local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
+
+local SKYSHARDS_SKILLPANEL_FORMAT_BASIC = 1
+local SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED = 2
+local SKYSHARDS_SKILLPANEL_FORMAT_DETAILED = 3
 
 local MAINWORLD_SKYS
 
@@ -128,7 +132,7 @@ end
 local db
 local defaults = {      -- default settings for saved variables
   compassMaxDistance = 0.05,
-  skillPanelDisplay = 2,
+  skillPanelDisplay = SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED,
   pinTexture = {
     type = 1,
     size = 38,
@@ -598,6 +602,9 @@ end
 local function GetNumFoundSkyShards()
 
   collectedSkyShards = 0
+  --[[TODO why does this have to be 1 in order to have a total divisible by 3?
+  Is it purely because of the quest Soul Shriven in Coldharbour?
+  ]]--
   totalSkyShards = 1
 
   local ids = SkyShards_GetAchievementIDs()
@@ -606,8 +613,8 @@ local function GetNumFoundSkyShards()
     local numSkyshards = GetNumSkyshardsInZone(zoneId)
     if numSkyshards then
       totalSkyShards = totalSkyShards + numSkyshards
-      for n = 1, numSkyshards do
-        local skyshardId = GetZoneSkyshardId(zoneId, n)
+      for skyshardIndex = 1, numSkyshards do
+        local skyshardId = GetZoneSkyshardId(zoneId, skyshardIndex)
         local completed = GetSkyshardDiscoveryStatus(skyshardId)
         if completed == SKYSHARD_DISCOVERY_STATUS_ACQUIRED then
           collectedSkyShards = collectedSkyShards + 1
@@ -632,12 +639,12 @@ local function AlterSkyShardsIndicator()
     end
     self.availablePointsLabel:SetText(pointsLabel)
 
-    if db.skillPanelDisplay > 1 then
+    if db.skillPanelDisplay > SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
       if collectedSkyShards < totalSkyShards then
-        if db.skillPanelDisplay == 2 then
+        if db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED then
           local newFormat = string.gsub(GetString(SI_SKILLS_SKY_SHARDS_COLLECTED), "\/3", "\/" .. totalSkyShards)
           self.skyShardsLabel:SetText(zo_strformat(newFormat, collectedSkyShards))
-        elseif db.skillPanelDisplay == 3 then
+        elseif db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_DETAILED then
           local newFormat = string.gsub(GetString(SI_SKILLS_SKY_SHARDS_COLLECTED), "\/3",
             "\/" .. totalSkyShards .. " (" .. GetNumSkyShards() .. "/3)")
           self.skyShardsLabel:SetText(zo_strformat(newFormat, collectedSkyShards))
@@ -656,16 +663,16 @@ local function AlterSkyShardsIndicator()
     local availablePoints = GetAvailableSkillPoints()
     self.headerData.data1Text = availablePoints
 
-    if db.skillPanelDisplay == 1 then
+    if db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
       local skyShards = GetNumSkyShards()
       self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,
         NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
-    elseif db.skillPanelDisplay > 1 then
+    elseif db.skillPanelDisplay > SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
       if collectedSkyShards < totalSkyShards then
-        if db.skillPanelDisplay == 2 then
+        if db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED then
           self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
             totalSkyShards)
-        elseif db.skillPanelDisplay == 3 then
+        elseif db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_DETAILED then
           local skyShards = GetNumSkyShards()
           self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
             totalSkyShards) .. " (" .. zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,

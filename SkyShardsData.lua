@@ -47,6 +47,7 @@ local skyshardsAchievementIDs = {
   [554] = true, -- Rivenspire Skyshards
   [515] = true, -- Stormhaven Skyshards
   [407] = true, -- Stros M'Kai Skyshards
+  [3672] = true, -- Telvanni Peninsula and Apocrypha
   -- Arteaum and Summerset same zoneID
   [1845] = true, -- Summerset Skyshard Hunter
   -- The Reach and Arkthzand Cavern same zoneID
