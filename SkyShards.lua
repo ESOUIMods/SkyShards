@@ -31,10 +31,11 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 local LAM = LibAddonMenu2
 local LMP = LibMapPins
 local GPS = LibGPS3
+local LMD = LibMapData
 
 --Local constants -------------------------------------------------------------
-SkyShards = SkyShards or {}
-local ADDON_NAME = "SkyShards"
+local ADDON_NAME = SkyShards.name
+local ADDON_PANEL = "SkyShardsPanel"
 local ADDON_VERSION = "10.52"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
@@ -56,77 +57,9 @@ local SKYSHARDS_SKILLPANEL_FORMAT_BASIC = 1
 local SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED = 2
 local SKYSHARDS_SKILLPANEL_FORMAT_DETAILED = 3
 
+local SKYSHARDS_SET_ICON_MENU = 1
+
 local MAINWORLD_SKYS
-
--------------------------------------------------
------ Logger Function                       -----
--------------------------------------------------
-SkyShards.show_log = false
-if LibDebugLogger then
-  SkyShards.logger = LibDebugLogger.Create(ADDON_NAME)
-end
-local logger
-local viewer
-if DebugLogViewer then viewer = true else viewer = false end
-if LibDebugLogger then logger = true else logger = false end
-
-local function create_log(log_type, log_content)
-  if not viewer and log_type == "Info" then
-    CHAT_ROUTER:AddSystemMessage(log_content)
-    return
-  end
-  if not SkyShards.show_log then return end
-  if logger and log_type == "Debug" then
-    SkyShards.logger:Debug(log_content)
-  end
-  if logger and log_type == "Info" then
-    SkyShards.logger:Info(log_content)
-  end
-  if logger and log_type == "Verbose" then
-    SkyShards.logger:Verbose(log_content)
-  end
-  if logger and log_type == "Warn" then
-    SkyShards.logger:Warn(log_content)
-  end
-end
-
-local function emit_message(log_type, text)
-  if (text == "") then
-    text = "[Empty String]"
-  end
-  create_log(log_type, text)
-end
-
-local function emit_table(log_type, t, indent, table_history)
-  indent = indent or "."
-  table_history = table_history or {}
-
-  for k, v in pairs(t) do
-    local vType = type(v)
-
-    emit_message(log_type, indent .. "(" .. vType .. "): " .. tostring(k) .. " = " .. tostring(v))
-
-    if (vType == "table") then
-      if (table_history[v]) then
-        emit_message(log_type, indent .. "Avoiding cycle on table...")
-      else
-        table_history[v] = true
-        emit_table(log_type, v, indent .. "  ", table_history)
-      end
-    end
-  end
-end
-
-function SkyShards:dm(log_type, ...)
-  for i = 1, select("#", ...) do
-    local value = select(i, ...)
-    if (type(value) == "table") then
-      emit_table(log_type, value)
-    else
-      emit_message(log_type, tostring(value))
-    end
-  end
-end
 
 --Local variables -------------------------------------------------------------
 local db
@@ -215,15 +148,7 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local lastZone = ""
-local skyshards
-local function UpdateSkyshardsData(zone, subzone)
-  skyshards = SkyShards_GetLocalData(zone, subzone)
-  lastZone = GetMapTileTexture()
-end
-
 local function ShouldDisplaySkyshards()
-
   if db.immersiveMode == 1 then
     return true
   end
@@ -304,15 +229,30 @@ local function ShouldDisplaySkyshards()
 
 end
 
+local skyshardData
+local lastMapTexture = ""
+local function UpdateSkyshardsData(zone, subzone)
+  SkyShards:dm("Debug", "UpdateSkyshardsData")
+  if LMD.mapTexture ~= lastMapTexture then
+    SkyShards:dm("Warn", "Map Texture Changed")
+    skyshardData = SkyShards_GetLocalData(zone, subzone)
+    lastMapTexture = LMD.mapTexture
+  end
+end
+
 local function CompassCallback()
-  if GetMapType() > MAPTYPE_ZONE then return end
+  if LMD.isWorld then return end
+  SkyShards:dm("Debug", "CompassCallback")
 
   if not db.filters[PINS_COMPASS] then return end
 
   local shouldDisplay = ShouldDisplaySkyshards()
 
-  if skyshards ~= nil then
-    for _, pinData in ipairs(skyshards) do
+  local zone, subzone = LMP:GetZoneAndSubzone(false, true)
+  UpdateSkyshardsData(zone, subzone)
+
+  if skyshardData ~= nil then
+    for _, pinData in ipairs(skyshardData) do
       local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
       local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
       local shardStatus = GetSkyshardDiscoveryStatus(shardId)
@@ -324,18 +264,16 @@ local function CompassCallback()
 end
 
 local function MapCallbackCreatePins(pinType)
-
-  if GetMapType() > MAPTYPE_ZONE then return end
+  if LMD.isWorld then return end
+  SkyShards:dm("Debug", "MapCallbackCreatePins")
 
   local shouldDisplay = ShouldDisplaySkyshards()
 
   local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-  if GetMapTileTexture() ~= lastZone then
-    UpdateSkyshardsData(zone, subzone)
-  end
+  UpdateSkyshardsData(zone, subzone)
 
-  if skyshards ~= nil then
-    for _, pinData in ipairs(skyshards) do
+  if skyshardData ~= nil then
+    for _, pinData in ipairs(skyshardData) do
       local zoneId = GetSkyshardAchievementZoneId(pinData[SKYSHARDS_PINDATA_ACHIEVEMENTID])
       local shardId = GetZoneSkyshardId(zoneId, pinData[SKYSHARDS_PINDATA_ZONEGUIDEINDEX])
       local shardStatus = GetSkyshardDiscoveryStatus(shardId)
@@ -419,16 +357,16 @@ local function CreateSettingsMenu()
     registerForDefaults = true,
     website = ADDON_WEBSITE,
   }
-  LAM:RegisterAddonPanel(ADDON_NAME, panelData)
+  LAM:RegisterAddonPanel(ADDON_PANEL, panelData)
 
   local CreateIcons, unknownIcon, collectedIcon
   CreateIcons = function(panel)
-    if panel == SkyShards then
-      unknownIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[1], CT_TEXTURE)
-      unknownIcon:SetAnchor(RIGHT, panel.controlsToRefresh[1].combobox, LEFT, -10, 0)
+    if panel == SkyShardsPanel then
+      unknownIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[SKYSHARDS_SET_ICON_MENU], CT_TEXTURE)
+      unknownIcon:SetAnchor(RIGHT, panel.controlsToRefresh[SKYSHARDS_SET_ICON_MENU].combobox, LEFT, -10, 0)
       unknownIcon:SetTexture(pinTextures.unknown[db.pinTexture.type])
       unknownIcon:SetDimensions(db.pinTexture.size, db.pinTexture.size)
-      collectedIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[1], CT_TEXTURE)
+      collectedIcon = WINDOW_MANAGER:CreateControl(nil, panel.controlsToRefresh[SKYSHARDS_SET_ICON_MENU], CT_TEXTURE)
       collectedIcon:SetAnchor(RIGHT, unknownIcon, LEFT, -5, 0)
       collectedIcon:SetTexture(pinTextures.collected[db.pinTexture.type])
       collectedIcon:SetDimensions(db.pinTexture.size, db.pinTexture.size)
@@ -437,170 +375,168 @@ local function CreateSettingsMenu()
   end
   CALLBACK_MANAGER:RegisterCallback("LAM-PanelControlsCreated", CreateIcons)
 
-  local optionsTable = {
-    {
-      type = "dropdown",
-      name = GetString(SKYS_PIN_TEXTURE),
-      tooltip = GetString(SKYS_PIN_TEXTURE_DESC),
-      choices = pinTexturesList,
-      getFunc = function() return pinTexturesList[db.pinTexture.type] end,
-      setFunc = function(selected)
-        for index, name in ipairs(pinTexturesList) do
-          if name == selected then
-            db.pinTexture.type = index
-            LMP:SetLayoutKey(PINS_UNKNOWN, "texture", pinTextures.unknown[index])
-            LMP:SetLayoutKey(PINS_COLLECTED, "texture", pinTextures.collected[index])
-            unknownIcon:SetTexture(pinTextures.unknown[index])
-            collectedIcon:SetTexture(pinTextures.collected[index])
-            LMP:RefreshPins(PINS_UNKNOWN)
-            LMP:RefreshPins(PINS_COLLECTED)
-            COMPASS_PINS.pinLayouts[PINS_COMPASS].texture = pinTextures.unknown[index]
-            COMPASS_PINS:RefreshPins(PINS_COMPASS)
-            break
-          end
+  local optionsTable = {}
+  optionsTable[SKYSHARDS_SET_ICON_MENU] = {
+    type = "dropdown",
+    name = GetString(SKYS_PIN_TEXTURE),
+    tooltip = GetString(SKYS_PIN_TEXTURE_DESC),
+    choices = pinTexturesList,
+    getFunc = function() return pinTexturesList[db.pinTexture.type] end,
+    setFunc = function(selected)
+      for index, name in ipairs(pinTexturesList) do
+        if name == selected then
+          db.pinTexture.type = index
+          LMP:SetLayoutKey(PINS_UNKNOWN, "texture", pinTextures.unknown[index])
+          LMP:SetLayoutKey(PINS_COLLECTED, "texture", pinTextures.collected[index])
+          unknownIcon:SetTexture(pinTextures.unknown[index])
+          collectedIcon:SetTexture(pinTextures.collected[index])
+          LMP:RefreshPins(PINS_UNKNOWN)
+          LMP:RefreshPins(PINS_COLLECTED)
+          COMPASS_PINS.pinLayouts[PINS_COMPASS].texture = pinTextures.unknown[index]
+          COMPASS_PINS:RefreshPins(PINS_COMPASS)
+          break
         end
-      end,
-      disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
-      default = pinTexturesList[defaults.pinTexture.type],
-    },
-    {
-      type = "slider",
-      name = GetString(SKYS_PIN_SIZE),
-      tooltip = GetString(SKYS_PIN_SIZE_DESC),
-      min = 20,
-      max = 70,
-      getFunc = function() return db.pinTexture.size end,
-      setFunc = function(size)
-        db.pinTexture.size = size
-        unknownIcon:SetDimensions(size, size)
-        collectedIcon:SetDimensions(size, size)
-        LMP:SetLayoutKey(PINS_UNKNOWN, "size", size)
-        LMP:SetLayoutKey(PINS_COLLECTED, "size", size)
-        LMP:RefreshPins(PINS_UNKNOWN)
-        LMP:RefreshPins(PINS_COLLECTED)
-      end,
-      disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
-      default = defaults.pinTexture.size
-    },
-    {
-      type = "slider",
-      name = GetString(SKYS_PIN_LAYER),
-      tooltip = GetString(SKYS_PIN_LAYER_DESC),
-      min = 10,
-      max = 200,
-      step = 5,
-      getFunc = function() return db.pinTexture.level end,
-      setFunc = function(level)
-        db.pinTexture.level = level
-        LMP:SetLayoutKey(PINS_UNKNOWN, "level", level)
-        LMP:SetLayoutKey(PINS_COLLECTED, "level", level)
-        LMP:RefreshPins(PINS_UNKNOWN)
-        LMP:RefreshPins(PINS_COLLECTED)
-      end,
-      disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
-      default = defaults.pinTexture.level,
-    },
-    {
-      type = "checkbox",
-      name = GetString(SKYS_UNKNOWN),
-      tooltip = GetString(SKYS_UNKNOWN_DESC),
-      getFunc = function() return db.filters[PINS_UNKNOWN] end,
-      setFunc = function(state)
-        db.filters[PINS_UNKNOWN] = state
-        LMP:SetEnabled(PINS_UNKNOWN, state)
-      end,
-      default = defaults.filters[PINS_UNKNOWN],
-    },
-    {
-      type = "checkbox",
-      name = GetString(SKYS_COLLECTED),
-      tooltip = GetString(SKYS_COLLECTED_DESC),
-      getFunc = function() return db.filters[PINS_COLLECTED] end,
-      setFunc = function(state)
-        db.filters[PINS_COLLECTED] = state
-        LMP:SetEnabled(PINS_COLLECTED, state)
-      end,
-      default = defaults.filters[PINS_COLLECTED]
-    },
-    {
-      type = "checkbox",
-      name = GetString(SKYS_COMPASS_UNKNOWN),
-      tooltip = GetString(SKYS_COMPASS_UNKNOWN_DESC),
-      getFunc = function() return db.filters[PINS_COMPASS] end,
-      setFunc = function(state)
-        db.filters[PINS_COMPASS] = state
-        COMPASS_PINS:RefreshPins(PINS_COMPASS)
-      end,
-      default = defaults.filters[PINS_COMPASS],
-    },
-    {
-      type = "slider",
-      name = GetString(SKYS_COMPASS_DIST),
-      tooltip = GetString(SKYS_COMPASS_DIST_DESC),
-      min = 1,
-      max = 100,
-      getFunc = function() return db.compassMaxDistance * 1000 end,
-      setFunc = function(maxDistance)
-        db.compassMaxDistance = maxDistance / 1000
-        COMPASS_PINS.pinLayouts[PINS_COMPASS].maxDistance = maxDistance / 1000
-        COMPASS_PINS:RefreshPins(PINS_COMPASS)
-      end,
-      width = "full",
-      disabled = function() return not db.filters[PINS_COMPASS] end,
-      default = defaults.compassMaxDistance * 1000,
-    },
-    {
-      type = "colorpicker",
-      name = GetString(SKYS_MAINWORLD),
-      tooltip = GetString(SKYS_MAINWORLD_DESC),
-      getFunc = function() return MAINWORLD_SKYS:UnpackRGBA() end,
-      setFunc = function(...)
-        MAINWORLD_SKYS:SetRGBA(...)
-        db.mainworldSkyshards = MAINWORLD_SKYS:ToHex()
-        LMP:RefreshPins()
-        COMPASS_PINS:RefreshPins(PINS_COMPASS)
-      end,
-      default = ZO_SELECTED_TEXT,
-    },
-    {
-      type = "dropdown",
-      name = GetString(SKYS_SKILLS),
-      tooltip = GetString(SKYS_SKILLS_DESC),
-      choices = skillPanelChoices,
-      getFunc = function() return skillPanelChoices[db.skillPanelDisplay] end,
-      setFunc = function(selected)
-        for index, name in ipairs(skillPanelChoices) do
-          if name == selected then
-            db.skillPanelDisplay = index
-            SKILLS_WINDOW:RefreshSkillPointInfo()
-            break
-          end
-        end
-      end,
-      default = skillPanelChoices[defaults.skillPanelDisplay],
-    },
-    {
-      type = "dropdown",
-      name = GetString(SKYS_IMMERSIVE),
-      tooltip = GetString(SKYS_IMMERSIVE_DESC),
-      choices = immersiveChoices,
-      getFunc = function() return immersiveChoices[db.immersiveMode] end,
-      setFunc = function(selected)
-        for index, name in ipairs(immersiveChoices) do
-          if name == selected then
-            db.immersiveMode = index
-            break
-          end
-        end
-      end,
-      default = immersiveChoices[defaults.immersiveMode],
-    },
+      end
+    end,
+    disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
+    default = pinTexturesList[defaults.pinTexture.type],
   }
-  LAM:RegisterOptionControls(ADDON_NAME, optionsTable)
+  optionsTable[#optionsTable + 1] = {
+    type = "slider",
+    name = GetString(SKYS_PIN_SIZE),
+    tooltip = GetString(SKYS_PIN_SIZE_DESC),
+    min = 20,
+    max = 70,
+    getFunc = function() return db.pinTexture.size end,
+    setFunc = function(size)
+      db.pinTexture.size = size
+      unknownIcon:SetDimensions(size, size)
+      collectedIcon:SetDimensions(size, size)
+      LMP:SetLayoutKey(PINS_UNKNOWN, "size", size)
+      LMP:SetLayoutKey(PINS_COLLECTED, "size", size)
+      LMP:RefreshPins(PINS_UNKNOWN)
+      LMP:RefreshPins(PINS_COLLECTED)
+    end,
+    disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
+    default = defaults.pinTexture.size
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "slider",
+    name = GetString(SKYS_PIN_LAYER),
+    tooltip = GetString(SKYS_PIN_LAYER_DESC),
+    min = 10,
+    max = 200,
+    step = 5,
+    getFunc = function() return db.pinTexture.level end,
+    setFunc = function(level)
+      db.pinTexture.level = level
+      LMP:SetLayoutKey(PINS_UNKNOWN, "level", level)
+      LMP:SetLayoutKey(PINS_COLLECTED, "level", level)
+      LMP:RefreshPins(PINS_UNKNOWN)
+      LMP:RefreshPins(PINS_COLLECTED)
+    end,
+    disabled = function() return not (db.filters[PINS_UNKNOWN] or db.filters[PINS_COLLECTED]) end,
+    default = defaults.pinTexture.level,
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "checkbox",
+    name = GetString(SKYS_UNKNOWN),
+    tooltip = GetString(SKYS_UNKNOWN_DESC),
+    getFunc = function() return db.filters[PINS_UNKNOWN] end,
+    setFunc = function(state)
+      db.filters[PINS_UNKNOWN] = state
+      LMP:SetEnabled(PINS_UNKNOWN, state)
+    end,
+    default = defaults.filters[PINS_UNKNOWN],
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "checkbox",
+    name = GetString(SKYS_COLLECTED),
+    tooltip = GetString(SKYS_COLLECTED_DESC),
+    getFunc = function() return db.filters[PINS_COLLECTED] end,
+    setFunc = function(state)
+      db.filters[PINS_COLLECTED] = state
+      LMP:SetEnabled(PINS_COLLECTED, state)
+    end,
+    default = defaults.filters[PINS_COLLECTED]
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "checkbox",
+    name = GetString(SKYS_COMPASS_UNKNOWN),
+    tooltip = GetString(SKYS_COMPASS_UNKNOWN_DESC),
+    getFunc = function() return db.filters[PINS_COMPASS] end,
+    setFunc = function(state)
+      db.filters[PINS_COMPASS] = state
+      COMPASS_PINS:RefreshPins(PINS_COMPASS)
+    end,
+    default = defaults.filters[PINS_COMPASS],
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "slider",
+    name = GetString(SKYS_COMPASS_DIST),
+    tooltip = GetString(SKYS_COMPASS_DIST_DESC),
+    min = 1,
+    max = 100,
+    getFunc = function() return db.compassMaxDistance * 1000 end,
+    setFunc = function(maxDistance)
+      db.compassMaxDistance = maxDistance / 1000
+      COMPASS_PINS.pinLayouts[PINS_COMPASS].maxDistance = maxDistance / 1000
+      COMPASS_PINS:RefreshPins(PINS_COMPASS)
+    end,
+    width = "full",
+    disabled = function() return not db.filters[PINS_COMPASS] end,
+    default = defaults.compassMaxDistance * 1000,
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "colorpicker",
+    name = GetString(SKYS_MAINWORLD),
+    tooltip = GetString(SKYS_MAINWORLD_DESC),
+    getFunc = function() return MAINWORLD_SKYS:UnpackRGBA() end,
+    setFunc = function(...)
+      MAINWORLD_SKYS:SetRGBA(...)
+      db.mainworldSkyshards = MAINWORLD_SKYS:ToHex()
+      LMP:RefreshPins()
+      COMPASS_PINS:RefreshPins(PINS_COMPASS)
+    end,
+    default = ZO_SELECTED_TEXT,
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "dropdown",
+    name = GetString(SKYS_SKILLS),
+    tooltip = GetString(SKYS_SKILLS_DESC),
+    choices = skillPanelChoices,
+    getFunc = function() return skillPanelChoices[db.skillPanelDisplay] end,
+    setFunc = function(selected)
+      for index, name in ipairs(skillPanelChoices) do
+        if name == selected then
+          db.skillPanelDisplay = index
+          SKILLS_WINDOW:RefreshSkillPointInfo()
+          break
+        end
+      end
+    end,
+    default = skillPanelChoices[defaults.skillPanelDisplay],
+  }
+  optionsTable[#optionsTable + 1] = {
+    type = "dropdown",
+    name = GetString(SKYS_IMMERSIVE),
+    tooltip = GetString(SKYS_IMMERSIVE_DESC),
+    choices = immersiveChoices,
+    getFunc = function() return immersiveChoices[db.immersiveMode] end,
+    setFunc = function(selected)
+      for index, name in ipairs(immersiveChoices) do
+        if name == selected then
+          db.immersiveMode = index
+          break
+        end
+      end
+    end,
+    default = immersiveChoices[defaults.immersiveMode],
+  }
+  LAM:RegisterOptionControls(ADDON_PANEL, optionsTable)
 end
 
 local function GetNumFoundSkyShards()
-
   collectedSkyShards = 0
   --[[TODO why does this have to be 1 in order to have a total divisible by 3?
   Is it purely because of the quest Soul Shriven in Coldharbour?
@@ -628,7 +564,6 @@ local function GetNumFoundSkyShards()
 end
 
 local function AlterSkyShardsIndicator()
-
   local function PreHookRefreshSkillPointInfo(self)
     -- keyboard function
     GetNumFoundSkyShards()
@@ -660,23 +595,18 @@ local function AlterSkyShardsIndicator()
   local function PreHookRefreshPointsDisplay(self)
     -- gamepad function
     GetNumFoundSkyShards()
+    local skyShards = GetNumSkyShards()
     local availablePoints = GetAvailableSkillPoints()
     self.headerData.data1Text = availablePoints
 
     if db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
-      local skyShards = GetNumSkyShards()
-      self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,
-        NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
+      self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards, NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
     elseif db.skillPanelDisplay > SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
       if collectedSkyShards < totalSkyShards then
         if db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED then
-          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
-            totalSkyShards)
+          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards, totalSkyShards)
         elseif db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_DETAILED then
-          local skyShards = GetNumSkyShards()
-          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
-            totalSkyShards) .. " (" .. zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,
-            NUM_PARTIAL_SKILL_POINTS_FOR_FULL) .. ")"
+          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards, totalSkyShards) .. " (" .. zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards, NUM_PARTIAL_SKILL_POINTS_FOR_FULL) .. ")"
         end
       else
         self.headerData.data2Text = collectedSkyShards
@@ -719,7 +649,7 @@ end
 
 local function OnLoad(eventCode, addOnName)
 
-  if addOnName == "SkyShards" then
+  if addOnName == ADDON_NAME then
     EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
 
     db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)

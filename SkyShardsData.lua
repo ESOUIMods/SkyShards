@@ -23,7 +23,6 @@ Under the following terms:
 Please read full licence at :
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ]]
-SkyShards = SkyShards or {}
 
 --achievementIDs for skyshards:
 local skyshardsAchievementIDs = {
