@@ -10,9 +10,9 @@
 ## AddOnVersion: 100052
 ## Author: Sharlikran
 ; previous authors Ayantir, Garkin, AssemblerManiac
-## APIVersion: 101037 101038
+## APIVersion: 101039 101040
 ## SavedVariables: SkyS_SavedVariables
-## DependsOn: CustomCompassPins>=32 LibAddonMenu-2.0>=34 LibMapPing>=1236 LibGPS>=69 LibMapPins-1.0>=10038
+## DependsOn: CustomCompassPins>=32 LibAddonMenu-2.0>=35 LibMapPing>=1236 LibGPS>=69 LibMapPins-1.0>=10038
 ## DependsOn: LibMapData>=111
 ## OptionalDependsOn: LibDebugLogger DebugLogViewer
 
