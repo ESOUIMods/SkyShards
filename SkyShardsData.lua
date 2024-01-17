@@ -23,6 +23,7 @@ Under the following terms:
 Please read full licence at :
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ]]
+SkyShards = SkyShards or {}
 
 --achievementIDs for skyshards:
 local skyshardsAchievementIDs = {
@@ -1884,6 +1885,61 @@ skyshardsData["galen"] = {
   },
   ["u36_embervine_int1_base"] = { -- Embervine breadcrumb
     { 0.3909091055, 0.3860139846, 3499, 6, 2 },
+  },
+}
+
+skyshardsData["apocrypha"] = {
+  ["u38_apocrypha_base"] = { --
+    { 0.6800, 0.4970, 3672, 5 },
+    { 0.8930, 0.5660, 3672, 6 },
+    { 0.4746365547, 0.4754182696, 3672, 7, 4 }, -- tunnel
+    { 0.5120, 0.3140, 3672, 8 },
+    { 0.4150, 0.4420, 3672, 9 },
+    { 0.2190, 0.3300, 3672, 10 },
+    { 0.4030, 0.4990, 3672, 11, 3 }, -- underweave
+    { 0.5780, 0.7340, 3672, 14, 2 }, -- Disquiet Study
+    { 0.9038958549, 0.6655811071, 3672, 15, 2 }, -- Quires Wind
+    { 0.3903756141, 0.1914914846, 3672, 16, 2 }, -- Fathoms Drift
+    { 0.3335747718, 0.3868216574, 3672, 18, 2 }, -- apogee_wind
+  },
+  ["u38_camonnaruhn_base"] = {
+    { 0.5422678589, 0.5139195322, 3672, 17, 2 }, -- camonnaruhn
+  },
+  ["u38_quires_wind_base"] = {
+    {0.5638747811, 0.6563143730, 3672, 15, 2 }, -- Quires Wind
+  },
+  ["u38_disquiet_study_base"] = {
+    {0.4542265236,0.2998609840,3672,14, 2 }, -- Disquiet Study
+  },
+  ["u38_underweave_central_base"] = {
+    { 0.3536794185, 0.6212207674,3672,11, 3 }, -- underweave
+  },
+  ["u38_corpusclebight_02_base"] = {
+    { 0.4232380986, 0.1226666644,3672,16, 2 }, -- Fathoms Drift
+  },
+}
+
+skyshardsData["telvanni"] = {
+  ["u38_telvannipeninsula_base"] = { --
+    { 0.6989716291, 0.3625525832, 3672, 1 },
+    { 0.3170, 0.3640, 3672, 2 },
+    { 0.5170, 0.7810, 3672, 3 },
+    { 0.6700, 0.6080, 3672, 4 },
+    { 0.7191173434, 0.3177967369, 3672, 12, 3 }, -- gorne
+    { 0.7864651679, 0.4997152686, 3672, 13, 2 }, -- eggmine
+    { 0.2419047057, 0.6903068423, 3672, 17, 2 }, -- camonnaruhn
+  },
+  ["u38_eggmine_base"] = {
+    { 0.2916465997, 0.5309107303, 3672, 13, 2 }, -- eggmine
+  },
+  ["u38_gorne_main_0"] = {
+    { 0.4036848545, 0.3325843811, 3672, 12, 3 }, -- gorne
+  },
+  ["u38_apogee_wind_base"] = {
+    { 0.4809495210, 0.4708372652, 3672, 18, 2 }, -- apogee_wind
+  },
+  ["u38_tunnel2_base"] = {
+    { 0.5926405787, 0.1200416460, 3672, 7, 4 }, -- tunnel
   },
 }
 
