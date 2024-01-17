@@ -31,12 +31,11 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 local LAM = LibAddonMenu2
 local LMP = LibMapPins
 local GPS = LibGPS3
-local LMD = LibMapData
 
 --Local constants -------------------------------------------------------------
 SkyShards = {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.49"
+local ADDON_VERSION = "10.50"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -210,14 +209,11 @@ pinTooltipCreator.creator = function(pin)
 
 end
 
-local lastMapTexture = ""
+local lastZone = ""
 local skyshards
 local function UpdateSkyshardsData(zone, subzone)
-  if LMD.mapTexture ~= lastMapTexture then
-    lastMapTexture = LMD.mapTexture
-    skyshards = SkyShards_GetLocalData(zone, subzone)
-    COMPASS_PINS:RefreshPins(PINS_COMPASS)
-  end
+  skyshards = SkyShards_GetLocalData(zone, subzone)
+  lastZone = GetMapTileTexture()
 end
 
 local function ShouldDisplaySkyshards()
@@ -328,7 +324,9 @@ local function MapCallbackCreatePins(pinType)
   local shouldDisplay = ShouldDisplaySkyshards()
 
   local zone, subzone = LMP:GetZoneAndSubzone(false, true)
-  UpdateSkyshardsData(zone, subzone)
+  if GetMapTileTexture() ~= lastZone then
+    UpdateSkyshardsData(zone, subzone)
+  end
 
   if skyshards ~= nil then
     for _, pinData in ipairs(skyshards) do
@@ -714,7 +712,6 @@ local function OnLoad(eventCode, addOnName)
 
   if addOnName == "SkyShards" then
     EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
-    SkyShards:dm("Debug", "OnAddOnLoaded")
 
     db = ZO_SavedVars:NewCharacterIdSettings("SkyS_SavedVariables", 4, nil, defaults)
     NamesToIDSavedVars()
