@@ -4,15 +4,15 @@
 ; States and/or other countries. All rights reserved.
 ; You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
-## Title: |cefebbeSkyShards|r v10.52
+## Title: |cefebbeSkyShards|r v10.53
 ## Description: This addon displays skyshards on the world map, compass band, and inside delves/dungeons.
-## Version: 10.52
-## AddOnVersion: 100052
+## Version: 10.53
+## AddOnVersion: 100053
 ## Author: Sharlikran
 ; previous authors Ayantir, Garkin, AssemblerManiac
-## APIVersion: 101037 101038
+## APIVersion: 101041 101042
 ## SavedVariables: SkyS_SavedVariables
-## DependsOn: CustomCompassPins>=32 LibAddonMenu-2.0>=34 LibMapPing>=1236 LibGPS>=69 LibMapPins-1.0>=10038
+## DependsOn: CustomCompassPins>=32 LibAddonMenu-2.0>=36 LibMapPing>=1236 LibGPS>=69 LibMapPins-1.0>=10038
 ## OptionalDependsOn: LibDebugLogger DebugLogViewer
 
 Language/strings.lua

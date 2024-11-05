@@ -72,6 +72,7 @@ local skyshardsAchievementIDs = {
   [2461] = true, -- Northern Elsweyr Skyshard Hunter
   [2562] = true, -- Southern Elsweyr Skyshard Hunter
   [1843] = true, -- Morrowind Skyshard Hunter
+  [3949] = true, -- West Weald Skyshard Hunter
   [1320] = true, -- Wrothgar Skyshard Hunter
   -- Only one Cyrodiil needed to get the 46 total skyshards
   [692] = true, -- Cyrodiil Ebonheart Skyshards
@@ -1941,6 +1942,67 @@ skyshardsData["telvanni"] = {
   },
   ["u38_tunnel2_base"] = {
     { 0.5926405787, 0.1200416460, 3672, 7, 4 }, -- tunnel
+  },
+}
+
+skyshardsData["westweald"] = {
+  -- Gold Road Chapter (West Weald) - Data and Code provided by hamgatan
+
+  ["westwealdoverland_base"] = {            -- West Weald Zone Coordinates
+    { 0.6320, 0.5472, 3949, 1 },      -- On the steps of a vineyard near wildburn's edge
+    { 0.1549, 0.5618, 3949, 2 },      -- Outside the grate upriver of Varen's Watch
+    { 0.7712, 0.5992, 3949, 3 },      -- Overlooking the gorge beneath the Skingrad Castle bridge
+    { 0.4847, 0.7125, 3949, 4 },      -- Atop an overgrown citadel caught in Vashabar's bloom
+    { 0.4844, 0.7914, 3949, 5 },      -- Where Ayleids once looked down upon the river Strid
+    { 0.5108, 0.4436, 3949, 6, 1 },   -- Gazing down upon wheat fields from Centurion's Rise
+    { 0.7091779708, 0.4135984480, 3949, 7 },      -- Up top on Rock Bottom
+    { 0.3952, 0.5045, 3949, 8 },      -- In the rubble of a collapsed mine in sight of Leftwheal
+    { 0.6438, 0.2424, 3949, 9 },      -- Wedged in a stump at Deserter's Lagoon
+    { 0.4875, 0.5725, 3949, 10 },     -- Tucked in a cave amid the wildburn beyond Hoperoot
+    { 0.8684, 0.6880, 3949, 11, 3 },  -- Resting on Silorn trasures down a blind alley in the north
+    { 0.3396, 0.4878, 3949, 12, 3 },  -- In the maw of a mighty skull. Look up in Leftwheal
+    { 0.6800, 0.3774, 3949, 13, 2 },  -- On a platform overlooking the Legion's Rest central cavern
+    { 0.5343, 0.7285, 3949, 14, 2 },  -- On a wildgrown bridge high above a Fyrelight stream
+    { 0.5116, 0.5197, 3949, 15, 2 },  -- Displayed at a crossroads in Nonungalo's ancient maze
+    { 0.7680, 0.2075, 3949, 16, 2 },  -- Carted to the top of the battlements at Fort Colovia
+    { 0.7183, 0.7340, 3949, 17, 2 },  -- South at Haldain Lumber Camp, beneath Ayleid boughs
+    { 0.1407, 0.6124, 3949, 18, 2 },  -- Pulled to a towers top on the north bank of Varen's Watch
+  },
+  -- Ontus [temporarymaps]
+  ["u42_ontus_city_base"] = {
+    { 0.1598, 0.7010, 3949, 6, 1 },
+  },
+  -- Silorn [temporarymaps]
+  ["u42_silorn_base"] = {
+    { 0.5594, 0.3140, 3949, 11, 3 },
+  },
+  -- Leftwheal Trading Post [westweald]
+  ["u42_leftwheal_ext2_base"] = {
+    { 0.3846, 0.2871, 3949, 12, 3 },
+  },
+  -- Legions Rest [westweald]
+  ["u42_windcave_base"] = {
+    { 0.4547, 0.2831, 3949, 13, 2 },
+  },
+  -- Fyrelight Cave [temporarymaps]
+  ["u42_base_clawcave"] = {
+    { 0.3335, 0.4267, 3949, 14, 2 },
+  },
+  -- Nonungalo [westweald]
+  ["u42_base_nonungalo"] = {
+    { 0.4379, 0.3005, 3949, 15, 2 },
+  },
+  -- Fort Colovia [westweald]
+  ["u42_base_towerbelli"] = {
+    { 0.4995, 0.6541, 3949, 16, 2 },
+  },
+  -- Haldain Lumber Camp [temporarymaps]
+  ["u42_base_haldain"] = {
+    { 0.5110, 0.7589, 3949, 17, 2 },
+  },
+  -- Varen's Watch [westweald]
+  ["ui_maps_u42_varenswall_ext"] = {
+    { 0.5089, 0.4037, 3949, 18, 2 },
   },
 }
 
