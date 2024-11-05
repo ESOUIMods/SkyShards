@@ -1988,23 +1988,23 @@ skyshardsData["westweald"] = {
   ["ui_maps_u42_varenswall_ext"] = {
     { 0.5089, 0.4037, 3949, 18, 2 },
   },
+  -- Ontus [westweald]
+  ["u42_ontus_city_base"] = {
+    { 0.1598, 0.7010, 3949, 6, 1 },
+  },
+  -- Silorn [westweald]
+  ["u42_silorn_base"] = {
+    { 0.5594, 0.3140, 3949, 11, 3 },
+  },
+  -- Fyrelight Cave [westweald]
+  ["u42_fyrelightcave_base"] = {
+    { 0.3335, 0.4267, 3949, 14, 2 },
+  },
 }
 
 skyshardsData["temporarymaps"] = {
   -- temporarymaps is being used for Gold Road as ZOS did not move the maps to the correct path at launch
 
-  -- Ontus [temporarymaps]
-  ["u42_ontus_city_base"] = {
-    { 0.1598, 0.7010, 3949, 6, 1 },
-  },
-  -- Silorn [temporarymaps]
-  ["u42_silorn_base"] = {
-    { 0.5594, 0.3140, 3949, 11, 3 },
-  },
-  -- Fyrelight Cave [temporarymaps]
-  ["u42_base_clawcave"] = {
-    { 0.3335, 0.4267, 3949, 14, 2 },
-  },
   -- Haldain Lumber Camp [temporarymaps]
   ["u42_base_haldain"] = {
     { 0.5110, 0.7589, 3949, 17, 2 },
