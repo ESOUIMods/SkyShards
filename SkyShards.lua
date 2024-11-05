@@ -35,7 +35,7 @@ local GPS = LibGPS3
 --Local constants -------------------------------------------------------------
 SkyShards = SkyShards or {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.53"
+local ADDON_VERSION = "10.54"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
