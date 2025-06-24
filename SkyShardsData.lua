@@ -70,6 +70,7 @@ local skyshardsAchievementIDs = {
   [3270] = true, -- High Isle Skyshard Hunter
   [2291] = true, -- Murkmire Skyshard Hunter
   [2461] = true, -- Northern Elsweyr Skyshard Hunter
+  [4405] = true, -- Western Solstice Skyshard Hunter
   [2562] = true, -- Southern Elsweyr Skyshard Hunter
   [1843] = true, -- Morrowind Skyshard Hunter
   [3949] = true, -- West Weald Skyshard Hunter
@@ -1982,7 +1983,7 @@ skyshardsData["westweald"] = {
   },
   -- Fort Colovia [westweald]
   ["u42_base_towerbelli"] = {
-    { 0.4995, 0.6541, 3949, 16, 2 },
+    { 0.4985819756, 0.6549369692, 3949, 16, 2 },
   },
   -- Varen's Watch [westweald]
   ["ui_maps_u42_varenswall_ext"] = {
@@ -2000,14 +2001,42 @@ skyshardsData["westweald"] = {
   ["u42_fyrelightcave_base"] = {
     { 0.3335, 0.4267, 3949, 14, 2 },
   },
-}
-
-skyshardsData["temporarymaps"] = {
-  -- temporarymaps is being used for Gold Road as ZOS did not move the maps to the correct path at launch
-
   -- Haldain Lumber Camp [temporarymaps]
   ["u42_base_haldain"] = {
     { 0.5110, 0.7589, 3949, 17, 2 },
+  },
+}
+
+skyshardsData["solstice"] = {
+  -- Update 46 - Seasons of the Worm Cult (Western Solstice) - Data and Code provided by hamgatan
+
+  ["u46_overland_base"] = {            -- Western Solstice Zone Coordinates
+    { 0.5109, 0.4320, 4405, 1, 3 }, -- In a high tower watching over the docks of the blighted grotto
+    { 0.4752, 0.7099, 4405, 2, 2 }, -- At the end of a winding wooden path around the Sommelier's tent
+    { 0.2761, 0.4573, 4405, 3, 2 }, -- Hidden high in a haunted haven of Hadolids
+    { 0.3116, 0.5953, 4405, 4, 2 }, -- Watching over the sunken entrance to a tainted village
+    { 0.4233, 0.3670, 4405, 5 }, -- Resting on the shore beneath a once-radiant temple
+    { 0.2782, 0.5023, 4405, 6 }, -- Casting its gaze over the favorite fishing spot of local Nords
+    { 0.3520, 0.6935, 4405, 7 }, -- Meditating in the mountains with an everlasting view
+    { 0.5698, 0.6163, 4405, 8 }, -- Half-buried under the abandoned Warm-Stone village
+    { 0.4754, 0.5615, 4405, 9 }, -- In the half-sunken ritual site ruins south of Sunport.
+
+  },
+  -- Deetra Grotto [solstice]
+  ["u46_base_cotp"] = {
+    { 0.4012, 0.5243, 4405, 1, 3 },
+  },
+  -- Vale of Revelry [solstice]
+  ["u42_base_sanguinehdlv"] = {
+    { 0.4642, 0.6046, 4405, 2, 2 },
+  },
+  -- Carapace Caverns [solstice]
+  ["u46_carapacecaverns_base"] = {
+    { 0.7064, 0.7852, 4405, 3, 2 },
+  },
+  -- Tainted Leel [solstice]
+  ["u46_base_lostvillage"] = {
+    { 0.8643, 0.4639, 4405, 4, 2 },
   },
 }
 
