@@ -35,7 +35,7 @@ local GPS = LibGPS3
 --Local constants -------------------------------------------------------------
 SkyShards = SkyShards or {}
 local ADDON_NAME = "SkyShards"
-local ADDON_VERSION = "10.56"
+local ADDON_VERSION = "10.57"
 local ADDON_WEBSITE = "http://www.esoui.com/downloads/info128-SkyShards.html"
 local PINS_UNKNOWN = "SkySMapPin_unknown"
 local PINS_COLLECTED = "SkySMapPin_collected"
@@ -746,18 +746,22 @@ local function OnLoad(eventCode, addOnName)
         end
       end,
       additionalLayout = {
-        function(pin)
+        [CUSTOM_COMPASS_LAYOUT_UPDATE] = function(pin)
           if pin.pinTag then
-            if not pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] or pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_ON_CITY_MAP or pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_UNDER_GROUND then
+            if not pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] or
+              pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_ON_CITY_MAP or
+              pin.pinTag[SKYSHARDS_PINDATA_MOREINFO] == SKYSHARDS_PINDATA_UNDER_GROUND then
               local icon = pin:GetNamedChild("Background")
               icon:SetColor(MAINWORLD_SKYS:UnpackRGBA())
             end
           end
-        end,
-        function(pin)
-          --
         end
-      }
+      },
+      mapPinTypeString = PINS_UNKNOWN,
+      onToggleCallback = function(compassPinType, enabled)
+        COMPASS_PINS:SetCustomPinEnabled(compassPinType, enabled)
+        COMPASS_PINS:RefreshPins(compassPinType)
+      end,
     }
 
     --initialize map pins
@@ -783,7 +787,7 @@ local function OnLoad(eventCode, addOnName)
     LMP:SetClickHandlers(PINS_COLLECTED, clickHandler)
 
     --initialize compass pins
-    COMPASS_PINS:AddCustomPin(PINS_COMPASS, function() CompassCallback() end, pinLayout_compassunknown)
+    COMPASS_PINS:AddCustomPin(PINS_COMPASS, function() CompassCallback() end, pinLayout_compassunknown, db.filters)
     COMPASS_PINS:RefreshPins(PINS_COMPASS)
 
     -- addon menu
@@ -791,6 +795,9 @@ local function OnLoad(eventCode, addOnName)
 
     -- Change SkyShard Display on Skills window
     AlterSkyShardsIndicator()
+
+    RedirectTexture("EsoUI/Art/MapPins/skyshard_seen.dds", "/esoui/art/icons/heraldrycrests_misc_blank_01.dds")
+    RedirectTexture("EsoUI/Art/Compass/skyshard_seen.dds", "/esoui/art/icons/heraldrycrests_misc_blank_01.dds")
 
     --events
     EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_SKYSHARDS_UPDATED, OnSkyshardsUpdated)
