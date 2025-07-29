@@ -1,3 +1,58 @@
+--[[
+-------------------------------------------------------------------------------
+-- SkyShards
+-------------------------------------------------------------------------------
+-- Original author: Ales Machat (Garkin), started 2014-04-05
+--
+-- Maintainers:
+--    Ayantir (contributions starting 2015-11-07)
+--    AssemblerManiac (contributions starting 2018-05-27)
+--    Sharlikran (current maintainer, contributions starting 2020-06-24)
+--
+-------------------------------------------------------------------------------
+-- This addon includes contributions licensed under the following terms:
+--
+-- MIT License (Garkin, 2014–2015):
+--   Permission is hereby granted, free of charge, to any person obtaining a copy
+--   of this software and associated documentation files (the "Software"), to deal
+--   in the Software without restriction, including without limitation the rights
+--   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--   copies of the Software, and to permit persons to whom the Software is
+--   furnished to do so, subject to the conditions in the LICENSE file.
+--
+-- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, 2015–2020):
+--   You are free to share and adapt the material with attribution, but not for
+--   commercial purposes. Derivatives must be licensed under the same terms.
+--   Full terms at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+--
+-- BSD 3-Clause License (Sharlikran, 2020–present):
+--   Redistribution and use in source and binary forms, with or without
+--   modification, are permitted under the conditions detailed in the LICENSE file.
+--
+-------------------------------------------------------------------------------
+-- Maintainer Notice:
+-- Redistribution of this addon outside of ESOUI.com or GitHub is discouraged
+-- unless authorized by the current maintainer. While the original MIT license
+-- permits wide redistribution, uncoordinated uploads may cause version
+-- fragmentation or confusion. Please respect the intent of the maintainers and
+-- the ESO addon ecosystem.
+-- ----------------------------------------------------------------------------
+-- Data Integrity and Attribution Notice:
+-- While individual skyshard locations can be discovered using the ESO API,
+-- the compiled dataset provided in SkyShards is the result of years of
+-- manual exploration, community submissions, and dedicated contributions.
+-- Recreating this dataset independently requires significant time and effort.
+--
+-- Direct reuse, copying, or redistribution of the data tables, either in full
+-- or in substantial part, without permission from the current maintainer,
+-- is prohibited. Misrepresenting this work as your own, or implying you
+-- independently compiled the data, undermines the efforts of the contributors.
+--
+-- If you wish to incorporate this data into your addon or tool, please
+-- contact the current maintainer to request permission and discuss proper
+-- attribution.
+-- ----------------------------------------------------------------------------
+]]
 local LAM = LibAddonMenu2
 local LMP = LibMapPins
 
