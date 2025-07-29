@@ -2,7 +2,7 @@ SkyShards = SkyShards or {}
 SkyShards.db = SkyShards.db or {}
 
 SkyShards.name = "SkyShards"
-SkyShards.version = "10.58"
+SkyShards.version = "10.59"
 SkyShards.website = "http://www.esoui.com/downloads/info128-SkyShards.html"
 
 SkyShards.PINS_UNKNOWN = "SkySMapPin_unknown"
@@ -15,7 +15,7 @@ local defaults = {
   pinTexture = {
     type = 1,
     size = 38,
-    level = 40,
+    level = 80,
   },
   filters = {
     ["SkySCompassPin_unknown"] = true,
@@ -26,7 +26,6 @@ local defaults = {
   immersiveMode = 1,
 }
 SkyShards.defaults = defaults
-d("[Init] SkyShards.defaults.pinTexture = " .. tostring(SkyShards.defaults and SkyShards.defaults.pinTexture))
 
 local pinTextures = {
   unknown = {
