@@ -12,7 +12,7 @@
 -------------------------------------------------------------------------------
 -- This addon includes contributions licensed under the following terms:
 --
--- MIT License (Garkin, 2014–2015):
+-- MIT License (Garkin, 2014â€“2015):
 --   Permission is hereby granted, free of charge, to any person obtaining a copy
 --   of this software and associated documentation files (the "Software"), to deal
 --   in the Software without restriction, including without limitation the rights
@@ -20,14 +20,10 @@
 --   copies of the Software, and to permit persons to whom the Software is
 --   furnished to do so, subject to the conditions in the LICENSE file.
 --
--- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, 2015–2020):
+-- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, Sharlikran, 2015â€“present):
 --   You are free to share and adapt the material with attribution, but not for
 --   commercial purposes. Derivatives must be licensed under the same terms.
 --   Full terms at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
---
--- BSD 3-Clause License (Sharlikran, 2020–present):
---   Redistribution and use in source and binary forms, with or without
---   modification, are permitted under the conditions detailed in the LICENSE file.
 --
 -------------------------------------------------------------------------------
 -- Maintainer Notice:
@@ -56,7 +52,7 @@
 --Libraries--------------------------------------------------------------------
 local LMP = LibMapPins
 local GPS = LibGPS3
-
+local SSP = false
 --Local constants -------------------------------------------------------------
 
 local SKYSHARDS_PINDATA_LOCX = 1
@@ -72,8 +68,8 @@ local SKYSHARDS_PINDATA_UNDER_GROUND = 4
 local SKYSHARDS_PINDATA_IN_GROUP_DELVE = 5
 
 local SKYSHARDS_SKILLPANEL_FORMAT_BASIC = 1
-local SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED = 2
-local SKYSHARDS_SKILLPANEL_FORMAT_DETAILED = 3
+local SKYSHARDS_SKILLPANEL_FORMAT_DETAILED = 2
+local SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED = 3
 
 -- Local functions ------------------------------------------------------------
 local function MyPrint(...)
@@ -293,6 +289,18 @@ local function ShowMyPosition()
 end
 SLASH_COMMANDS["/skypos"] = ShowMyPosition
 
+local SKYSHARD_SKILLSPANEL_FORMAT_BASIC = "Skyshards: |cffffff<<1>>/3|r"
+local SKYSHARD_SKILLSPANEL_FORMAT_DETAILED = "Skyshards: |cffffff<<1>>/<<2>>|r"
+local SKYSHARD_SKILLSPANEL_FORMAT_ADVANCED = "Skyshards: |cffffff<<1>>/<<2>> (<<3>>/3)|r"
+local SKYSHARD_SKILLPOINTS_TO_SPEND_SSP = "Skill Points: |cffffff<<1>>/<<2>>|r"
+
+local GAMEPAD_SKYSHARD_SKILLSPANEL_FORMAT_BASIC = "|cffffff<<1>>/3|r"
+local GAMEPAD_SKYSHARD_SKILLSPANEL_FORMAT_DETAILED = "|cffffff<<1>>/<<2>>|r"
+local GAMEPAD_SKYSHARD_SKILLSPANEL_FORMAT_ADVANCED = "|cffffff<<1>>/<<2>> (<<3>>/3)|r"
+
+local GAMEPAD_SKYSHARD_SKILLPOINTS_TO_SPEND = "|cffffff<<1>>|r"
+local GAMEPAD_SKYSHARD_SKILLPOINTS_TO_SPEND_SSP = "|cffffff<<1>>/<<2>>|r"
+
 local function GetNumFoundSkyShards()
 
   collectedSkyShards = 0
@@ -351,39 +359,26 @@ local function AlterSkyShardsIndicator()
     end
   end
 
-  local function PreHookRefreshPointsDisplay(self)
+  local function PostHookRefreshPointsDisplay(self)
     -- gamepad function
     GetNumFoundSkyShards()
-    local availablePoints = GetAvailableSkillPoints()
-    self.headerData.data1Text = availablePoints
+    local availablePoints = SKILL_POINT_ALLOCATION_MANAGER:GetAvailableSkillPoints()
+    local numSkyshardsCurrentlyCollected = GetNumSkyShards()
+    local displaySetting = SkyShards.db.skillPanelDisplay
 
-    if SkyShards.db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
-      local skyShards = GetNumSkyShards()
-      self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,
-        NUM_PARTIAL_SKILL_POINTS_FOR_FULL)
-    elseif SkyShards.db.skillPanelDisplay > SKYSHARDS_SKILLPANEL_FORMAT_BASIC then
-      if collectedSkyShards < totalSkyShards then
-        if SkyShards.db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED then
-          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
-            totalSkyShards)
-        elseif SkyShards.db.skillPanelDisplay == SKYSHARDS_SKILLPANEL_FORMAT_DETAILED then
-          local skyShards = GetNumSkyShards()
-          self.headerData.data2Text = zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, collectedSkyShards,
-            totalSkyShards) .. " (" .. zo_strformat(SI_GAMEPAD_SKILLS_SKY_SHARDS_FOUND, skyShards,
-            NUM_PARTIAL_SKILL_POINTS_FOR_FULL) .. ")"
-        end
-      else
-        self.headerData.data2Text = collectedSkyShards
-      end
+    local skillPointsLabel = zo_strformat(GAMEPAD_SKYSHARD_SKILLPOINTS_TO_SPEND, availablePoints)
+    if SSP then
+      skillPointsLabel = zo_strformat(GAMEPAD_SKYSHARD_SKILLPOINTS_TO_SPEND_SSP, availablePoints, SKILL_POINT_ALLOCATION_MANAGER:GetTotalNumSkillPoints())
     end
+    self.headerData.data1Text = skillPointsLabel
 
+    local skyshardsLabel = zo_strformat(GAMEPAD_SKYSHARD_SKILLSPANEL_FORMAT_DETAILED, collectedSkyShards, totalSkyShards)
+    self.headerData.data2Text = skyshardsLabel
     ZO_GamepadGenericHeader_RefreshData(self.header, self.headerData)
-    return true
-
   end
 
   GetNumFoundSkyShards()
-  ZO_PreHook(GAMEPAD_SKILLS, "RefreshPointsDisplay", PreHookRefreshPointsDisplay)
+  ZO_PostHook(GAMEPAD_SKILLS, "RefreshPointsDisplay", PostHookRefreshPointsDisplay)
 
 end
 

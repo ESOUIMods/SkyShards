@@ -57,7 +57,7 @@ SkyShards = SkyShards or {}
 SkyShards.db = SkyShards.db or {}
 
 SkyShards.name = "SkyShards"
-SkyShards.version = "10.60"
+SkyShards.version = "10.61"
 SkyShards.website = "http://www.esoui.com/downloads/info128-SkyShards.html"
 
 SkyShards.PINS_UNKNOWN = "SkySMapPin_unknown"
@@ -66,7 +66,7 @@ SkyShards.PINS_COMPASS = "SkySCompassPin_unknown"
 
 local defaults = {
   compassMaxDistance = 0.05,
-  skillPanelDisplay = 3, -- SKYSHARDS_SKILLPANEL_FORMAT_DETAILED
+  skillPanelDisplay = 2, -- SKYSHARDS_SKILLPANEL_FORMAT_DETAILED
   pinTexture = {
     type = 1,
     size = 38,

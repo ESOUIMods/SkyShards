@@ -20,14 +20,10 @@
 --   copies of the Software, and to permit persons to whom the Software is
 --   furnished to do so, subject to the conditions in the LICENSE file.
 --
--- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, 2015–2020):
+-- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, Sharlikran, 2015–present):
 --   You are free to share and adapt the material with attribution, but not for
 --   commercial purposes. Derivatives must be licensed under the same terms.
 --   Full terms at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
---
--- BSD 3-Clause License (Sharlikran, 2020–present):
---   Redistribution and use in source and binary forms, with or without
---   modification, are permitted under the conditions detailed in the LICENSE file.
 --
 -------------------------------------------------------------------------------
 -- Maintainer Notice:
@@ -59,10 +55,21 @@ local LMP = LibMapPins
 -- Settings menu --------------------------------------------------------------
 function SkyShards:CreateSettingsMenu()
 
+
+local SKYSHARDS_SKILLPANEL_FORMAT_BASIC = 1
+local SKYSHARDS_SKILLPANEL_FORMAT_DETAILED = 2
+local SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED = 3
+
   local skillPanelChoices = {
-    [1] = GetString(SKYS_SKILLS_OPTION1),
-    [2] = GetString(SKYS_SKILLS_OPTION2),
-    [3] = GetString(SKYS_SKILLS_OPTION3),
+    [SKYSHARDS_SKILLPANEL_FORMAT_BASIC] = GetString(SKYS_SKILLS_OPTION1),
+    [SKYSHARDS_SKILLPANEL_FORMAT_DETAILED] = GetString(SKYS_SKILLS_OPTION2),
+    [SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED] = GetString(SKYS_SKILLS_OPTION3),
+  }
+
+local skillPanelChoicesValues = {
+    [1] = SKYSHARDS_SKILLPANEL_FORMAT_BASIC,
+    [2] = SKYSHARDS_SKILLPANEL_FORMAT_DETAILED,
+    [3] = SKYSHARDS_SKILLPANEL_FORMAT_ADVANCED,
   }
 
   local immersiveChoices = {
@@ -249,15 +256,11 @@ function SkyShards:CreateSettingsMenu()
       name = GetString(SKYS_SKILLS),
       tooltip = GetString(SKYS_SKILLS_DESC),
       choices = skillPanelChoices,
-      getFunc = function() return skillPanelChoices[SkyShards.db.skillPanelDisplay] end,
+      choicesValues = skillPanelChoicesValues,
+      getFunc = function() return SkyShards.db.skillPanelDisplay end,
       setFunc = function(selected)
-        for index, name in ipairs(skillPanelChoices) do
-          if name == selected then
-            SkyShards.db.skillPanelDisplay = index
-            SKILLS_WINDOW:RefreshSkillPointInfo()
-            break
-          end
-        end
+        SkyShards.db.skillPanelDisplay = selected
+        SKILLS_WINDOW:RefreshSkillPointInfo()
       end,
       default = skillPanelChoices[SkyShards.defaults.skillPanelDisplay],
     },

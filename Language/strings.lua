@@ -34,8 +34,8 @@ local strings = {
 	SKYS_SKILLS						= "Recap on the skill panel",
 	SKYS_SKILLS_DESC				= "Select the display format of the SkyShards count on the skill panel.",
 	SKYS_SKILLS_OPTION1			= "Basic",
-	SKYS_SKILLS_OPTION3			= "Advanced",
 	SKYS_SKILLS_OPTION2			= "Detailed",
+	SKYS_SKILLS_OPTION3			= "Advanced",
 
 	--filters
 	SKYS_UNKNOWN					= "Show unknown skyshards",
