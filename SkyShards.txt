@@ -12,12 +12,10 @@
 ; previous authors Ayantir, Garkin, AssemblerManiac
 ## APIVersion: 101045 101046
 ## SavedVariables: SkyS_SavedVariables
-## DependsOn: CustomCompassPins>=136 LibAddonMenu-2.0>=40 LibGPS>=73 LibMapPins-1.0>=10044
+## DependsOn: CustomCompassPins>=136 LibAddonMenu-2.0>=40 LibMapPing>=1240 LibGPS>=73 LibMapPins-1.0>=10044
 ## OptionalDependsOn: LibDebugLogger DebugLogViewer
 
 Language/strings.lua
 Language/$(language).lua
-Init.lua
-SkyShards_Data.lua
+SkyShardsData.lua
 SkyShards.lua
-SkyShards_Settings.lua
