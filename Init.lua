@@ -12,7 +12,7 @@
 -------------------------------------------------------------------------------
 -- This addon includes contributions licensed under the following terms:
 --
--- MIT License (Garkin, 2014–2015):
+-- MIT License (Garkin, 2014â€“2015):
 --   Permission is hereby granted, free of charge, to any person obtaining a copy
 --   of this software and associated documentation files (the "Software"), to deal
 --   in the Software without restriction, including without limitation the rights
@@ -20,12 +20,12 @@
 --   copies of the Software, and to permit persons to whom the Software is
 --   furnished to do so, subject to the conditions in the LICENSE file.
 --
--- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, 2015–2020):
+-- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, 2015â€“2020):
 --   You are free to share and adapt the material with attribution, but not for
 --   commercial purposes. Derivatives must be licensed under the same terms.
 --   Full terms at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 --
--- BSD 3-Clause License (Sharlikran, 2020–present):
+-- BSD 3-Clause License (Sharlikran, 2020â€“present):
 --   Redistribution and use in source and binary forms, with or without
 --   modification, are permitted under the conditions detailed in the LICENSE file.
 --
@@ -57,7 +57,7 @@ SkyShards = SkyShards or {}
 SkyShards.db = SkyShards.db or {}
 
 SkyShards.name = "SkyShards"
-SkyShards.version = "10.61"
+SkyShards.version = "10.62"
 SkyShards.website = "http://www.esoui.com/downloads/info128-SkyShards.html"
 
 SkyShards.PINS_UNKNOWN = "SkySMapPin_unknown"

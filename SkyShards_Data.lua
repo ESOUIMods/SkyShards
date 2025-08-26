@@ -12,7 +12,7 @@
 -------------------------------------------------------------------------------
 -- This addon includes contributions licensed under the following terms:
 --
--- MIT License (Garkin, 2014–2015):
+-- MIT License (Garkin, 2014â€“2015):
 --   Permission is hereby granted, free of charge, to any person obtaining a copy
 --   of this software and associated documentation files (the "Software"), to deal
 --   in the Software without restriction, including without limitation the rights
@@ -20,7 +20,7 @@
 --   copies of the Software, and to permit persons to whom the Software is
 --   furnished to do so, subject to the conditions in the LICENSE file.
 --
--- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, Sharlikran, 2015–present):
+-- Creative Commons BY-NC-SA 4.0 (Ayantir, AssemblerManiac, Sharlikran, 2015â€“present):
 --   You are free to share and adapt the material with attribution, but not for
 --   commercial purposes. Derivatives must be licensed under the same terms.
 --   Full terms at: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
@@ -2034,7 +2034,7 @@ skyshardsData["westweald"] = {
 skyshardsData["solstice"] = {
   -- Update 46 - Seasons of the Worm Cult (Western Solstice) - Data and Code provided by hamgatan
 
-  ["u46_overland_base"] = {            -- Western Solstice Zone Coordinates
+  ["u48_overland_base"] = {            -- Western Solstice Zone Coordinates
     { 0.5109, 0.4320, 4405, 1, 3 }, -- In a high tower watching over the docks of the blighted grotto
     { 0.4752, 0.7099, 4405, 2, 2 }, -- At the end of a winding wooden path around the Sommelier's tent
     { 0.2761, 0.4573, 4405, 3, 2 }, -- Hidden high in a haunted haven of Hadolids
@@ -2051,7 +2051,7 @@ skyshardsData["solstice"] = {
     { 0.4012, 0.5243, 4405, 1, 3 },
   },
   -- Vale of Revelry [solstice]
-  ["u42_base_sanguinehdlv"] = {
+  ["u46_base_sanguinehdlv"] = {
     { 0.4642, 0.6046, 4405, 2, 2 },
   },
   -- Carapace Caverns [solstice]

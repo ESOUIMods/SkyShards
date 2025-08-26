@@ -125,6 +125,7 @@ local lastZone = ""
 local skyshards
 local function UpdateSkyshardsData(zone, subzone)
   skyshards = SkyShards_GetLocalData(zone, subzone)
+  COMPASS_PINS:RefreshPins(SkyShards.PINS_COMPASS)
   lastZone = GetMapTileTexture()
 end
 
